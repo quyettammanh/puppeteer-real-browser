@@ -4,6 +4,10 @@ const { stepChooseModule } = require("./steps/choose_module.js");
 const { clickRegisterForMe } = require("./helper/click_register_for_me.js");
 const { stepLogin } = require("./steps/login.js");
 const { checkGoetheErrors } = require("./helper/goethe_err.js");
+const { stepPayment } = require("./steps/payment.js");
+const { stepInputData } = require("./steps/input_data.js");
+const { cancellBooking } = require("./helper/click_cancel_booking");
+const {acceptCookies} = require("./helper/click_cookies");
 
 async function taskRegisterGoethe(browser, page, url, user, pathProxy, exam) {
   try {
@@ -13,7 +17,7 @@ async function taskRegisterGoethe(browser, page, url, user, pathProxy, exam) {
       return null;
     }
     await randomTime(1, 2);
-    console.log("Starting remaining steps",newPage.url());
+    console.log("Starting remaining steps");
     await handleRemainingSteps(newPage, user, exam, newPage.url());
     console.log("Done");
   } catch (error) {
@@ -39,10 +43,11 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
     pspSelection: false,
     summary: false,
   };
-  while (attempts < maxAttempts && Date.now() - startTime < timeout) {
+  while (attempts < maxAttempts) {
     try {
       let currentStep = "";
-      const currentUrl = page.url();
+      console.log("1111Current step:", currentStep);
+      let currentUrl = page.url();
       if (await checkGoetheErrors(page, user)) {
         return;
       }
@@ -53,7 +58,7 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
         currentStep = "button_register_for_me";
       } else if (currentUrl.includes("login.goethe.de")) {
         currentStep = "login";
-      } else if (currentUrl.includes("oska-acc")) {
+      } else if (currentUrl.includes("coe/oska-acc")) {
         currentStep = "personal_info";
       } else if (currentUrl.includes("child-acc")) {
         currentStep = "child_acc";
@@ -67,8 +72,8 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
         currentStep = "summary";
       } else {
         currentStep = "unknown";
-        console.log("Unknown step:", currentUrl);
-        return;
+        console.log("222Unknown step:", currentUrl);
+        await page.reload();
       }
       // Check if stuck in same step for too long
       if (currentStep === lastStep && Date.now() - lastStepTime > stepTimeout) {
@@ -84,6 +89,8 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
         lastStep = currentStep;
         lastStepTime = Date.now();
       }
+      await acceptCookies(page)
+      await cancellBooking(page);
 
       // Choose Module Step
       if (
@@ -95,6 +102,7 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
         await stepChooseModule(page, user);
         if (!page.url().includes("options")) {
           stepCompletionStatus.chooseModule = true;
+          currentUrl = page.url();
           console.log(user.email, "✅ Completed: Choose module");
         }
       }
@@ -106,23 +114,119 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
         attempts = 0;
         console.log(user.email, "📝 Starting: Register for me", currentUrl);
         await clickRegisterForMe(page);
-        stepCompletionStatus.registerForMe = true;
-        console.log(user.email, "✅ Completed: Register for me");
+        if (!page.url().includes("coe/selection")) {
+          stepCompletionStatus.registerForMe = true;
+          currentUrl = page.url();
+          console.log(user.email, "✅ Completed: Register for me");
+          await randomTime(1, 2);
+        }
+        // stepCompletionStatus.registerForMe = true;
+        // console.log(user.email, "✅ Completed: Register for me");
+        // await randomTime(1, 2);
       }
-      // // Login Step
-      // else if (currentStep.includes("login") && !stepCompletionStatus.login) {
-      //   attempts = 0;
-      //   console.log(user.email, "🔑 Starting: Login", currentUrl);
-      //   await stepLogin(page, user);
-      //   stepCompletionStatus.login = true;
-      //   console.log(user.email, "✅ Completed: Login");
-      //   // await page.pause();
-      // }
-      else{
+      // Login Step
+      else if (currentStep.includes("login") && !stepCompletionStatus.login) {
+        // attempts = 0;
+        console.log(user.email, "🔑 Starting: Login", currentUrl);
+        await stepLogin(page, user);
+        await randomTime(3, 4);
+        if (!page.url().includes("login")) {
+          stepCompletionStatus.login = true;
+          currentUrl = page.url();
+          console.log(user.email, "✅ Completed: Login", currentUrl);
+        }
+      }
+      // input data user
+      else if (
+        currentStep.includes("oska-acc") &&
+        !stepCompletionStatus.personalInfo
+      ) {
+        // attempts = 0;
+        console.log(user.email, "🔑 Starting: Personal Info", currentUrl);
+        await stepInputData(page, user, exam);
+        if (!page.url().includes("oska-acc")) {
+          stepCompletionStatus.personalInfo = true;
+          currentUrl = page.url();
+          console.log(user.email, "✅ Completed: Personal Info");
+        }
+      }
+      // child-acc step
+      else if (
+        currentStep.includes("child-acc") &&
+        !stepCompletionStatus.childAcc
+      ) {
+        // attempts = 0;
+        console.log(user.email, "🔑 Starting: Child Acc", currentUrl);
+        // await stepInputData(page, user, exam);
+        if (!page.url().includes("child-acc")) {
+          stepCompletionStatus.childAcc = true;
+          currentUrl = page.url();
+          console.log(user.email, "✅ Completed: Child Acc");
+        }
+      }
+      // studyGoethe Step
+      else if (
+        currentStep.includes("booked-options") &&
+        !stepCompletionStatus.studyGoethe
+      ) {
+        attempts = 0;
+        console.log(user.email, "🔑 Starting: Study Goethe", currentUrl);
+        // await stepPayment(page);
+        if (!page.url().includes("booked-options")) {
+          stepCompletionStatus.studyGoethe = true;
+          currentUrl = page.url();
+          console.log(user.email, "✅ Completed: Study Goethe");
+        }
+      }
+      // voucher Step
+      else if (
+        currentStep.includes("voucher") &&
+        !stepCompletionStatus.voucher
+      ) {
+        // attempts = 0;
+        console.log(user.email, "🔑 Starting: Voucher", currentUrl);
+        await stepPayment(page);
+        if (!page.url().includes("voucher")) {
+          stepCompletionStatus.voucher = true;
+          currentUrl = page.url();
+          console.log(user.email, "✅ Completed: Voucher");
+        }
+      }
+      // selection Step
+      else if (
+        currentStep.includes("psp_selection") &&
+        !stepCompletionStatus.pspSelection
+      ) {
+        // attempts = 0;
+        console.log(user.email, "🔑 Starting: PSP Selection", currentUrl);
+        await stepPayment(page);
+        if (!page.url().includes("psp-selection")) {
+          stepCompletionStatus.pspSelection = true;
+          currentUrl = page.url();
+          console.log(user.email, "✅ Completed: PSP Selection");
+        }
+      }
+      // summary Step
+      else if (
+        currentStep.includes("summary") &&
+        !stepCompletionStatus.summary
+      ) {
+        // attempts = 0;
+        console.log(user.email, "🔑 Starting: Summary", currentUrl);
+        await stepPayment(page);
+        if (!page.url().includes("summary")) {
+          stepCompletionStatus.summary = true;
+          currentUrl = page.url();
+          console.log(user.email, "✅ Completed: Summary");
+        }
+      } else {
+        attempts++;
         console.log("Unknown step:", currentUrl);
-        await userInputLoop();
+
+        // await userInputLoop();
       }
     } catch (error) {
+      attempts++;
       console.error("Error in handleRemainingSteps:", error);
     }
   }

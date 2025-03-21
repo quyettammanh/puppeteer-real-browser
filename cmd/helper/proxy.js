@@ -1,5 +1,7 @@
 const fs = require("fs");
-const useProxy = require('@lem0-packages/puppeteer-page-proxy')
+const { URL } = require("url");
+
+const useProxy = require("@lem0-packages/puppeteer-page-proxy");
 
 function getProxies(filePath) {
   try {
@@ -47,16 +49,22 @@ function getProxies(filePath) {
   }
 }
 
-// Hàm sử dụng proxy ngẫu nhiên cho một trang cụ thể
-async function proxyRoating(page, proxies) {
+// const { URL } = require("url");
+// const useProxy = require("@lem0-packages/puppeteer-page-proxy");
+
+async function proxyRoating(page, url, proxies) {
   const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
   console.log("proxy roating", randomProxy);
-  const proxyUrl = `http://${randomProxy.proxy}:${randomProxy.port}@${randomProxy.username}:${randomProxy.password}`;
-  console.log("proxyUrl", proxyUrl);
-  // Xóa tất cả listeners hiện tại
-  await page.setRequestInterception(false);
 
-  // Thiết lập lại request interception
+  // Construct a valid proxy URL
+  const proxyUrl = new URL(`http://${randomProxy.proxy}:${randomProxy.port}`);
+  proxyUrl.username = encodeURIComponent(randomProxy.username);
+  proxyUrl.password = encodeURIComponent(randomProxy.password);
+
+  console.log("proxyUrl", proxyUrl.toString());
+
+  // Reset request interception
+  await page.setRequestInterception(false);
   await page.setRequestInterception(true);
 
   // Remove all previous listeners
@@ -65,12 +73,14 @@ async function proxyRoating(page, proxies) {
   // Add new proxy
   page.on("request", async (request) => {
     try {
-      await useProxy(request, proxyUrl);
+      await useProxy(request, proxyUrl.toString());
     } catch (err) {
       console.log(err);
       request.continue();
     }
   });
+
+  // await page.goto(url);
   return page;
 }
 

@@ -16,17 +16,21 @@ async function fightingForSlots(browser, page, url, pathProxy) {
         // break; // Thoát vòng lặp khi đạt thành công
       } else {
         console.log("Vào trang thất bại, thử lại lần", attempt);
-        // const proxies = getProxies(pathProxy);
-        // const newPage = await proxyRoating(page, proxies);
-        // const response = await gotoPage(newPage, url);
-        // if (response && response.status() === 200) {
-        //   console.log("Đã vào trang thành công!", response.url());
-        //   return newPage;
-        // }
+        const proxies = getProxies(pathProxy);
+        const newPage=await proxyRoating(page,url, proxies);
+        const response = await gotoPage(newPage, url);
+        if (response && response.status() === 200) {
+          console.log("Đã vào trang thành công!", response.url());
+          return newPage;
+        }
       }
     }
   } catch (error) {
-    console.error("Error in fightingForSlots:", error);
+    if (
+      !error.message.includes("Target page, context or browser has been closed")
+    ) {
+      console.error("Error in fightingForSlots:", error);
+    }
   }
 }
 
