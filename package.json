@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@lem0-packages/puppeteer-page-proxy": "^1.4.1",
     "puppeteer-real-browser": "^1.4.2"
   }
 }

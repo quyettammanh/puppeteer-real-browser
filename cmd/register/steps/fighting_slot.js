@@ -1,0 +1,33 @@
+const { gotoPage } = require("../../helper/goto_page.js");
+const { proxyRoating, getProxies } = require("../../helper/proxy.js");
+
+async function fightingForSlots(browser, page, url, pathProxy) {
+  try {
+    console.log("chọn module đăng ký");
+    let attempt = 0;
+    let maxAttempts = 5;
+
+    while (attempt < maxAttempts) {
+      attempt++;
+      const response = await gotoPage(page, url);
+      if (response && response.status() === 200) {
+        console.log("Đã vào trang thành công!", response.url());
+        return page;
+        // break; // Thoát vòng lặp khi đạt thành công
+      } else {
+        console.log("Vào trang thất bại, thử lại lần", attempt);
+        // const proxies = getProxies(pathProxy);
+        // const newPage = await proxyRoating(page, proxies);
+        // const response = await gotoPage(newPage, url);
+        // if (response && response.status() === 200) {
+        //   console.log("Đã vào trang thành công!", response.url());
+        //   return newPage;
+        // }
+      }
+    }
+  } catch (error) {
+    console.error("Error in fightingForSlots:", error);
+  }
+}
+
+module.exports = { fightingForSlots };
