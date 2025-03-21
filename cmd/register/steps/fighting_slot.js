@@ -1,5 +1,5 @@
 const { gotoPage } = require("../../helper/goto_page.js");
-const { proxyRoating, getProxies } = require("../../helper/proxy.js");
+const { getProxies ,setProxyOnPage} = require("../../helper/proxy.js");
 
 async function fightingForSlots(browser, page, url, pathProxy) {
   try {
@@ -17,7 +17,8 @@ async function fightingForSlots(browser, page, url, pathProxy) {
       } else {
         console.log("Vào trang thất bại, thử lại lần", attempt);
         const proxies = getProxies(pathProxy);
-        const newPage=await proxyRoating(page,url, proxies);
+        const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
+        const newPage=await setProxyOnPage(page,randomProxy);
         const response = await gotoPage(newPage, url);
         if (response && response.status() === 200) {
           console.log("Đã vào trang thành công!", response.url());
