@@ -25,5 +25,6 @@ const { browser, page } = await initBrowserWithRealBrowser(proxy);
   await taskRegisterGoethe(browser, page, url, user, pathProxy, exam);
   // await userInputLoop();
   //   await browser.close();
-  console.log("Done");
+  console.log("Cuong-Done");
+    //   await browser.close();
 })();

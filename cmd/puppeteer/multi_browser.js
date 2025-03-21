@@ -48,7 +48,8 @@ async function initBrowserWithRealBrowser(proxy) {
     };
     // Connect using the prepared options
     const { browser, page } = await connect(connectOptions);
-    await setProxyOnPage(page, proxy);
+    // await setProxyOnPage(page, proxy);
+    await setProxyOnPage(page);
 
     return { browser, page };
 }

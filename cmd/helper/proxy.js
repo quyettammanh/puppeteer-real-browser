@@ -56,6 +56,11 @@ function getProxies(filePath) {
 }
 
 async function setProxyOnPage(page, proxy) {
+  if (!proxy || !proxy.proxy || !proxy.port) {
+    console.log("Không có proxy, không thiết lập proxy.");
+    return page;
+  }
+
   // Xác định loại proxy
   let proxyUrl;
   if (proxy.type === "socks5") {
@@ -75,6 +80,7 @@ async function setProxyOnPage(page, proxy) {
   }
 
   console.log("proxyUrl", proxyUrl);
+
   // Reset request interception
   await page.setRequestInterception(false);
   await page.setRequestInterception(true);
@@ -92,9 +98,49 @@ async function setProxyOnPage(page, proxy) {
     }
   });
 
-  // await page.goto(url);
   return page;
 }
+
+// async function setProxyOnPage(page, proxy) {
+//   // Xác định loại proxy
+//   let proxyUrl;
+//   if (proxy.type === "socks5") {
+//     proxyUrl = `socks5://${encodeURIComponent(
+//       proxy.username
+//     )}:${encodeURIComponent(proxy.password)}@${proxy.proxy}:${
+//       proxy.port
+//     }`;
+//   } else if (proxy.type === "http") {
+//     proxyUrl = `http://${encodeURIComponent(
+//       proxy.username
+//     )}:${encodeURIComponent(proxy.password)}@${proxy.proxy}:${
+//       proxy.port
+//     }`;
+//   } else {
+//     throw new Error("Proxy type not supported");
+//   }
+
+//   console.log("proxyUrl", proxyUrl);
+//   // Reset request interception
+//   await page.setRequestInterception(false);
+//   await page.setRequestInterception(true);
+
+//   // Remove all previous listeners
+//   page.removeAllListeners("request");
+
+//   // Add new proxy
+//   page.on("request", async (request) => {
+//     try {
+//       await useProxy(request, proxyUrl.toString());
+//     } catch (err) {
+//       console.log(err);
+//       request.continue();
+//     }
+//   });
+
+//   // await page.goto(url);
+//   return page;
+// }
 
 
 // async function proxyRoating(page, proxies) {

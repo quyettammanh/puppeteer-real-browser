@@ -6,8 +6,9 @@ const { stepLogin } = require("./steps/login.js");
 const { checkGoetheErrors } = require("./helper/goethe_err.js");
 const { stepPayment } = require("./steps/payment.js");
 const { stepInputData } = require("./steps/input_data.js");
-const { cancellBooking } = require("./helper/click_cancel_booking");
+const { cancellBooking,getActiveStepText } = require("./helper/click_cancel_booking");
 const {acceptCookies} = require("./helper/click_cookies");
+const { stepSummary } = require("./steps/summary.js");
 
 async function taskRegisterGoethe(browser, page, url, user, pathProxy, exam) {
   try {
@@ -26,13 +27,15 @@ async function taskRegisterGoethe(browser, page, url, user, pathProxy, exam) {
 }
 
 async function handleRemainingSteps(page, user, exam, originUrl) {
-  const maxAttempts = 5;
+  const maxAttempts = 20;
   const timeout = 6000000; // 10 minute all step
   const stepTimeout = 1200000; // 2 minute stuck in same step
   let attempts = 0;
   let startTime = Date.now();
   let lastStepTime = Date.now();
   let lastStep = "";
+  let currentUrl = "";
+  let currentStep = "";
   let stepCompletionStatus = {
     chooseModule: false,
     login: false,
@@ -45,9 +48,7 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
   };
   while (attempts < maxAttempts) {
     try {
-      let currentStep = "";
-      console.log("1111Current step:", currentStep);
-      let currentUrl = page.url();
+      currentUrl = page.url();
       if (await checkGoetheErrors(page, user)) {
         return;
       }
@@ -71,10 +72,12 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
       } else if (currentUrl.includes("summary")) {
         currentStep = "summary";
       } else {
-        currentStep = "unknown";
-        console.log("222Unknown step:", currentUrl);
+        // currentStep = "unknown";
+        currentStep = await getActiveStepText(page);
+        console.log("222Unknown step:", currentUrl,currentStep  );
         await page.reload();
       }
+      console.log("Current step:", currentStep);
       // Check if stuck in same step for too long
       if (currentStep === lastStep && Date.now() - lastStepTime > stepTimeout) {
         console.log(`Stuck in ${currentStep} for too long, refreshing...`);
@@ -213,7 +216,7 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
       ) {
         // attempts = 0;
         console.log(user.email, "🔑 Starting: Summary", currentUrl);
-        await stepPayment(page);
+        await stepSummary(page);
         if (!page.url().includes("summary")) {
           stepCompletionStatus.summary = true;
           currentUrl = page.url();
@@ -221,9 +224,9 @@ async function handleRemainingSteps(page, user, exam, originUrl) {
         }
       } else {
         attempts++;
+        currentUrl = page.url();
         console.log("Unknown step:", currentUrl);
-
-        // await userInputLoop();
+        await randomTime(3,4);
       }
     } catch (error) {
       attempts++;
