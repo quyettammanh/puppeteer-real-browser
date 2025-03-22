@@ -1,5 +1,8 @@
 const { takeScreenshot } = require("../../helper/func.js");
 
+// Helper function for waiting since page.waitForTimeout is not available
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 /**
  * Handle success page processing
  * @param {Object} page - Puppeteer page object
@@ -23,7 +26,7 @@ async function stepSuccess(page, user, log = console.log) {
     });
     
     // Additional wait to ensure all elements are rendered
-    await page.waitForTimeout(3000);
+    await wait(3000); // Using custom wait function instead of page.waitForTimeout
     
     log("Success page appears ready, taking screenshot");
     
