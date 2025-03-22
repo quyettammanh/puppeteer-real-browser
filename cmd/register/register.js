@@ -5,7 +5,7 @@ const { clickRegisterForMe } = require("./helper/click_register_for_me.js");
 const { stepLogin } = require("./steps/login.js");
 const { checkGoetheErrors } = require("./helper/goethe_err.js");
 const { stepPayment } = require("./steps/payment.js");
-const { stepInputData } = require("./steps/input_data.js");
+const { stepInputData } = require("./steps/input_data_v2.js");
 const {
   cancellBooking,
   getActiveStepText,

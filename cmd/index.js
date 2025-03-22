@@ -26,11 +26,18 @@ const { userInputLoop } = require("./helper/func.js");
   
   // Process users in parallel with separate browser instances
   const taskPromises = [];
-  const numUsers = 5; // Number of browsers to open
+  
+  // Determine how many browsers to open based on user count
+  // If we have fewer than 5 users, only open as many browsers as we have users
+  // This ensures each browser has a unique user and we don't waste resources
+  const maxBrowsers = 5; // Maximum number of parallel browsers
+  const numUsers = Math.min(listUsers.length, maxBrowsers);
+  
+  console.log(`Starting ${numUsers} browser${numUsers > 1 ? 's' : ''} for ${listUsers.length} available user${listUsers.length > 1 ? 's' : ''}`);
   
   for (let i = 0; i < numUsers; i++) {
-    // Select a user - use the index if available, otherwise use the first user
-    const user = listUsers.length > i ? listUsers[i] : listUsers[0];
+    // Each browser gets its own user since we're ensuring numUsers ≤ listUsers.length
+    const user = listUsers[i];
     
     // Select a random proxy
     const proxy = listProxies[Math.floor(Math.random() * listProxies.length)];
@@ -44,8 +51,7 @@ const { userInputLoop } = require("./helper/func.js");
     const browserPromise = (async () => {
       try {
         // Initialize a new browser for this user with the browser ID
-        // const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
-        const { browser, page } = await initBrowserWithRealBrowser(browserId);
+        const { browser, page } = await initBrowserWithRealBrowser(proxy, browserId);
 
         // Process with this browser
         await taskRegisterGoethe(browser, page, url, user, pathProxy, exam, browserId);
