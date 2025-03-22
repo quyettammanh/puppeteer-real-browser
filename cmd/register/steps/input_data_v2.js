@@ -1,11 +1,37 @@
-// const { clickButtonContinue, accpectCookiesV2 } = require('../helper/func.js');
-// const { randomTime, userInputLoop } = require('../../utils/func.js');
-// const { checkWarning } = require('../helper/func_err.js')
-
 const {clickButtonContinue}=require('../helper/click_continue')
 
 // Helper function for waiting since page.waitForTimeout is not available
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Simpler function to wait for a short period and network stability
+// This works with older versions of Puppeteer that don't support event listeners
+async function waitForNetworkIdle(page, timeout = 1000) {
+    try {
+        // For older Puppeteer versions, we'll use a simpler approach
+        // Just wait a reasonable amount of time for network to settle
+        await wait(timeout);
+        
+        // Try to wait for the page to become idle using a known trick
+        try {
+            // This will wait until network is somewhat idle
+            await page.evaluate(() => {
+                return new Promise(resolve => {
+                    // If page is already loaded, resolve immediately
+                    if (document.readyState === 'complete') {
+                        resolve();
+                    } else {
+                        // Otherwise wait for load event
+                        window.addEventListener('load', resolve);
+                    }
+                });
+            });
+        } catch (e) {
+            // Ignore errors, just use the timeout approach
+        }
+    } catch (error) {
+        console.log("Error waiting for network idle:", error);
+    }
+}
 
 async function stepInputData(page, user, exam) {
     try {
@@ -20,33 +46,45 @@ async function stepInputData(page, user, exam) {
 }
 
 async function inputData(page, user, exam) {
-    // const labels = await page.$$eval('.cs-input--error .cs-input__label', (elements) => {
-    //     return elements.map(element => element.textContent.trim());
-    // });
-
-    // console.log(labels);
-
-    // await checkWarning(page, user);
-    // Add data name of new user
     if (page.url().includes('oska-acc')) {
         try {
-            await inputDataName(page, user);
-            // await page.pause();
+            // First check if name fields exist on the page
+            const firstNameField = await page.$('input[name="accountPanel:basicData:body:firstName:inputContainer:input"]');
+            const lastNameField = await page.$('input[name="accountPanel:basicData:body:lastName:inputContainer:input"]');
+            const datePickerButton = await page.$('button[type="button"][title="Ngày"]');
+            
+            if (firstNameField || lastNameField || datePickerButton) {
+                console.log(`${user.email} - Trang có trường nhập thông tin tên, tiến hành điền`);
+                await inputDataName(page, user);
+            } else {
+                console.log(`${user.email} - Không có trường nhập thông tin tên, bỏ qua`);
+            }
         } catch (error) {
             console.log(user.email, "Không điền được thông tin name\n");
         }
     }
 
     if (page.url().includes('oska-acc')) {
-        // Add data address of user -> Check if address data exists, if not, click next
         try {
-            // Check if postal code field exists
-            const postalCodeElem = await page.$("//div[text()='Mã bưu chính']");
-            if (postalCodeElem) {
+            // Check if any address fields exist on the page
+            const postalCodeField = await page.$('input[autocomplete="postal-code"]');
+            const cityField = await page.$('input[autocomplete="locality"]');
+            const streetField = await page.$('input[autocomplete="street-address"]');
+            const phoneField = await page.$('input[name="accountPanel:furtherData:body:mobilePhone:input2Container:input2"]');
+            
+            if (postalCodeField || cityField || streetField || phoneField) {
+                console.log(`${user.email} - Trang có trường nhập thông tin địa chỉ, tiến hành điền`);
                 page = await inputDataAddress(page, user, exam);
             } else {
-                await clickButtonContinue(page);
-                page = await inputDataAddress(page, user, exam);
+                // Check if postal code element exists using XPath
+                const postalCodeElem = await page.$x("//div[text()='Mã bưu chính']");
+                if (postalCodeElem && postalCodeElem.length > 0) {
+                    console.log(`${user.email} - Tìm thấy trường mã bưu chính, tiến hành điền`);
+                    page = await inputDataAddress(page, user, exam);
+                } else {
+                    console.log(`${user.email} - Không có trường nhập thông tin địa chỉ, bỏ qua`);
+                    await clickButtonContinue(page);
+                }
             }
         } catch (error) {
             console.log(user.email, "Không nhập được thông tin địa chỉ\n");
@@ -61,6 +99,17 @@ async function fillInputFieldAdress(page, selector, value, fieldName, email) {
             // Find the input element
             const inputElement = await page.$(selector);
             if (inputElement) {
+                // Check if element is visible in the DOM
+                const isVisible = await page.evaluate(el => {
+                    const style = window.getComputedStyle(el);
+                    return style && style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
+                }, inputElement);
+                
+                if (!isVisible) {
+                    console.log(`${email} - Trường ${fieldName} không hiển thị, bỏ qua`);
+                    return;
+                }
+                
                 // Click on the element
                 await inputElement.click();
                 // Wait for any network activity to settle
@@ -71,12 +120,12 @@ async function fillInputFieldAdress(page, selector, value, fieldName, email) {
                 
                 // Type the value
                 await inputElement.type(String(value));
-                // Wait for network activity again
-                await wait(500);
+                // Wait for network activity to settle
+                await waitForNetworkIdle(page);
                 
                 console.log(`${email} - Đã điền ${fieldName}`);
             } else {
-                console.log(`${email} - Không tìm thấy trường ${fieldName}`);
+                console.log(`${email} - Không tìm thấy trường ${fieldName}, bỏ qua`);
             }
         }
     } catch (error) {
@@ -87,22 +136,42 @@ async function fillInputFieldAdress(page, selector, value, fieldName, email) {
 async function inputDataAddress(page, user, exam) {
     // Nhập postal code
     if (page.url().includes('oska-acc')) {
-        await fillInputFieldAdress(page, 'input[autocomplete="postal-code"]', user.postal_code, 'postal_code', user.email);
+        const postalField = await page.$('input[autocomplete="postal-code"]');
+        if (postalField) {
+            await fillInputFieldAdress(page, 'input[autocomplete="postal-code"]', user.postal_code, 'postal_code', user.email);
+        } else {
+            console.log(`${user.email} - Không tìm thấy trường postal code, bỏ qua`);
+        }
     }
     
     // Nhập location
     if (page.url().includes('oska-acc')) {
-        await fillInputFieldAdress(page, 'input[autocomplete="locality"]', user.location, 'location', user.email);
+        const locationField = await page.$('input[autocomplete="locality"]');
+        if (locationField) {
+            await fillInputFieldAdress(page, 'input[autocomplete="locality"]', user.location, 'location', user.email);
+        } else {
+            console.log(`${user.email} - Không tìm thấy trường location, bỏ qua`);
+        }
     }
     
     // Nhập street name
     if (page.url().includes('oska-acc')) {
-        await fillInputFieldAdress(page, 'input[autocomplete="street-address"]', user.street_name, 'street_name', user.email);
+        const streetField = await page.$('input[autocomplete="street-address"]');
+        if (streetField) {
+            await fillInputFieldAdress(page, 'input[autocomplete="street-address"]', user.street_name, 'street_name', user.email);
+        } else {
+            console.log(`${user.email} - Không tìm thấy trường street name, bỏ qua`);
+        }
     }
     
     // Nhập phone number
     if (page.url().includes('oska-acc')) {
-        await fillInputFieldAdress(page, 'input[name="accountPanel:furtherData:body:mobilePhone:input2Container:input2"]', user.number_phone, 'số điện thoại', user.email);
+        const phoneField = await page.$('input[name="accountPanel:furtherData:body:mobilePhone:input2Container:input2"]');
+        if (phoneField) {
+            await fillInputFieldAdress(page, 'input[name="accountPanel:furtherData:body:mobilePhone:input2Container:input2"]', user.number_phone, 'số điện thoại', user.email);
+        } else {
+            console.log(`${user.email} - Không tìm thấy trường số điện thoại, bỏ qua`);
+        }
     }
     
     // Nhập birthplace (có kiểm tra hiển thị)
@@ -113,7 +182,7 @@ async function inputDataAddress(page, user, exam) {
             if (birthplaceInput) {
                 const isVisible = await page.evaluate(el => {
                     const style = window.getComputedStyle(el);
-                    return style && style.display !== 'none' && style.visibility !== 'hidden';
+                    return style && style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
                 }, birthplaceInput);
 
                 if (isVisible) {
@@ -121,8 +190,10 @@ async function inputDataAddress(page, user, exam) {
                     await birthplaceInput.type(user.place_of_birth);
                     console.log(user.email, "Đã điền place of birth");
                 } else {
-                    console.log(user.email, "Không tìm thấy ô nhập nơi sinh - bỏ qua");
+                    console.log(user.email, "Trường nhập nơi sinh không hiển thị - bỏ qua");
                 }
+            } else {
+                console.log(user.email, "Không tìm thấy trường nhập nơi sinh - bỏ qua");
             }
         } catch (error) {
             console.log(user.email, "Lỗi khi điền nơi sinh:", error.message);
@@ -136,21 +207,40 @@ async function inputDataAddress(page, user, exam) {
                 // Tìm và click vào nút dropdown
                 const dropdownBtn = await page.$("button[title*='thực hiện kì thi']");
                 if (dropdownBtn) {
-                    await dropdownBtn.click();
-                    await wait(3000);
+                    const isVisible = await page.evaluate(el => {
+                        const style = window.getComputedStyle(el);
+                        return style && style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
+                    }, dropdownBtn);
                     
-                    // Tìm và chọn tùy chọn "Đoàn tụ gia đình" từ dropdown
-                    const optionSelector = "a span:not([class]):not([id]):not([role]):not([name]):not([title]):not([type]):not([value]):not([placeholder]):not([for]):not([href]):not([src]):not([alt]):not([aria-label]):not([aria-labelledby]):not([aria-describedby]):not([aria-details]):not([aria-controls]):not([aria-owns]):not([aria-flowto]):not([aria-activedescendant]):not([data-*])";
-                    const options = await page.$$(optionSelector);
-                    
-                    for (const option of options) {
-                        const text = await page.evaluate(el => el.textContent.trim(), option);
-                        if (text === 'Đoàn tụ gia đình') {
-                            await option.click();
-                            console.log(`${user.email} - Đã chọn động lực: Đoàn tụ gia đình`);
-                            break;
+                    if (isVisible) {
+                        await dropdownBtn.click();
+                        // Wait for dropdown menu to appear
+                        await waitForNetworkIdle(page);
+                        
+                        // Tìm và chọn tùy chọn "Đoàn tụ gia đình" từ dropdown
+                        const optionSelector = "a span:not([class]):not([id]):not([role]):not([name]):not([title]):not([type]):not([value]):not([placeholder]):not([for]):not([href]):not([src]):not([alt]):not([aria-label]):not([aria-labelledby]):not([aria-describedby]):not([aria-details]):not([aria-controls]):not([aria-owns]):not([aria-flowto]):not([aria-activedescendant]):not([data-*])";
+                        const options = await page.$$(optionSelector);
+                        
+                        let foundOption = false;
+                        for (const option of options) {
+                            const text = await page.evaluate(el => el.textContent.trim(), option);
+                            if (text === 'Đoàn tụ gia đình') {
+                                await option.click();
+                                await waitForNetworkIdle(page);
+                                console.log(`${user.email} - Đã chọn động lực: Đoàn tụ gia đình`);
+                                foundOption = true;
+                                break;
+                            }
                         }
+                        
+                        if (!foundOption) {
+                            console.log(`${user.email} - Không tìm thấy tùy chọn "Đoàn tụ gia đình", bỏ qua`);
+                        }
+                    } else {
+                        console.log(`${user.email} - Nút dropdown động lực không hiển thị, bỏ qua`);
                     }
+                } else {
+                    console.log(`${user.email} - Không tìm thấy nút dropdown động lực, bỏ qua`);
                 }
             }
         } catch (error) {
@@ -168,6 +258,17 @@ async function fillInputFieldName(page, selector, value, fieldName, email, optio
         if (page.url().includes('oska-acc')) {
             const inputElement = await page.$(selector);
             if (inputElement) {
+                // Check if element is visible in the DOM
+                const isVisible = await page.evaluate(el => {
+                    const style = window.getComputedStyle(el);
+                    return style && style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
+                }, inputElement);
+                
+                if (!isVisible) {
+                    console.log(`${email} - Trường ${fieldName} không hiển thị, bỏ qua`);
+                    return;
+                }
+                
                 await inputElement.click();
                 
                 // Clear existing text
@@ -183,7 +284,7 @@ async function fillInputFieldName(page, selector, value, fieldName, email, optio
                 
                 console.log(`${email} - Đã điền ${fieldName}`);
             } else {
-                console.log(`${email} - Không tìm thấy trường ${fieldName}`);
+                console.log(`${email} - Không tìm thấy trường ${fieldName}, bỏ qua`);
             }
         }
     } catch (error) {
@@ -210,24 +311,91 @@ async function clickDatePicker(page, title, user_date_part, fieldName, email) {
             // Click on date picker button
             const dateButton = await page.$(`button[type="button"][title="${title}"]`);
             if (dateButton) {
+                // Check if button is visible
+                const isVisible = await page.evaluate(el => {
+                    const style = window.getComputedStyle(el);
+                    return style && style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
+                }, dateButton);
+                
+                if (!isVisible) {
+                    console.log(`${email} - Nút chọn ${fieldName} không hiển thị, bỏ qua`);
+                    return;
+                }
+                
                 await dateButton.click();
-                await wait(3000);
+                // Wait for dropdown to appear
+                await waitForNetworkIdle(page);
                 
                 // Find and click the date option
-                // We need to find all links and check their text content
                 const linkElements = await page.$$('a');
-                for (const link of linkElements) {
-                    const linkText = await page.evaluate(el => el.textContent.trim(), link);
+                
+                if (title === 'Tháng') {
+                    // Special handling for months based on the pattern observed in 2.txt
+                    let monthFound = false;
                     
-                    // Check if this is the date we want
-                    if (linkText === formatted_date_part || 
-                        (title === 'Tháng' && linkText === `tháng ${formatted_date_part}`)) {
-                        await link.click();
-                        await wait(3000); // Wait for UI to update
-                        console.log(`${email} - Điền ${fieldName} hoàn tất`);
-                        break;
+                    for (const link of linkElements) {
+                        const isLinkVisible = await page.evaluate(el => {
+                            const style = window.getComputedStyle(el);
+                            return style && style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
+                        }, link);
+                        
+                        if (!isLinkVisible) continue;
+                        
+                        const linkText = await page.evaluate(el => el.textContent.trim(), link);
+                        
+                        // For month 1, we need to use a regex pattern
+                        if (formatted_date_part === '1') {
+                            const regex = new RegExp(`^tháng ${formatted_date_part}$`);
+                            if (regex.test(linkText)) {
+                                await link.click();
+                                await waitForNetworkIdle(page);
+                                console.log(`${email} - Điền tháng 1 hoàn tất (regex match)`);
+                                monthFound = true;
+                                break;
+                            }
+                        } 
+                        // For other months, direct string matching
+                        else if (linkText === `tháng ${formatted_date_part}`) {
+                            await link.click();
+                            await waitForNetworkIdle(page);
+                            console.log(`${email} - Điền ${fieldName} hoàn tất (direct match)`);
+                            monthFound = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!monthFound) {
+                        console.log(`${email} - Không tìm thấy tháng ${formatted_date_part}`);
+                    }
+                } else {
+                    // Standard handling for day and year
+                    let valueFound = false;
+                    
+                    for (const link of linkElements) {
+                        const isLinkVisible = await page.evaluate(el => {
+                            const style = window.getComputedStyle(el);
+                            return style && style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
+                        }, link);
+                        
+                        if (!isLinkVisible) continue;
+                        
+                        const linkText = await page.evaluate(el => el.textContent.trim(), link);
+                        
+                        if (linkText === formatted_date_part) {
+                            await link.click();
+                            await waitForNetworkIdle(page);
+                            console.log(`${email} - Điền ${fieldName} hoàn tất`);
+                            valueFound = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!valueFound) {
+                        console.log(`${email} - Không tìm thấy giá trị ${formatted_date_part} cho ${fieldName}`);
                     }
                 }
+            } else {
+                console.log(`${email} - Không tìm thấy nút chọn ${fieldName}, bỏ qua`);
             }
         }
     } catch (error) {
@@ -237,44 +405,70 @@ async function clickDatePicker(page, title, user_date_part, fieldName, email) {
 
 
 async function inputDataName(page, user) {
-    // Add Last Name (First Name in the context of the provided code)
+    // Check if First Name field exists
     if (page.url().includes('oska-acc')) {
-        await fillInputFieldName(
-            page,
-            'input[name="accountPanel:basicData:body:firstName:inputContainer:input"]',
-            user.last_name,
-            'tên',
-            user.email,
-            { pressEnter: true }
-        );
+        const firstNameField = await page.$('input[name="accountPanel:basicData:body:firstName:inputContainer:input"]');
+        if (firstNameField) {
+            await fillInputFieldName(
+                page,
+                'input[name="accountPanel:basicData:body:firstName:inputContainer:input"]',
+                user.last_name,
+                'tên',
+                user.email,
+                { pressEnter: true }
+            );
+        } else {
+            console.log(`${user.email} - Không tìm thấy trường nhập tên, bỏ qua`);
+        }
     }
 
-    // Add Family Name (Last Name/Family Name in the context of the provided code)
+    // Check if Last Name field exists
     if (page.url().includes('oska-acc')) {
-        await fillInputFieldName(
-            page,
-            'input[name="accountPanel:basicData:body:lastName:inputContainer:input"]',
-            user.family_name,
-            'họ',
-            user.email,
-            { pressEnter: true }
-        );
+        const lastNameField = await page.$('input[name="accountPanel:basicData:body:lastName:inputContainer:input"]');
+        if (lastNameField) {
+            await fillInputFieldName(
+                page,
+                'input[name="accountPanel:basicData:body:lastName:inputContainer:input"]',
+                user.family_name,
+                'họ',
+                user.email,
+                { pressEnter: true }
+            );
+        } else {
+            console.log(`${user.email} - Không tìm thấy trường nhập họ, bỏ qua`);
+        }
     }
 
-    // Add Date of Birth
+    // Check if Day picker exists
     if (page.url().includes('oska-acc')) {
-        await clickDatePicker(page, 'Ngày', user.date_birth, 'ngày sinh', user.email);
+        const dayButton = await page.$('button[type="button"][title="Ngày"]');
+        if (dayButton) {
+            await clickDatePicker(page, 'Ngày', user.date_birth, 'ngày sinh', user.email);
+        } else {
+            console.log(`${user.email} - Không tìm thấy nút chọn ngày sinh, bỏ qua`);
+        }
     }
 
-    // Add Month of Birth
+    // Check if Month picker exists
     if (page.url().includes('oska-acc')) {
-        await clickDatePicker(page, 'Tháng', user.month_birth, 'tháng sinh', user.email);
+        const monthButton = await page.$('button[type="button"][title="Tháng"]');
+        if (monthButton) {
+            await clickDatePicker(page, 'Tháng', user.month_birth, 'tháng sinh', user.email);
+        } else {
+            console.log(`${user.email} - Không tìm thấy nút chọn tháng sinh, bỏ qua`);
+        }
     }
 
-    // Add Year of Birth
+    // Check if Year picker exists
     if (page.url().includes('oska-acc')) {
-        await clickDatePicker(page, 'Năm', user.year_birth, 'năm sinh', user.email);
+        const yearButton = await page.$('button[type="button"][title="Năm"]');
+        if (yearButton) {
+            await clickDatePicker(page, 'Năm', user.year_birth, 'năm sinh', user.email);
+        } else {
+            console.log(`${user.email} - Không tìm thấy nút chọn năm sinh, bỏ qua`);
+        }
     }
+    
     await clickButtonContinue(page);
     return page;
 }

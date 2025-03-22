@@ -22,7 +22,7 @@ const { userInputLoop } = require("./helper/func.js");
   }
   
   const exam = "b1_hcm";
-  const url = "https://www.goethe.de/coe?lang=vi&oid=3a16cc8727c1736380043caf334b0cd50599061081cbdd96afaeca4171f12aee";
+  const url = "https://www.goethe.de/coe/entry?lang=vi&oid=d155f6758546edfb6c0627ebdc1a00d3b7633e1e82e4035aa2e9f377dd0d5671";
   
   // Process users in parallel with separate browser instances
   const taskPromises = [];
@@ -51,7 +51,7 @@ const { userInputLoop } = require("./helper/func.js");
     const browserPromise = (async () => {
       try {
         // Initialize a new browser for this user with the browser ID
-        const { browser, page } = await initBrowserWithRealBrowser(proxy, browserId);
+        const { browser, page } = await initBrowserWithRealBrowser(browserId);
 
         // Process with this browser
         await taskRegisterGoethe(browser, page, url, user, pathProxy, exam, browserId);

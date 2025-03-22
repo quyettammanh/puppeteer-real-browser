@@ -2,7 +2,7 @@ const { connect } = require("puppeteer-real-browser");
 // const pluginProxy = require('puppeteer-extra-plugin-proxy');
 const { proxyRoating, setProxyOnPage } = require("../helper/proxy.js");
 
-async function initBrowserWithRealBrowser(proxy, browserId) {
+async function initBrowserWithRealBrowser(browserId,proxy) {
   const identifier =
     browserId || `browser-${Math.random().toString(36).substring(2, 8)}`;
   console.log(`Browser ${identifier}: Initializing browser`);
