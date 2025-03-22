@@ -14,6 +14,7 @@ const fetch = (...args) =>
 const BOT_TOKEN = process.env.BOT_TOKEN
 const CHAT_ID = process.env.CHAT_ID
 const base_url = "https://api.telegram.org/bot" + BOT_TOKEN
+
 async function sendTelegramMessage(message) {
     const url = base_url + `/sendMessage`
 

@@ -42,8 +42,29 @@ async function randomTime(min = 1, max = 5) {
     await new Promise(resolve => setTimeout(resolve, delayInMilliseconds));
 }
 
+// Hàm chụp ảnh trang web và lưu với tên theo format
+async function takeScreenshot(page, user) {
+    // Tạo thư mục nếu không tồn tại
+    const screenshotDir = path.join(process.cwd(), 'cmd/data/img');
+    if (!fs.existsSync(screenshotDir)) {
+        fs.mkdirSync(screenshotDir, { recursive: true });
+    }
+    
+    // Tạo tên file với format: tên người dùng + ngày giờ hiện tại
+    const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
+    const fileName = `${user.email}_${timestamp}.png`;
+    const filePath = path.join(screenshotDir, fileName);
+    
+    // Chụp và lưu ảnh
+    await page.screenshot({ path: filePath, fullPage: true });
+    console.log(`Đã chụp màn hình và lưu tại: ${filePath}`);
+    
+    return filePath;
+}
+
 module.exports = {
     userInputLoop,
     randomTime,
     readFileJson,
+    takeScreenshot,
 }

@@ -9,6 +9,7 @@ const { stepInputData } = require("./steps/input_data.js");
 const { cancellBooking,getActiveStepText } = require("./helper/click_cancel_booking");
 const {acceptCookies} = require("./helper/click_cookies");
 const { stepSummary } = require("./steps/summary.js");
+const { takeScreenshot } = require("../helper/func.js");
 
 async function taskRegisterGoethe(browser, page, url, user, pathProxy, exam) {
   try {
