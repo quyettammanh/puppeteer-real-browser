@@ -7,7 +7,7 @@ const { extractCookies } = require('./link_cookies.js');
 const linkQueue = [];
 
 // Maximum number of concurrent browsers
-const MAX_CONCURRENT_BROWSERS = 5;
+const MAX_CONCURRENT_BROWSERS = 10;
 
 // Counter for active browsers
 let activeBrowserCount = 0;

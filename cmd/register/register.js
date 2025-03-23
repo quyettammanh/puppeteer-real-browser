@@ -43,17 +43,10 @@ async function taskRegisterGoethe(
       );
       return null;
     }
-
-    await randomTime(1, 2);
     console.log(
       `Browser ${identifier}: Starting remaining steps for ${user.email}`
     );
     console.log("user đang chạy", user.email);
-    // await randomTime(3,4);
-    // return;
-
-    // await userInputLoop();
-
     // Use identifier for better tracking
     await handleRemainingSteps(newPage, user, exam, newPage.url(), identifier);
 

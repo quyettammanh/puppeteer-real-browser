@@ -12,7 +12,7 @@ const checkGoetheErrors = (page, user) => {
         return false;
     } else if (url.includes('session-expired')) {
         console.log(user.email, "Session expired, exiting...");
-        return false;
+        return true;
     } else if (url.includes('error')) {
         console.log(user.email, "Error, exiting...");
         return true;

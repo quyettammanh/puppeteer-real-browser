@@ -25,7 +25,7 @@ const { closeAllBrowsers } = require("./utils/registrationUtils.js");
   }  
   // Initialize the queue system with proxies
   initQueue(listProxies);
-  console.log(`Queue system initialized with max 5 concurrent browsers and ${listProxies.length} proxies`);
+  console.log(`Queue system initialized with max 10 concurrent browsers and ${listProxies.length} proxies`);
   
   // Subscribe to Redis channel for registration links
   const redisChannel = process.env.REDIS_REGISTER_CHANNEL || 'url_updates';
