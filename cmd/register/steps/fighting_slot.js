@@ -32,6 +32,7 @@ async function fightingForSlots(browser, page, url, pathProxy, browserId) {
         console.log(`Browser ${identifier}: Applying new proxy`, randomProxy.proxy);
         
         // Apply the proxy to the current page
+        console.log("randomProxy", randomProxy);
         await setProxyOnPage(page, randomProxy, identifier);
         
         // Try again with the new proxy

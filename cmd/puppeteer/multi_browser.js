@@ -5,16 +5,16 @@ const { proxyRoating, setProxyOnPage } = require("../helper/proxy.js");
 async function initBrowserWithRealBrowser(browserId,proxy) {
   const identifier =
     browserId || `browser-${Math.random().toString(36).substring(2, 8)}`;
-  console.log(`Browser ${identifier}: Initializing browser`);
+  // console.log(`Browser ${identifier}: Initializing browser`);
 
   let hiddenChrome =
     process.env.open_chrome?.toLowerCase() === "false" ? false : true;
   hiddenChrome = false;
-  console.log(`Browser ${identifier}: hiddenChrome: ${hiddenChrome}`);
+  // console.log(`Browser ${identifier}: hiddenChrome: ${hiddenChrome}`);
 
   // Create unique user data directory for each browser to isolate cookies and session data
   const userDataDir = `./user-data-${identifier}`;
-  console.log(`Browser ${identifier}: Using isolated user data directory: ${userDataDir}`);
+  // console.log(`Browser ${identifier}: Using isolated user data directory: ${userDataDir}`);
 
   // Create configuration object
   const connectOptions = {
@@ -34,6 +34,7 @@ async function initBrowserWithRealBrowser(browserId,proxy) {
 
   // Apply the proxy to the initial page if provided
   if (proxy) {
+    console.log(`Browser ${identifier}: Applying proxy`, proxy.proxy);
     await setProxyOnPage(page, proxy, identifier);
     console.log(`Browser ${identifier}: Initial proxy applied to first page`);
   }
