@@ -80,23 +80,23 @@ function createUsers(filePath) {
 function checkUserPathByKey(key) {
     let userPath = '';
     if (key.includes("hanoi_a1")) {
-        userPath = "./data/user/hn/hn_a1.json";
+        userPath = "./cmd/data/user/hn/hn_a1.json";
     } else if (key.includes("hanoi_a2")) {
-        userPath = "./data/user/hn/hn_a2.json";
+        userPath = "./cmd/data/user/hn/hn_a2.json";
     } else if (key.includes("hanoi_b1")) {
-        userPath = "./data/user/hn/hn_b1.json";
+        userPath = "./cmd/data/user/hn/hn_b1.json";
     } else if (key.includes("hanoi_b2")) {
-        userPath = "./data/user/hn/hn_b2.json";
+        userPath = "./cmd/data/user/hn/hn_b2.json";
     } else if (key.includes("hcm_a1")) {
-        userPath = "./data/user/hcm/hcm_a1.json";
+        userPath = "./cmd/data/user/hcm/hcm_a1.json";
     } else if (key.includes("hcm_a2")) {
-        userPath = "./data/user/hcm/hcm_a2.json";
+        userPath = "./cmd/data/user/hcm/hcm_a2.json";
     } else if (key.includes("hcm_b1")) {
-        userPath = "./data/user/hcm/hcm_b1.json";
+        userPath = "./cmd/data/user/hcm/hcm_b1.json";
     } else if (key.includes("hcm_b2")) {
-        userPath = "./data/user/hcm/hcm_b2.json";
+        userPath = "./cmd/data/user/hcm/hcm_b2.json";
     } else{
-        userPath = "./data/test/user.json";
+        userPath = "./cmd/data/test/user.json";
     }
     return userPath;
 }

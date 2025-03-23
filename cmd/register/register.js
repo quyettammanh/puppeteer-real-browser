@@ -43,6 +43,7 @@ async function taskRegisterGoethe(
       );
       return null;
     }
+    
     console.log(
       `Browser ${identifier}: Starting remaining steps for ${user.email}`
     );
@@ -122,6 +123,7 @@ async function handleRemainingSteps(
   identifier = ""
 ) {
   const maxAttempts = 20;
+  const maxStepAttempts = 5; // Maximum attempts per individual step
   const timeout = 6000000; // 10 minute all step
   const stepTimeout = 1200000; // 2 minute stuck in same step
   let attempts = 0;
@@ -129,6 +131,9 @@ async function handleRemainingSteps(
   let lastStepTime = Date.now();
   let lastStep = "";
   let currentStep = "";
+  
+  // Track attempts per step
+  let stepAttempts = {};
 
   // Add identifier prefix to all console logs
   const log = (message) => console.log(`Browser for ${user.email}: ${message}`);
@@ -146,6 +151,11 @@ async function handleRemainingSteps(
     summary: false,
     success: false,
   };
+
+  // Initialize step attempts counter
+  Object.keys(stepCompletionStatus).forEach(step => {
+    stepAttempts[step] = 0;
+  });
 
   // Định nghĩa các xử lý cho từng bước
   const stepHandlers = {
@@ -323,6 +333,12 @@ async function handleRemainingSteps(
         await page.reload();
         lastStepTime = Date.now();
         attempts++;
+        
+        // Increment step-specific attempts
+        if (currentStep && stepAttempts[currentStep] !== undefined) {
+          stepAttempts[currentStep]++;
+        }
+        
         continue;
       }
 
@@ -336,11 +352,31 @@ async function handleRemainingSteps(
       await acceptCookies(page);
       await cancellBooking(page);
 
-      // Xử lý bước hiện tại nếu chưa hoàn thành
+      // Xử lý bước hiện tại nếu chưa hoàn thành và chưa vượt quá số lần thử
       const handler = stepHandlers[currentStep];
       if (handler && !stepCompletionStatus[currentStep]) {
-        attempts = 0; // Reset attempts for valid steps
-        await handler();
+        // Check if maximum attempts for this step have been reached
+        if (stepAttempts[currentStep] >= maxStepAttempts) {
+          log(`⚠️ Maximum attempts (${maxStepAttempts}) reached for step "${currentStep}". Skipping...`);
+          // Take screenshot of the failed step
+          await takeScreenshot(page, user, {
+            fullPage: true,
+            createDateFolder: true,
+            fileName: `max_attempts_${currentStep}.png`,
+          });
+          
+          // Force move to next step (mark current as completed)
+          stepCompletionStatus[currentStep] = true;
+        } else {
+          // Try to handle the step
+          const success = await handler();
+          
+          // Increment attempt counter only if the step failed
+          if (!success) {
+            stepAttempts[currentStep]++;
+            log(`Step "${currentStep}" attempt ${stepAttempts[currentStep]}/${maxStepAttempts}`);
+          }
+        }
       } else if (!handler) {
         // Bước không xác định
         log("Unknown or unhandled step:");
@@ -363,10 +399,20 @@ async function handleRemainingSteps(
       }
     } catch (error) {
       attempts++;
-      log(
-        `Error in handleRemainingSteps (attempt ${attempts}/${maxAttempts}):`,
-        error.message
-      );
+      
+      // Increment step-specific attempts when an error occurs
+      if (currentStep && stepAttempts[currentStep] !== undefined) {
+        stepAttempts[currentStep]++;
+        log(`Error in step "${currentStep}" (attempt ${stepAttempts[currentStep]}/${maxStepAttempts}): ${error.message}`);
+        
+        // If max attempts reached for this step, mark it as completed to move on
+        if (stepAttempts[currentStep] >= maxStepAttempts) {
+          log(`⚠️ Maximum attempts (${maxStepAttempts}) reached for step "${currentStep}" after error. Moving on...`);
+          stepCompletionStatus[currentStep] = true;
+        }
+      } else {
+        log(`Error in handleRemainingSteps (attempt ${attempts}/${maxAttempts}): ${error.message}`);
+      }
 
       // Chụp màn hình khi có lỗi
       try {
