@@ -51,8 +51,8 @@ const { userInputLoop } = require("./helper/func.js");
     const browserPromise = (async () => {
       try {
         // Initialize a new browser for this user with the browser ID
-        // const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
-        const { browser, page } = await initBrowserWithRealBrowser(browserId);
+        const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
+        // const { browser, page } = await initBrowserWithRealBrowser(browserId);
 
 
         // Process with this browser
