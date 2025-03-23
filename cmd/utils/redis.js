@@ -127,6 +127,60 @@ const pingRedis = async (redisSub) => {
     }
 };
 
+/**
+ * Subscribe to a Redis channel to receive registration links
+ * @param {string} channel - The Redis channel to subscribe to
+ * @param {function} callback - Callback function to process links (link, exam, modules, date)
+ * @returns {Object} - The Redis subscriber client
+ */
+async function subscribeToRegistrationLinks(channel, callback) {
+    try {
+        // Make sure subscriber client is connected
+        if (!redisSub.isOpen) {
+            await connectRedisSub();
+        }
+        
+        console.log(`Subscribing to Redis channel: ${channel}`);
+        
+        // Subscribe to the channel
+        await redisSub.subscribe(channel, (message) => {
+            console.log(`Received message from Redis channel ${channel}: ${message}`);
+            
+            try {
+                // Parse the message in format "link@exam@modules@date"
+                const parts = message.split('@');
+                
+                if (parts.length >= 4) {
+                    const link = parts[0];
+                    const exam = parts[1];
+                    const modules = parts[2];
+                    const date = parts[3];
+                    
+                    // Validate link
+                    if (isValidUrl(link)) {
+                        console.log(`Processing valid registration link: ${link}, Exam: ${exam}, Modules: ${modules}, Date: ${date}`);
+                        
+                        // Call the callback with parsed data
+                        callback(link, exam, modules, date);
+                    } else {
+                        console.error(`Invalid URL format received: ${link}`);
+                    }
+                } else {
+                    console.error(`Invalid message format. Expected "link@exam@modules@date", got: ${message}`);
+                }
+            } catch (err) {
+                console.error(`Error processing Redis message: ${err.message}`);
+            }
+        });
+        
+        console.log(`Successfully subscribed to channel: ${channel}`);
+        return redisSub;
+    } catch (err) {
+        console.error(`Error subscribing to Redis channel ${channel}: ${err.message}`);
+        throw err;
+    }
+}
+
 module.exports = {
     connectLinkQueue,
     connectRedis,
@@ -138,4 +192,5 @@ module.exports = {
     },
     saveURLListWithTTL,
     pingRedis,
+    subscribeToRegistrationLinks,
 };
