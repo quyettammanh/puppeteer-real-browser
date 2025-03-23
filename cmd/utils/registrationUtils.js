@@ -2,6 +2,7 @@ const { initBrowserWithRealBrowser } = require("../puppeteer/multi_browser.js");
 const { taskRegisterGoethe } = require("../register/register.js");
 const { parseExamCode } = require("./examUtils.js");
 const { getNextUser, returnUserToPool } = require("./userPool.js");
+const { extractCookies, parseCookies } = require("./link_cookies.js");
 
 // Store active browsers to manage them
 const activeBrowsers = new Map();
@@ -15,11 +16,15 @@ const activeBrowsers = new Map();
  * @param {Object} user - User object with credentials
  * @param {string} proxy - Proxy to use
  * @param {string} browserId - Unique browser identifier
+ * @param {string} cookies - Cookies extracted from the URL (optional)
  * @returns {Promise<void>}
  */
-async function processRegistration(url, examCode, modules, date, user, proxy, browserId) {
+async function processRegistration(url, examCode, modules, date, user, proxy, browserId, cookies = null) {
   console.log(`Processing registration for ${user.email} - Exam: ${examCode}, Date: ${date}`);
   console.log(`Modules: ${modules}, URL: ${url}, Browser ID: ${browserId}`);
+  if (cookies) {
+    console.log(`Using cookies from link`);
+  }
   
   try {
     // Initialize a new browser for this user with the browser ID
@@ -27,6 +32,30 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
     
     // Keep track of active browsers
     activeBrowsers.set(browserId, { browser, user });
+    
+    // If cookies were provided, set them on the page
+    if (cookies) {
+      try {
+        // Wait for the page to be ready before setting cookies
+        if (!page.isClosed()) {
+          console.log(`Setting cookies on page for ${browserId}`);
+          
+          // Use the parseCookies function to convert cookie string to cookie objects
+          const cookieObjects = parseCookies(cookies, url);
+          
+          if (cookieObjects.length > 0) {
+            // Set cookies on the page
+            await page.setCookie(...cookieObjects);
+            console.log(`Successfully set ${cookieObjects.length} cookies on page for ${browserId}`);
+          } else {
+            console.log(`No valid cookies to set for ${browserId}`);
+          }
+        }
+      } catch (error) {
+        console.error(`Error setting cookies for ${browserId}:`, error);
+        // Continue without cookies if there was an error
+      }
+    }
     
     // Process with this browser - pass modules and date as additional parameters
     await taskRegisterGoethe(browser, page, url, user, "./cmd/data/proxy/proxy.txt", examCode, browserId, modules, date);

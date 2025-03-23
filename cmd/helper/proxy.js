@@ -83,21 +83,21 @@ async function setProxyOnPage(page, proxy, browserId) {
       throw new Error("Proxy type not supported");
     }
   
-    console.log(`Browser ${browserIdentifier}: Setting proxy ${proxy.proxy}:${proxy.port}`);
+    // console.log(`Browser ${browserIdentifier}: Setting proxy ${proxy.proxy}:${proxy.port}`);
   
     // Reset request interception - make sure to handle errors
     try {
       await page.setRequestInterception(false);
       await page.setRequestInterception(true);
     } catch (err) {
-      console.error(`Browser ${browserIdentifier}: Error setting request interception:`, err.message);
+      // console.error(`Browser ${browserIdentifier}: Error setting request interception:`, err.message);
       // Try to continue even if this fails
     }
   
     // Remove all previous listeners to avoid memory leaks
     const listenerCount = page.listenerCount("request");
     if (listenerCount > 0) {
-      console.log(`Browser ${browserIdentifier}: Removing ${listenerCount} existing request listeners`);
+      // console.log(`Browser ${browserIdentifier}: Removing ${listenerCount} existing request listeners`);
       page.removeAllListeners("request");
     }
   
@@ -109,7 +109,7 @@ async function setProxyOnPage(page, proxy, browserId) {
         // Only log the first part of the error to avoid spam
         const errorMsg = err.message || "Unknown error";
         const shortError = errorMsg.split('\n')[0];
-        console.log(`Browser ${browserIdentifier}: Proxy error:`, shortError);
+        // console.log(`Browser ${browserIdentifier}: Proxy error:`, shortError);
         
         try {
           request.continue();
@@ -125,90 +125,6 @@ async function setProxyOnPage(page, proxy, browserId) {
     return page; // Return the page even if proxy setup fails
   }
 }
-
-// async function setProxyOnPage(page, proxy) {
-//   // Xác định loại proxy
-//   let proxyUrl;
-//   if (proxy.type === "socks5") {
-//     proxyUrl = `socks5://${encodeURIComponent(
-//       proxy.username
-//     )}:${encodeURIComponent(proxy.password)}@${proxy.proxy}:${
-//       proxy.port
-//     }`;
-//   } else if (proxy.type === "http") {
-//     proxyUrl = `http://${encodeURIComponent(
-//       proxy.username
-//     )}:${encodeURIComponent(proxy.password)}@${proxy.proxy}:${
-//       proxy.port
-//     }`;
-//   } else {
-//     throw new Error("Proxy type not supported");
-//   }
-
-//   console.log("proxyUrl", proxyUrl);
-//   // Reset request interception
-//   await page.setRequestInterception(false);
-//   await page.setRequestInterception(true);
-
-//   // Remove all previous listeners
-//   page.removeAllListeners("request");
-
-//   // Add new proxy
-//   page.on("request", async (request) => {
-//     try {
-//       await useProxy(request, proxyUrl.toString());
-//     } catch (err) {
-//       console.log(err);
-//       request.continue();
-//     }
-//   });
-
-//   // await page.goto(url);
-//   return page;
-// }
-
-
-// async function proxyRoating(page, proxies) {
-//   const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
-//   console.log("proxy roating", randomProxy);
-
-//   // Xác định loại proxy
-//   let proxyUrl;
-//   if (randomProxy.type === "socks5") {
-//     proxyUrl = `socks5://${encodeURIComponent(
-//       randomProxy.username
-//     )}:${encodeURIComponent(randomProxy.password)}@${randomProxy.proxy}:${
-//       randomProxy.port
-//     }`;
-//   } else if (randomProxy.type === "http") {
-//     proxyUrl = `http://${encodeURIComponent(
-//       randomProxy.username
-//     )}:${encodeURIComponent(randomProxy.password)}@${randomProxy.proxy}:${
-//       randomProxy.port
-//     }`;
-//   } else {
-//     throw new Error("Proxy type not supported");
-//   }
-
-//   console.log("proxyUrl", proxyUrl);
-//   // Reset request interception
-//   await page.setRequestInterception(false);
-//   await page.setRequestInterception(true);
-
-//   // Remove all previous listeners
-//   page.removeAllListeners("request");
-
-//   // Add new proxy
-//   page.on("request", async (request) => {
-//     try {
-//       await useProxy(request, proxyUrl.toString());
-//     } catch (err) {
-//       console.log(err);
-//       request.continue();
-//     }
-//   });
-//   return page;
-// }
 
 module.exports = {
   getProxies,

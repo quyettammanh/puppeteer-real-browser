@@ -1,10 +1,17 @@
 const { getProxies } = require("./helper/proxy.js");
 const { connectRedis, subscribeToRegistrationLinks } = require("./utils/redis.js");
-const { processRegistrationLink, closeAllBrowsers } = require("./utils/registrationUtils.js");
+const { 
+  initQueue,
+  addToQueue, 
+  processQueue,
+  getQueueLength,
+  getActiveBrowserCount
+} = require("./utils/registrationQueue.js");
+const { closeAllBrowsers } = require("./utils/registrationUtils.js");
 
 // Main function with Redis integration
 (async () => {
-  console.log("Starting Goethe Registration System with Redis Integration");
+  console.log("Starting Goethe Registration System with Redis Integration and Queue System");
   
   // Connect to Redis first
   await connectRedis();
@@ -15,16 +22,25 @@ const { processRegistrationLink, closeAllBrowsers } = require("./utils/registrat
   if (!listProxies || listProxies.length === 0) {
     console.warn(`Không có proxy nào cho exam`);
     return;
-  }
+  }  
+  // Initialize the queue system with proxies
+  initQueue(listProxies);
+  console.log(`Queue system initialized with max 5 concurrent browsers and ${listProxies.length} proxies`);
   
   // Subscribe to Redis channel for registration links
-  const redisChannel = process.env.REDIS_REGISTER_CHANNEL || 'goethe-register-links';
+  const redisChannel = process.env.REDIS_REGISTER_CHANNEL || 'url_updates';
   console.log(`Subscribing to Redis channel: ${redisChannel}`);
   
+  // Set up periodic status reporting
+  setInterval(() => {
+    console.log(`Queue status: ${getQueueLength()} links waiting, ${getActiveBrowserCount()} active browsers`);
+  }, 60000); // Log status every minute
+  
   await subscribeToRegistrationLinks(redisChannel, (link, examCode, modules, date) => {
-    // Reconstruct message and process it
+    // Reconstruct message and add it to the queue
     const message = `${link}@${examCode}@${modules}@${date}`;
-    processRegistrationLink(message, listProxies);
+    addToQueue(message);
+    // Queue system will automatically process links as browser capacity becomes available
   });
   
   console.log("Waiting for registration links from Redis...");
@@ -36,8 +52,9 @@ const { processRegistrationLink, closeAllBrowsers } = require("./utils/registrat
   const initialDate = process.env.INITIAL_DATE || new Date().toLocaleDateString('en-GB');
   
   if (initialUrl) {
-    console.log(`Processing initial URL: ${initialUrl}`);
-    processRegistrationLink(`${initialUrl}@${initialExam}@${initialModules}@${initialDate}`, listProxies);
+    console.log(`Adding initial URL to queue: ${initialUrl}`);
+    const initialMessage = `${initialUrl}@${initialExam}@${initialModules}@${initialDate}`;
+    addToQueue(initialMessage);
   }
   
   // Keep the process running
