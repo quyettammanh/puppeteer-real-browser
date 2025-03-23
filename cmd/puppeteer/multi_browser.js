@@ -9,8 +9,7 @@ async function initBrowserWithRealBrowser(browserId,proxy) {
 
   let hiddenChrome =
     process.env.open_chrome?.toLowerCase() === "false" ? false : true;
-  hiddenChrome = false;
-  // console.log(`Browser ${identifier}: hiddenChrome: ${hiddenChrome}`);
+  console.log(`Browser ${identifier}: hiddenChrome: ${hiddenChrome}`);
 
   // Create unique user data directory for each browser to isolate cookies and session data
   const userDataDir = `./user-data-${identifier}`;
