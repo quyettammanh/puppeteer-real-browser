@@ -11,7 +11,7 @@ async function stepChooseModule(page, user) {
 }
 
 async function chooseModule(page, user) {
-    await randomTime(4,5);
+    // await randomTime(4,5);
     console.log("Choose module");
     await acceptCookies(page)
     await clickButtonContinue(page);

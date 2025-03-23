@@ -16,13 +16,13 @@ async function acceptCookies(page, retries = 5, waitTime = 5000) {
             await acceptButton.click();
             isCookieAccepted = true;
           } else {
-            console.log("Không có thông báo cookies.");
+            // console.log("Không có thông báo cookies.");
           }
         } else {
-          console.log("Phần tử thông báo cookies không xuất hiện.");
+          // console.log("Phần tử thông báo cookies không xuất hiện.");
         }
       } catch (error) {
-        console.error(`Lỗi khi kiểm tra thông báo cookies: ${error.message}`);
+        // console.error(`Lỗi khi kiểm tra thông báo cookies: ${error.message}`);
       }
       attempt += 1;
     }

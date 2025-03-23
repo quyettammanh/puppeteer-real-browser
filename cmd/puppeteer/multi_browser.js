@@ -1,37 +1,46 @@
 const { connect } = require("puppeteer-real-browser");
+// const pluginProxy = require('puppeteer-extra-plugin-proxy');
+const { proxyRoating, setProxyOnPage } = require("../helper/proxy.js");
 
-async function initBrowserWithRealBrowser(proxy) {
-    console.log("initBrowserWithRealBrowser",proxy);
-    let hiddenChrome = process.env.open_chrome?.toLowerCase() === "false" ? false : true;
-    hiddenChrome=false
-    console.log(`hiddenChrome: ${hiddenChrome}`);
-    // Create configuration object without proxy initially
-    const connectOptions = {
-        headless: hiddenChrome,
-        // args: [],
-        // customConfig: {},
-        // turnstile: true,
-        // connectOption: {},
-        // disableXvfb: false,
-        // ignoreAllFlags: false,
-    };
-    
-    // Only add proxy configuration if a valid proxy object is provided
-    if (proxy && proxy.proxy && proxy.port) {
-        connectOptions.proxy = {
-            host: proxy.proxy,
-            port: proxy.port,
-            username: proxy.username || '',  // Make username optional
-            password: proxy.password || '',  // Make password optional
-        };
-    }
-    // console.log(connectOptions);
-     // Connect using the prepared options
-     const { browser, page } = await connect(connectOptions);
-    
-     return { browser, page };
+async function initBrowserWithRealBrowser(browserId,proxy) {
+  const identifier =
+    browserId || `browser-${Math.random().toString(36).substring(2, 8)}`;
+  console.log(`Browser ${identifier}: Initializing browser`);
+
+  let hiddenChrome =
+    process.env.open_chrome?.toLowerCase() === "false" ? false : true;
+  hiddenChrome = false;
+  console.log(`Browser ${identifier}: hiddenChrome: ${hiddenChrome}`);
+
+  // Create unique user data directory for each browser to isolate cookies and session data
+  const userDataDir = `./user-data-${identifier}`;
+  console.log(`Browser ${identifier}: Using isolated user data directory: ${userDataDir}`);
+
+  // Create configuration object
+  const connectOptions = {
+    headless: hiddenChrome,
+    args: [
+      // Add arguments to optimize for multiple tabs
+      "--disable-background-timer-throttling",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-renderer-backgrounding",
+    ],
+    defaultViewport: null, // Make viewport responsive
+    userDataDir: userDataDir, // Each browser gets its own user data directory for cookie isolation
+  };
+
+  // Connect using the prepared options
+  const { browser, page } = await connect(connectOptions);
+
+  // Apply the proxy to the initial page if provided
+  if (proxy) {
+    await setProxyOnPage(page, proxy, identifier);
+    console.log(`Browser ${identifier}: Initial proxy applied to first page`);
+  }
+
+  return { browser, page };
 }
 
 module.exports = {
-    initBrowserWithRealBrowser,
+  initBrowserWithRealBrowser,
 };
