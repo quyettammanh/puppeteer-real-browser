@@ -28,8 +28,8 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
   
   try {
     // Initialize a new browser for this user with the browser ID
-    const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
-    
+    // const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
+    const { browser, page } = await initBrowserWithRealBrowser(browserId);
     // Keep track of active browsers
     activeBrowsers.set(browserId, { browser, user });
     

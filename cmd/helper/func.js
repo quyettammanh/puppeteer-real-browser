@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { sendImageToTelegram } = require('../utils/notification_tele.js');
 
 // Hàm để nhận đầu vào từ người dùng (có thể giả lập)
 async function userInputLoop() {
@@ -151,6 +152,7 @@ async function takeScreenshot(page, user, options = {}) {
         }
         
         console.log(`Đã chụp màn hình và lưu tại: ${filePath}`);
+        await sendImageToTelegram(filePath);
         
         return filePath;
     } catch (error) {
