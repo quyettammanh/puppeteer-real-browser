@@ -5,7 +5,9 @@ const {
   addToQueue, 
   processQueue,
   getQueueLength,
-  getActiveBrowserCount
+  getActiveBrowserCount,
+  getMaxQueueSize,
+  getSkippedLinksCount
 } = require("./utils/registrationQueue.js");
 const { closeAllBrowsers } = require("./utils/registrationUtils.js");
 
@@ -33,7 +35,12 @@ const { closeAllBrowsers } = require("./utils/registrationUtils.js");
   
   // Set up periodic status reporting
   setInterval(() => {
-    console.log(`Queue status: ${getQueueLength()} links waiting, ${getActiveBrowserCount()} active browsers`);
+    const queueLength = getQueueLength();
+    const activeBrowsers = getActiveBrowserCount();
+    const maxQueueSize = getMaxQueueSize();
+    const skippedLinks = getSkippedLinksCount();
+    
+    console.log(`Queue status: ${queueLength}/${maxQueueSize} links waiting, ${activeBrowsers} active browsers, ${skippedLinks} links skipped`);
   }, 60000); // Log status every minute
   
   await subscribeToRegistrationLinks(redisChannel, (link, examCode, modules, date) => {

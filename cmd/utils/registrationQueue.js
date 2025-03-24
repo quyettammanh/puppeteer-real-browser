@@ -1,6 +1,6 @@
 const { processRegistration } = require('./registrationUtils.js');
 const { parseExamCode } = require('./examUtils.js');
-const { getNextUser, returnUserToPool } = require('./userPool.js');
+const { getNextUser, returnUserToPool, getAvailableUserCount } = require('./userPool.js');
 const { extractCookies } = require('./link_cookies.js');
 
 // Queue of pending registration links
@@ -9,11 +9,26 @@ const linkQueue = [];
 // Maximum number of concurrent browsers
 const MAX_CONCURRENT_BROWSERS = 6;
 
+// Maximum size for the queue to prevent memory issues
+const MAX_QUEUE_SIZE = 25;
+
+// Maximum time (in milliseconds) for browser to run before forced close
+const BROWSER_TIMEOUT = 15 * 60 * 1000; // 15 minutes
+
 // Counter for active browsers
 let activeBrowserCount = 0;
 
+// Counter for skipped links
+let skippedLinksCount = 0;
+
+// Flag to indicate if queue processing is already in progress
+let isProcessingQueue = false;
+
 // Store proxies to be used across function calls
 let globalProxies = [];
+
+// Store cookies by link to avoid extracting them multiple times
+const cookiesCache = new Map();
 
 /**
  * Initialize the queue system with proxies
@@ -27,50 +42,95 @@ function initQueue(proxies) {
 /**
  * Add a registration link to the queue
  * @param {string} message - Registration message in format "link@examCode@modules@date"
+ * @returns {boolean} - Whether the link was added to the queue or skipped
  */
 function addToQueue(message) {
+  // Check if queue is already at maximum capacity
+  if (linkQueue.length >= MAX_QUEUE_SIZE) {
+    skippedLinksCount++;
+    // Log overload status only periodically to avoid spamming logs
+    if (skippedLinksCount % 5 === 0) {
+      console.log(`⚠️ Queue is full (${linkQueue.length}/${MAX_QUEUE_SIZE}). Skipped ${skippedLinksCount} links.`);
+    }
+    return false;
+  }
+  
+  // Add to queue if under limit
   linkQueue.push(message);
-  console.log(`Added link to queue. Queue length: ${linkQueue.length}`);
-  processQueue();
+  console.log(`Added link to queue. Queue length: ${linkQueue.length}/${MAX_QUEUE_SIZE}`);
+  
+  // Attempt to process the queue
+  tryProcessQueue();
+  return true;
 }
 
 /**
- * Process the next item in the queue if we have capacity
+ * Safely attempt to process the queue without overlapping executions
+ */
+function tryProcessQueue() {
+  if (!isProcessingQueue) {
+    isProcessingQueue = true;
+    processQueue();
+  }
+}
+
+/**
+ * Process items in the queue if we have capacity
  */
 function processQueue() {
-  if (linkQueue.length === 0) {
-    console.log('No links in queue to process');
-    return;
-  }
+  try {
+    // Get all unique exam types from the queue
+    const examTypesInQueue = new Set();
+    for (const message of linkQueue) {
+      const parts = message.split('@');
+      if (parts.length >= 2) {
+        const examCode = parts[1];
+        const { location, level } = parseExamCode(examCode);
+        if (location && level) {
+          examTypesInQueue.add(`${location}_${level}`);
+        }
+      }
+    }
 
-  // If we're already at max capacity, don't start new registrations
-  if (activeBrowserCount >= MAX_CONCURRENT_BROWSERS) {
-    console.log(`Already at max capacity (${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}). Waiting for browsers to finish...`);
-    return;
-  }
+    // Calculate available users across all exam types in queue
+    let totalAvailableUsers = 0;
+    for (const examKey of examTypesInQueue) {
+      const [location, level] = examKey.split('_');
+      const availableCount = getAvailableUserCount(location, level);
+      totalAvailableUsers += availableCount;
+    }
 
-  // Check if we have proxies available
-  if (!globalProxies || globalProxies.length === 0) {
-    console.error('No proxies available for processing queue');
-    return;
-  }
+    // Use the lower of MAX_CONCURRENT_BROWSERS or totalAvailableUsers as the limit
+    const effectiveLimit = Math.min(MAX_CONCURRENT_BROWSERS, totalAvailableUsers || MAX_CONCURRENT_BROWSERS);
+    console.log(`Effective browser limit: ${effectiveLimit} (Available users: ${totalAvailableUsers}, Max browsers: ${MAX_CONCURRENT_BROWSERS})`);
 
-  // Get next link from queue
-  const message = linkQueue.shift();
-  console.log(`Processing next link from queue. ${linkQueue.length} links remaining.`);
-  
-  // Process the link
-  processLink(message, globalProxies)
-    .then(() => {
-      console.log('Link processed successfully');
-      // After processing, try to process more links if available
-      processQueue();
-    })
-    .catch(error => {
-      console.error('Error processing link:', error);
-      // Even on error, try to process more links if available
-      processQueue();
-    });
+    // Continue processing while there are items and capacity
+    while (linkQueue.length > 0 && activeBrowserCount < effectiveLimit) {
+      if (!globalProxies || globalProxies.length === 0) {
+        console.error('No proxies available for processing queue');
+        break;
+      }
+      
+      // Get next link from queue
+      const message = linkQueue.shift();
+      console.log(`Processing link from queue. Queue length: ${linkQueue.length}/${MAX_QUEUE_SIZE}`);
+      
+      // Process the link
+      processLink(message, globalProxies)
+        .catch(error => {
+          console.error('Error processing link:', error);
+        });
+    }
+    
+    if (linkQueue.length > 0 && activeBrowserCount >= effectiveLimit) {
+      console.log(`At max capacity (${activeBrowserCount}/${effectiveLimit}) with ${linkQueue.length} links waiting`);
+    } else if (linkQueue.length === 0) {
+      console.log('Queue is empty');
+    }
+  } finally {
+    // Reset processing flag
+    isProcessingQueue = false;
+  }
 }
 
 /**
@@ -80,13 +140,19 @@ function processQueue() {
  * @returns {Promise<void>}
  */
 async function processLink(message, proxies) {
+  // Increment active browser count first thing
+  activeBrowserCount++;
+  console.log(`Starting browser. Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
+  
+  let user = null;
+  let browserTimeout = null;
+  
   try {
     // Parse the message
     const parts = message.split('@');
     
     if (parts.length < 4) {
-      console.error(`Invalid message format. Expected "link@examCode@modules@date", got: ${message}`);
-      return;
+      throw new Error(`Invalid message format. Expected "link@examCode@modules@date", got: ${message}`);
     }
     
     const link = parts[0];
@@ -94,29 +160,33 @@ async function processLink(message, proxies) {
     const modules = parts[2];
     const date = parts[3];
     
-    // Extract cookies from the link if any
-    const cookies = await extractCookies(link);
-    if (cookies) {
-      console.log(`Extracted cookies from link: ${cookies.substring(0, 50)}${cookies.length > 50 ? '...' : ''}`);
+    // Check if cookies are already in cache
+    let cookies = cookiesCache.get(link);
+    
+    // If not in cache, extract them and cache for future use
+    if (!cookies) {
+      cookies = await extractCookies(link);
+      if (cookies) {
+        cookiesCache.set(link, cookies);
+        console.log(`Extracted and cached cookies from link: ${cookies.substring(0, 50)}${cookies.length > 50 ? '...' : ''}`);
+      } else {
+        console.log(`No cookies found in the link or failed to extract cookies`);
+      }
     } else {
-      console.log(`No cookies found in the link or failed to extract cookies`);
+      console.log(`Using cached cookies for link: ${cookies.substring(0, 50)}${cookies.length > 50 ? '...' : ''}`);
     }
     
     // Extract location and level from exam code
     const { location, level } = parseExamCode(examCode);
     
     if (!location || !level) {
-      console.error(`Could not parse location and level from exam code: ${examCode}`);
-      return;
+      throw new Error(`Could not parse location and level from exam code: ${examCode}`);
     }
     
     // Get an available user for this exam type
-    const user = await getNextUser(location, level);
+    user = await getNextUser(location, level);
     if (!user) {
-      console.log(`No users available for ${location} ${level}. Adding link back to queue.`);
-      // Put the link back at the end of the queue for retry
-      linkQueue.push(message);
-      return;
+      throw new Error(`No users available for ${location} ${level}`);
     }
     
     // Select a random proxy
@@ -127,33 +197,47 @@ async function processLink(message, proxies) {
     
     console.log(`Starting registration for ${user.email} with browser ID ${browserId}`);
     
-    // Increment active browser count
-    activeBrowserCount++;
-    console.log(`Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
+    // Set a timeout to forcibly close the browser if it takes too long
+    browserTimeout = setTimeout(() => {
+      console.warn(`Browser timeout reached for ${browserId}. Force closing.`);
+      processRegistration(link, examCode, modules, date, user, proxy, browserId, cookies, true)
+        .catch(error => {
+          console.error(`Error force closing browser ${browserId}:`, error);
+        });
+    }, BROWSER_TIMEOUT);
     
     // Process the registration
-    try {
-      await processRegistration(link, examCode, modules, date, user, proxy, browserId, cookies);
-    } finally {
-      // Decrement active browser count when done
-      activeBrowserCount--;
-      console.log(`Browser completed. Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
-      
-      // Return the user to the pool
-      returnUserToPool(user, location, level);
-      
-      // Process next item in queue if any
-      setTimeout(() => processQueue(), 1000); // Add a small delay before processing next item
-    }
+    await processRegistration(link, examCode, modules, date, user, proxy, browserId, cookies);
+    console.log(`Registration completed for ${user.email}`);
+    
   } catch (error) {
-    console.error(`Error processing link: ${error.message}`);
+    console.error(`Error in processLink: ${error.message}`);
     
-    // Decrement active browser count in case of error
+    // If we failed due to no users, put the message back in queue
+    if (error.message && error.message.includes('No users available')) {
+      console.log(`Re-adding message to queue due to no available users`);
+      linkQueue.push(message);
+    }
+  } finally {
+    // Clear the timeout if it exists
+    if (browserTimeout) {
+      clearTimeout(browserTimeout);
+    }
+    
+    // Return user to pool if we got one
+    if (user) {
+      const { location, level } = parseExamCode(user.examCode || '');
+      if (location && level) {
+        returnUserToPool(user, location, level);
+      }
+    }
+    
+    // Decrement active browser count
     activeBrowserCount--;
-    console.log(`Browser errored. Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
+    console.log(`Browser completed. Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
     
-    // Process next item in queue even if this one failed
-    setTimeout(() => processQueue(), 1000);
+    // Try to process more messages after a short delay
+    setTimeout(() => tryProcessQueue(), 1000);
   }
 }
 
@@ -163,6 +247,22 @@ async function processLink(message, proxies) {
  */
 function getQueueLength() {
   return linkQueue.length;
+}
+
+/**
+ * Get the maximum queue size
+ * @returns {number} - Maximum queue size
+ */
+function getMaxQueueSize() {
+  return MAX_QUEUE_SIZE;
+}
+
+/**
+ * Get the number of skipped links due to queue being full
+ * @returns {number} - Number of skipped links
+ */
+function getSkippedLinksCount() {
+  return skippedLinksCount;
 }
 
 /**
@@ -192,7 +292,7 @@ function setMaxConcurrentBrowsers(max) {
     console.log(`Set maximum concurrent browsers to ${MAX_CONCURRENT_BROWSERS}`);
     
     // Try to process queue in case the limit was increased
-    processQueue();
+    tryProcessQueue();
   } else {
     console.error(`Invalid maximum concurrent browsers value: ${max}`);
   }
@@ -203,6 +303,8 @@ module.exports = {
   addToQueue,
   processQueue,
   getQueueLength,
+  getMaxQueueSize,
+  getSkippedLinksCount,
   getActiveBrowserCount,
   clearQueue,
   setMaxConcurrentBrowsers

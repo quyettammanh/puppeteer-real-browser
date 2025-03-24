@@ -3,6 +3,49 @@ const { loadUsersForExam } = require('./examUtils.js');
 // Store available users for each exam type
 const availableUsersByExam = new Map();
 
+// Store currently active users (being used in browsers)
+const activeUsers = new Set();
+
+/**
+ * Track a user as currently active
+ * @param {Object} user - The user object to mark as active
+ * @returns {boolean} - true if user was marked active, false if already active
+ */
+function trackActiveUser(user) {
+  if (!user || !user.email) return false;
+  
+  // Check if user is already active
+  if (activeUsers.has(user.email)) {
+    console.warn(`User ${user.email} is already active. Should not be used in multiple browsers.`);
+    return false;
+  }
+  
+  activeUsers.add(user.email);
+  return true;
+}
+
+/**
+ * Check if a user is currently active
+ * @param {Object} user - The user object to check
+ * @returns {boolean} - true if user is active
+ */
+function isUserActive(user) {
+  if (!user || !user.email) return false;
+  return activeUsers.has(user.email);
+}
+
+/**
+ * Release a user from active status
+ * @param {Object} user - The user object to release
+ */
+function releaseActiveUser(user) {
+  if (!user || !user.email) return;
+  
+  if (activeUsers.has(user.email)) {
+    activeUsers.delete(user.email);
+  }
+}
+
 /**
  * Get the next available user for a specific exam type
  * @param {string} location - Exam location (hcm, hanoi)
@@ -24,12 +67,23 @@ async function getNextUser(location, level) {
   
   const availableUsers = availableUsersByExam.get(examKey);
   if (availableUsers.length === 0) {
-    console.log(`No available users left for ${examKey}. Waiting for current sessions to complete.`);
+    // console.log(`No available users left for ${examKey}. Waiting for current sessions to complete.`);
     return null;
   }
   
-  // Get and remove the first user from the available list
-  return availableUsers.shift();
+  // Find a user that is not currently active
+  for (let i = 0; i < availableUsers.length; i++) {
+    if (!isUserActive(availableUsers[i])) {
+      // Get and remove the user from the available list
+      const user = availableUsers.splice(i, 1)[0];
+      // Mark user as active
+      trackActiveUser(user);
+      return user;
+    }
+  }
+  
+  console.log(`All users for ${examKey} are currently active in browsers`);
+  return null;
 }
 
 /**
@@ -44,6 +98,9 @@ function returnUserToPool(user, location, level) {
   if (!availableUsersByExam.has(examKey)) {
     availableUsersByExam.set(examKey, []);
   }
+  
+  // Release user from active status
+  releaseActiveUser(user);
   
   availableUsersByExam.get(examKey).push(user);
   console.log(`User ${user.email} returned to the available pool for ${examKey}. Available users: ${availableUsersByExam.get(examKey).length}`);
@@ -81,5 +138,8 @@ module.exports = {
   getNextUser,
   returnUserToPool,
   getAvailableUserCount,
-  resetUserPool
+  resetUserPool,
+  trackActiveUser,
+  isUserActive,
+  releaseActiveUser
 }; 

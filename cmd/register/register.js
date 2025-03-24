@@ -43,7 +43,7 @@ async function taskRegisterGoethe(
       );
       return null;
     }
-    
+
     console.log(
       `Browser ${identifier}: Starting remaining steps for ${user.email}`
     );
@@ -54,8 +54,7 @@ async function taskRegisterGoethe(
     console.log(`Browser ${identifier}: Process completed for ${user.email}`);
   } catch (error) {
     console.error(
-      `Error in browser ${browserId} for ${user.email}: ${
-        error.message || "Unknown error"
+      `Error in browser ${browserId} for ${user.email}: ${error.message || "Unknown error"
       }`
     );
   }
@@ -131,7 +130,7 @@ async function handleRemainingSteps(
   let lastStepTime = Date.now();
   let lastStep = "";
   let currentStep = "";
-  
+
   // Track attempts per step
   let stepAttempts = {};
 
@@ -265,28 +264,44 @@ async function handleRemainingSteps(
         identifier
       );
     },
-
     summary: async () => {
       log("📋 Starting: Summary");
-      await stepSummary(page);
-      return checkStepCompletion(
-        page,
-        user,
-        "summary",
-        stepCompletionStatus,
-        "summary",
-        identifier
-      );
-    },
-
-    success: async () => {
-      log("🎉 Starting: Success page");
-      const result = await stepSuccess(page, user, log);
-      if (result) {
-        stepCompletionStatus.success = true;
+      const success = await stepSummary(page, user);
+      if (success) {
+        stepCompletionStatus.summary = true;
+        log("✅ Summary step completed successfully!");
       }
-      return result;
+      return success;
     },
+    // Add specific handling for success step
+    // success: async () => {
+    //   log("🎉 Starting: Success page");
+    //   stepCompletionStatus.success = true;
+    //   log("✅ Success step completed!");
+    //   return true;
+    // },
+
+    // summary: async () => {
+    //   log("📋 Starting: Summary");
+    //   return await stepSummary(page, user);
+    //   // return checkStepCompletion(
+    //   //   page,
+    //   //   user,
+    //   //   "summary",
+    //   //   stepCompletionStatus,
+    //   //   "summary",
+    //   //   identifier
+    //   // );
+    // },
+
+    // success: async () => {
+    //   log("🎉 Starting: Success page");
+    //   const result = await stepSuccess(page, user, log);
+    //   if (result) {
+    //     stepCompletionStatus.success = true;
+    //   }
+    //   return result;
+    // },
   };
 
   while (attempts < maxAttempts && Date.now() - startTime < timeout) {
@@ -311,7 +326,7 @@ async function handleRemainingSteps(
         // Regular step detection
         currentStep = await getCurrentStep(page, identifier);
       }
-      
+
       log("Current step:", currentStep);
 
       // Special handling for success page detection
@@ -333,12 +348,12 @@ async function handleRemainingSteps(
         await page.reload();
         lastStepTime = Date.now();
         attempts++;
-        
+
         // Increment step-specific attempts
         if (currentStep && stepAttempts[currentStep] !== undefined) {
           stepAttempts[currentStep]++;
         }
-        
+
         continue;
       }
 
@@ -364,13 +379,13 @@ async function handleRemainingSteps(
             createDateFolder: true,
             fileName: `max_attempts_${currentStep}.png`,
           });
-          
+
           // Force move to next step (mark current as completed)
           stepCompletionStatus[currentStep] = true;
         } else {
           // Try to handle the step
           const success = await handler();
-          
+
           // Increment attempt counter only if the step failed
           if (!success) {
             stepAttempts[currentStep]++;
@@ -387,8 +402,8 @@ async function handleRemainingSteps(
       // Kiểm tra xem đã hoàn thành tất cả các bước hay chưa
       const allStepsCompleted = Object.values(stepCompletionStatus).every(
         (status) => status
-      ) || stepCompletionStatus.success; // Consider success as completion condition
-
+        // ) || stepCompletionStatus.success; // Consider success as completion condition
+      ) || stepCompletionStatus.summary;
       if (allStepsCompleted) {
         log("✅ All steps completed successfully!");
         // Final screenshot already taken in success handler if that's how we finished
@@ -399,12 +414,12 @@ async function handleRemainingSteps(
       }
     } catch (error) {
       attempts++;
-      
+
       // Increment step-specific attempts when an error occurs
       if (currentStep && stepAttempts[currentStep] !== undefined) {
         stepAttempts[currentStep]++;
         log(`Error in step "${currentStep}" (attempt ${stepAttempts[currentStep]}/${maxStepAttempts}): ${error.message}`);
-        
+
         // If max attempts reached for this step, mark it as completed to move on
         if (stepAttempts[currentStep] >= maxStepAttempts) {
           log(`⚠️ Maximum attempts (${maxStepAttempts}) reached for step "${currentStep}" after error. Moving on...`);

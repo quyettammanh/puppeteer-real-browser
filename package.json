@@ -3,6 +3,7 @@
     "@lem0-packages/puppeteer-page-proxy": "^1.4.1",
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",
+    "node-fetch": "^3.3.2",
     "puppeteer-real-browser": "^1.4.2",
     "redis": "^4.7.0"
   }
