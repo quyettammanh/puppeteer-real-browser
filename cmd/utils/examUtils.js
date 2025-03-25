@@ -23,7 +23,7 @@ function parseExamCode(examCode) {
       examCode.toLowerCase().includes("hanoi") ||
       examCode.toLowerCase().includes("hn")
     ) {
-      location = "hn";
+      location = "hanoi";
     }
 
     // Try to extract level (b1, b2, c1, etc.)
@@ -67,12 +67,11 @@ async function loadUsersForExam(location, level) {
       return users;
     } else {
       console.warn(`User file not found: ${userFilePath}`);
-      // Fall back to default
-      return await loadDefaultUsers(examKey);
+      return [];
     }
   } catch (error) {
     console.error(`Error loading users for ${location}/${level}:`, error);
-    return await loadDefaultUsers(examKey);
+    return [];
   }
 }
 

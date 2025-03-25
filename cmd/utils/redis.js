@@ -141,9 +141,40 @@ async function subscribeToRegistrationLinks(channel, callback) {
 
     console.log(`Subscribing to Redis channel: ${channel}`);
 
+    // Add a queue status check to track overload condition
+    let isProcessingOverloaded = false;
+    let skippedLinksCount = 0;
+    let lastOverloadLogTime = 0;
+
     // Subscribe to the channel
     await redisSub.subscribe(channel, (message) => {
-    //   console.log(`Received message from Redis channel ${channel}: ${message}`);
+      // Get current queue info from the same module that manages the queue
+      let queueModule;
+      try {
+        queueModule = require('./registrationQueue');
+        const queueLength = queueModule.getQueueLength();
+        const activeBrowsers = queueModule.getActiveBrowserCount();
+        const maxBrowsers = 6; // Match the MAX_CONCURRENT_BROWSERS value from registrationQueue.js
+        
+        // Check if we're overloaded (queue has too many pending items)
+        const MAX_QUEUE_SIZE = 25; // Adjust this threshold as needed
+        isProcessingOverloaded = (queueLength >= MAX_QUEUE_SIZE && activeBrowsers >= maxBrowsers);
+        
+        // Log overload status periodically to avoid log spam
+        const now = Date.now();
+        if (isProcessingOverloaded && (now - lastOverloadLogTime > 60000)) { // Log once per minute
+          console.log(`⚠️ System overloaded: Queue length: ${queueLength}, Active browsers: ${activeBrowsers}/${maxBrowsers}, Skipped links: ${skippedLinksCount}`);
+          lastOverloadLogTime = now;
+        }
+      } catch (err) {
+        console.error(`Error checking queue status: ${err.message}`);
+      }
+      
+      // Skip processing if system is overloaded
+      if (isProcessingOverloaded) {
+        skippedLinksCount++;
+        return; // Skip this message
+      }
 
       try {
         // Parse the message in format "link@exam@modules@date"

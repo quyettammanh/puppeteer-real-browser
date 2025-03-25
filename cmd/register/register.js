@@ -43,7 +43,7 @@ async function taskRegisterGoethe(
       );
       return null;
     }
-    
+
     console.log(
       `Browser ${identifier}: Starting remaining steps for ${user.email}`
     );
@@ -54,8 +54,7 @@ async function taskRegisterGoethe(
     console.log(`Browser ${identifier}: Process completed for ${user.email}`);
   } catch (error) {
     console.error(
-      `Error in browser ${browserId} for ${user.email}: ${
-        error.message || "Unknown error"
+      `Error in browser ${browserId} for ${user.email}: ${error.message || "Unknown error"
       }`
     );
   }
@@ -64,6 +63,7 @@ async function taskRegisterGoethe(
 // Hàm xác định bước hiện tại dựa trên URL
 async function getCurrentStep(page, identifier = "") {
   const currentUrl = page.url();
+  console.log(`Browser for ${identifier}: Checking current URL: ${currentUrl}`);
 
   // Map URL patterns to step names
   const urlStepMap = [
@@ -79,22 +79,53 @@ async function getCurrentStep(page, identifier = "") {
     { pattern: "success", step: "success" },
   ];
 
-  // Tìm bước dựa trên URL
+  // Tìm bước dựa trên URL (case-insensitive)
   for (const { pattern, step } of urlStepMap) {
-    if (currentUrl.includes(pattern)) {
+    if (currentUrl.toLowerCase().includes(pattern.toLowerCase())) {
+      console.log(`Browser for ${identifier}: Matched step "${step}" from pattern "${pattern}"`);
       return step;
     }
   }
 
-  // Nếu không tìm thấy, lấy bước từ văn bản trang
-  const activeStep = await getActiveStepText(page);
-  console.log(
-    `Browser for ${identifier}: Unknown step from URL:`,
-    currentUrl,
-    "Active step text:",
-    activeStep
-  );
-  return activeStep || "unknown";
+  // Nếu không tìm thấy, thử phương thức khác để xác định bước
+  try {
+    // Check page title which might contain step information
+    const pageTitle = await page.title();
+    console.log(`Browser for ${identifier}: Page title: "${pageTitle}"`);
+    
+    // For debugging - take screenshot when step detection fails
+    await takeScreenshot(page, { 
+      fullPage: true, 
+      createDateFolder: true,
+      fileName: `unknown_step_${Date.now()}.png` 
+    });
+    
+    // Try to get text from any step indicator elements
+    const activeStep = await getActiveStepText(page);
+    console.log(
+      `Browser for ${identifier}: Step detection failed. URL: ${currentUrl}, Active step text: "${activeStep}"`
+    );
+    
+    // Additional attempts to identify the page - check for specific elements
+    const bodyText = await page.evaluate(() => document.body.innerText);
+    console.log(`Browser for ${identifier}: First 100 chars of page body: "${bodyText.substring(0, 100)}..."`);
+    
+    // Try to identify based on DOM structure or specific elements
+    const hasLoginForm = await page.evaluate(() => !!document.querySelector('form input[type="password"]'));
+    if (hasLoginForm) {
+      console.log(`Browser for ${identifier}: Detected login form on page`);
+      return "login";
+    }
+    
+    if (activeStep) {
+      return activeStep;
+    }
+    
+    return "unknown";
+  } catch (error) {
+    console.error(`Browser for ${identifier}: Error in getCurrentStep: ${error.message}`);
+    return "unknown";
+  }
 }
 
 // Hàm kiểm tra và cập nhật trạng thái hoàn thành bước
@@ -131,7 +162,7 @@ async function handleRemainingSteps(
   let lastStepTime = Date.now();
   let lastStep = "";
   let currentStep = "";
-  
+
   // Track attempts per step
   let stepAttempts = {};
 
@@ -265,28 +296,44 @@ async function handleRemainingSteps(
         identifier
       );
     },
-
     summary: async () => {
       log("📋 Starting: Summary");
-      await stepSummary(page);
-      return checkStepCompletion(
-        page,
-        user,
-        "summary",
-        stepCompletionStatus,
-        "summary",
-        identifier
-      );
-    },
-
-    success: async () => {
-      log("🎉 Starting: Success page");
-      const result = await stepSuccess(page, user, log);
-      if (result) {
-        stepCompletionStatus.success = true;
+      const success = await stepSummary(page, user);
+      if (success) {
+        stepCompletionStatus.summary = true;
+        log("✅ Summary step completed successfully!");
       }
-      return result;
+      return success;
     },
+    // Add specific handling for success step
+    // success: async () => {
+    //   log("🎉 Starting: Success page");
+    //   stepCompletionStatus.success = true;
+    //   log("✅ Success step completed!");
+    //   return true;
+    // },
+
+    // summary: async () => {
+    //   log("📋 Starting: Summary");
+    //   return await stepSummary(page, user);
+    //   // return checkStepCompletion(
+    //   //   page,
+    //   //   user,
+    //   //   "summary",
+    //   //   stepCompletionStatus,
+    //   //   "summary",
+    //   //   identifier
+    //   // );
+    // },
+
+    // success: async () => {
+    //   log("🎉 Starting: Success page");
+    //   const result = await stepSuccess(page, user, log);
+    //   if (result) {
+    //     stepCompletionStatus.success = true;
+    //   }
+    //   return result;
+    // },
   };
 
   while (attempts < maxAttempts && Date.now() - startTime < timeout) {
@@ -311,8 +358,8 @@ async function handleRemainingSteps(
         // Regular step detection
         currentStep = await getCurrentStep(page, identifier);
       }
-      
-      log("Current step:", currentStep);
+
+      log(`Current step: ${currentStep}`);
 
       // Special handling for success page detection
       if (currentStep === "success" && !stepCompletionStatus.success) {
@@ -333,12 +380,12 @@ async function handleRemainingSteps(
         await page.reload();
         lastStepTime = Date.now();
         attempts++;
-        
+
         // Increment step-specific attempts
         if (currentStep && stepAttempts[currentStep] !== undefined) {
           stepAttempts[currentStep]++;
         }
-        
+
         continue;
       }
 
@@ -364,13 +411,13 @@ async function handleRemainingSteps(
             createDateFolder: true,
             fileName: `max_attempts_${currentStep}.png`,
           });
-          
+
           // Force move to next step (mark current as completed)
           stepCompletionStatus[currentStep] = true;
         } else {
           // Try to handle the step
           const success = await handler();
-          
+
           // Increment attempt counter only if the step failed
           if (!success) {
             stepAttempts[currentStep]++;
@@ -387,8 +434,8 @@ async function handleRemainingSteps(
       // Kiểm tra xem đã hoàn thành tất cả các bước hay chưa
       const allStepsCompleted = Object.values(stepCompletionStatus).every(
         (status) => status
-      ) || stepCompletionStatus.success; // Consider success as completion condition
-
+        // ) || stepCompletionStatus.success; // Consider success as completion condition
+      ) || stepCompletionStatus.summary;
       if (allStepsCompleted) {
         log("✅ All steps completed successfully!");
         // Final screenshot already taken in success handler if that's how we finished
@@ -399,12 +446,12 @@ async function handleRemainingSteps(
       }
     } catch (error) {
       attempts++;
-      
+
       // Increment step-specific attempts when an error occurs
       if (currentStep && stepAttempts[currentStep] !== undefined) {
         stepAttempts[currentStep]++;
         log(`Error in step "${currentStep}" (attempt ${stepAttempts[currentStep]}/${maxStepAttempts}): ${error.message}`);
-        
+
         // If max attempts reached for this step, mark it as completed to move on
         if (stepAttempts[currentStep] >= maxStepAttempts) {
           log(`⚠️ Maximum attempts (${maxStepAttempts}) reached for step "${currentStep}" after error. Moving on...`);

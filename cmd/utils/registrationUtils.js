@@ -17,9 +17,10 @@ const activeBrowsers = new Map();
  * @param {string} proxy - Proxy to use
  * @param {string} browserId - Unique browser identifier
  * @param {string} cookies - Cookies extracted from the URL (optional)
+ * @param {boolean} forceClose - If true, browser will be immediately closed (for timeouts)
  * @returns {Promise<void>}
  */
-async function processRegistration(url, examCode, modules, date, user, proxy, browserId, cookies = null) {
+async function processRegistration(url, examCode, modules, date, user, proxy, browserId, cookies = null, forceClose = false) {
   console.log(`Processing registration for ${user.email} - Exam: ${examCode}, Date: ${date}`);
   console.log(`Modules: ${modules}, URL: ${url}, Browser ID: ${browserId}`);
   if (cookies) {
@@ -27,6 +28,19 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
   }
   
   try {
+    // If force close is true, try to close browser if it exists and return early
+    if (forceClose && activeBrowsers.has(browserId)) {
+      console.log(`Force closing browser ${browserId}`);
+      const { browser } = activeBrowsers.get(browserId);
+      try {
+        await browser.close();
+      } catch (e) {
+        console.error(`Error force closing browser ${browserId}:`, e);
+      }
+      activeBrowsers.delete(browserId);
+      return;
+    }
+    
     // Initialize a new browser for this user with the browser ID
     // const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
     const { browser, page } = await initBrowserWithRealBrowser(browserId);
@@ -113,6 +127,7 @@ async function processRegistrationLink(message, listProxies) {
     console.log(`Parsed exam code: Location=${location}, Level=${level}`);
     
     // Get an available user for this exam type
+    console.log('222')
     const user = await getNextUser(location, level);
     if (!user) {
       console.log(`No users available to process link for ${location} ${level}. Adding back to queue.`);

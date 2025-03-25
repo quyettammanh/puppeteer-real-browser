@@ -1,5 +1,22 @@
 async function clickRegisterForMe(page) {
   try {
+    // Đợi cho spinner và message "XIN CHỜ TRONG GIÂY LÁT" biến mất
+    try {
+      await page.waitForFunction(
+        () => {
+          // Kiểm tra text "XIN CHỜ TRONG GIÂY LÁT"
+          const waitText = document.body.innerText.includes("XIN CHỜ TRONG GIÂY LÁT");
+          // Kiểm tra spinner loading
+          const spinner = document.querySelector('.spinner-border');
+          return !waitText && !spinner;
+        },
+        { timeout: 30000 } // Đợi tối đa 30 giây
+      );
+      console.log("Trang đã sẵn sàng, tiếp tục thực hiện các bước...");
+    } catch (waitError) {
+      console.log("Đã hết thời gian chờ trang loading, thử tiếp tục...");
+    }
+
     // Chuyển XPath sang CSS selector và đợi button xuất hiện
     await page.waitForSelector(
       "button.cs-button:not(:empty)", // Chọn button có class "cs-button" và không rỗng
@@ -35,8 +52,11 @@ async function clickRegisterForMe(page) {
       button
     );
 
-    // Click button
-    await button.click();
+    // Click button và đợi navigation
+    await Promise.all([
+      page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 10000 }),
+      button.click()
+    ]);
 
     console.log("Đã bấm nút đăng ký thành công");
   } catch (error) {
