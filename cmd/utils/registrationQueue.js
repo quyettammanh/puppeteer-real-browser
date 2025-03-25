@@ -1,7 +1,8 @@
 const { processRegistration } = require('./registrationUtils.js');
 const { parseExamCode } = require('./examUtils.js');
-const { getNextUser, returnUserToPool, getAvailableUserCount } = require('./userPool.js');
+const { getNextUser, returnUserToPool, getAvailableUserCount, isUserActive, trackActiveUser } = require('./userPool.js');
 const { extractCookies } = require('./link_cookies.js');
+const { getSortedUsersByModules, getRequiredSkills } = require('./userSorter.js');
 
 // Queue of pending registration links
 const linkQueue = [];
@@ -149,10 +150,8 @@ function processQueue() {
  * @returns {Promise<void>}
  */
 async function processLink(message, proxies) {
-  // Increment active browser count first thing
   activeBrowserCount++;
   console.log("running async function processLink(message, proxies)");
-  // console.log(`Starting browser. Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
   
   let user = null;
   let browserTimeout = null;
@@ -192,12 +191,30 @@ async function processLink(message, proxies) {
     if (!location || !level) {
       throw new Error(`Could not parse location and level from exam code: ${examCode}`);
     }
-    
-    // Get an available user for this exam type
-    user = await getNextUser(location, level);
-    if (!user) {
+
+    // Get sorted users based on modules
+    const sortedUsers = getSortedUsersByModules(modules, location, level);
+    if (sortedUsers.length === 0) {
+      console.log(`No users available with matching modules for ${location} ${level}`);
       return;
     }
+
+    // Find the first available user that is not currently active
+    user = sortedUsers.find(user => !isUserActive(user));
+    if (!user) {
+      console.log(`No available users found - all matching users are currently active`);
+      return;
+    }
+
+    // Mark user as active
+    trackActiveUser(user);
+    
+    // Get required skills for this user
+    const requiredSkills = getRequiredSkills(user, modules);
+    
+    // Log user and required skills
+    console.log(`Selected user: ${user.email}`);
+    console.log(`Required skills: ${requiredSkills.join(', ')}`);
     
     // Select a random proxy
     const proxy = proxies[Math.floor(Math.random() * proxies.length)];
@@ -224,17 +241,13 @@ async function processLink(message, proxies) {
     console.error(`Error in processLink: ${error.message}`);
     
     // If we failed due to no users, put the message back in queue with a delay
-    // to prevent infinite loops
     if (error.message && error.message.includes('No users available')) {
       console.log(`Re-adding message to queue due to no available users`);
-      // Add a delay before reprocessing to avoid immediate infinite loops
       setTimeout(() => {
-        // Check if we already have too many retries for this message
         const retryKey = `retry_${message}`;
         const retryCount = retryCounters.get(retryKey) || 0;
         
         if (retryCount < MAX_RETRIES) {
-          // Increment retry counter and re-add to queue
           retryCounters.set(retryKey, retryCount + 1);
           linkQueue.push(message);
           console.log(`Retry ${retryCount + 1}/${MAX_RETRIES} for message due to no available users`);
@@ -244,12 +257,10 @@ async function processLink(message, proxies) {
       }, RETRY_DELAY);
     }
   } finally {
-    // Clear the timeout if it exists
     if (browserTimeout) {
       clearTimeout(browserTimeout);
     }
     
-    // Return user to pool if we got one
     if (user) {
       const { location, level } = parseExamCode(user.examCode || '');
       if (location && level) {
@@ -257,11 +268,9 @@ async function processLink(message, proxies) {
       }
     }
     
-    // Decrement active browser count
     activeBrowserCount--;
     console.log(`Browser completed. Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
     
-    // Try to process more messages after a short delay
     setTimeout(() => tryProcessQueue(), 1000);
   }
 }
