@@ -359,7 +359,7 @@ async function handleRemainingSteps(
         currentStep = await getCurrentStep(page, identifier);
       }
 
-      log("Current step:", currentStep);
+      log(`Current step: ${currentStep}`);
 
       // Special handling for success page detection
       if (currentStep === "success" && !stepCompletionStatus.success) {
