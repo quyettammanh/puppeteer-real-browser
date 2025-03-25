@@ -22,7 +22,8 @@ async function taskRegisterGoethe(
   user,
   pathProxy,
   exam,
-  browserId
+  browserId,
+  endStep = 'success'
 ) {
   try {
     const identifier = browserId || `user-${user.email.split("@")[0]}`;
@@ -48,8 +49,8 @@ async function taskRegisterGoethe(
       `Browser ${identifier}: Starting remaining steps for ${user.email}`
     );
     console.log("user đang chạy", user.email);
-    // Use identifier for better tracking
-    await handleRemainingSteps(newPage, user, exam, newPage.url(), identifier);
+    // Pass endStep to handleRemainingSteps
+    await handleRemainingSteps(newPage, user, exam, newPage.url(), identifier, endStep);
 
     console.log(`Browser ${identifier}: Process completed for ${user.email}`);
   } catch (error) {
@@ -151,7 +152,8 @@ async function handleRemainingSteps(
   user,
   exam,
   originUrl,
-  identifier = ""
+  identifier = "",
+  endStep = 'success'
 ) {
   const maxAttempts = 20;
   const maxStepAttempts = 5; // Maximum attempts per individual step
@@ -162,6 +164,12 @@ async function handleRemainingSteps(
   let lastStepTime = Date.now();
   let lastStep = "";
   let currentStep = "";
+
+  // Validate endStep
+  if (endStep !== 'summary' && endStep !== 'success') {
+    console.error(`Invalid endStep: ${endStep}. Must be either 'summary' or 'success'`);
+    endStep = 'success'; // Default to success if invalid
+  }
 
   // Track attempts per step
   let stepAttempts = {};
@@ -298,49 +306,39 @@ async function handleRemainingSteps(
     },
     summary: async () => {
       log("📋 Starting: Summary");
-      const success = await stepSummary(page, user);
+      const success = await stepSummary(page, user, endStep);
       if (success) {
         stepCompletionStatus.summary = true;
         log("✅ Summary step completed successfully!");
+        
+        // If endStep is 'summary', we're done here
+        if (endStep === 'summary') {
+          log("🎉 Ending at summary step as requested");
+          return true;
+        }
       }
       return success;
     },
-    // Add specific handling for success step
-    // success: async () => {
-    //   log("🎉 Starting: Success page");
-    //   stepCompletionStatus.success = true;
-    //   log("✅ Success step completed!");
-    //   return true;
-    // },
-
-    // summary: async () => {
-    //   log("📋 Starting: Summary");
-    //   return await stepSummary(page, user);
-    //   // return checkStepCompletion(
-    //   //   page,
-    //   //   user,
-    //   //   "summary",
-    //   //   stepCompletionStatus,
-    //   //   "summary",
-    //   //   identifier
-    //   // );
-    // },
-
-    // success: async () => {
-    //   log("🎉 Starting: Success page");
-    //   const result = await stepSuccess(page, user, log);
-    //   if (result) {
-    //     stepCompletionStatus.success = true;
-    //   }
-    //   return result;
-    // },
+    success: async () => {
+      log("🎉 Starting: Success page");
+      const result = await stepSuccess(page, user, log);
+      if (result) {
+        stepCompletionStatus.success = true;
+        log("✅ Success step completed!");
+        // If endStep is 'success', we're done here
+        if (endStep === 'success') {
+          log("🎉 Ending at success step as requested");
+          return true;
+        }
+      }
+      return result;
+    },
   };
 
   while (attempts < maxAttempts && Date.now() - startTime < timeout) {
     try {
       // Kiểm tra lỗi Goethe
       if (await checkGoetheErrors(page, user)) {
-        // await takeScreenshot(page, user, { fullPage: true });
         await takeScreenshot(page, user, {
           fullPage: true,
           showUrl: true,
@@ -418,6 +416,13 @@ async function handleRemainingSteps(
           // Try to handle the step
           const success = await handler();
 
+          // If we've completed the endStep, exit the loop
+          if (success && currentStep === endStep) {
+            log(`✅ Process completed successfully at ${endStep} step!`);
+            await takeScreenshot(page, user, { fullPage: true });
+            return;
+          }
+
           // Increment attempt counter only if the step failed
           if (!success) {
             stepAttempts[currentStep]++;
@@ -429,20 +434,6 @@ async function handleRemainingSteps(
         log("Unknown or unhandled step:");
         attempts++;
         await randomTime(3, 4);
-      }
-
-      // Kiểm tra xem đã hoàn thành tất cả các bước hay chưa
-      const allStepsCompleted = Object.values(stepCompletionStatus).every(
-        (status) => status
-        // ) || stepCompletionStatus.success; // Consider success as completion condition
-      ) || stepCompletionStatus.summary;
-      if (allStepsCompleted) {
-        log("✅ All steps completed successfully!");
-        // Final screenshot already taken in success handler if that's how we finished
-        if (!stepCompletionStatus.success) {
-          await takeScreenshot(page, user, { fullPage: true });
-        }
-        return;
       }
     } catch (error) {
       attempts++;
