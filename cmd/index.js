@@ -40,7 +40,7 @@ const { closeAllBrowsers } = require("./utils/registrationUtils.js");
     const maxQueueSize = getMaxQueueSize();
     const skippedLinks = getSkippedLinksCount();
     
-    console.log(`Queue status: ${queueLength}/${maxQueueSize} links waiting, ${activeBrowsers} active browsers, ${skippedLinks} links skipped`);
+    // console.log(`Queue status: ${queueLength}/${maxQueueSize} links waiting, ${activeBrowsers} active browsers, ${skippedLinks} links skipped`);
   }, 60000); // Log status every minute
   
   await subscribeToRegistrationLinks(redisChannel, (link, examCode, modules, date) => {

@@ -43,7 +43,7 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
     
     // Initialize a new browser for this user with the browser ID
     // const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
-    const { browser, page } = await initBrowserWithRealBrowser(browserId);
+    const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
     // Keep track of active browsers
     activeBrowsers.set(browserId, { browser, user });
     
@@ -127,6 +127,7 @@ async function processRegistrationLink(message, listProxies) {
     console.log(`Parsed exam code: Location=${location}, Level=${level}`);
     
     // Get an available user for this exam type
+    console.log('222')
     const user = await getNextUser(location, level);
     if (!user) {
       console.log(`No users available to process link for ${location} ${level}. Adding back to queue.`);

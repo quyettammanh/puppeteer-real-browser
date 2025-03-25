@@ -30,6 +30,15 @@ let globalProxies = [];
 // Store cookies by link to avoid extracting them multiple times
 const cookiesCache = new Map();
 
+// Store retry counters
+const retryCounters = new Map();
+
+// Maximum number of retries
+const MAX_RETRIES = 1;
+
+// Delay between retries
+const RETRY_DELAY = 1000; // 1 second
+
 /**
  * Initialize the queue system with proxies
  * @param {Array} proxies - List of available proxies
@@ -142,7 +151,8 @@ function processQueue() {
 async function processLink(message, proxies) {
   // Increment active browser count first thing
   activeBrowserCount++;
-  console.log(`Starting browser. Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
+  console.log("running async function processLink(message, proxies)");
+  // console.log(`Starting browser. Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
   
   let user = null;
   let browserTimeout = null;
@@ -186,7 +196,7 @@ async function processLink(message, proxies) {
     // Get an available user for this exam type
     user = await getNextUser(location, level);
     if (!user) {
-      throw new Error(`No users available for ${location} ${level}`);
+      return;
     }
     
     // Select a random proxy
@@ -213,10 +223,25 @@ async function processLink(message, proxies) {
   } catch (error) {
     console.error(`Error in processLink: ${error.message}`);
     
-    // If we failed due to no users, put the message back in queue
+    // If we failed due to no users, put the message back in queue with a delay
+    // to prevent infinite loops
     if (error.message && error.message.includes('No users available')) {
       console.log(`Re-adding message to queue due to no available users`);
-      linkQueue.push(message);
+      // Add a delay before reprocessing to avoid immediate infinite loops
+      setTimeout(() => {
+        // Check if we already have too many retries for this message
+        const retryKey = `retry_${message}`;
+        const retryCount = retryCounters.get(retryKey) || 0;
+        
+        if (retryCount < MAX_RETRIES) {
+          // Increment retry counter and re-add to queue
+          retryCounters.set(retryKey, retryCount + 1);
+          linkQueue.push(message);
+          console.log(`Retry ${retryCount + 1}/${MAX_RETRIES} for message due to no available users`);
+        } else {
+          console.log(`Maximum retries (${MAX_RETRIES}) reached for message, dropping: ${message}`);
+        }
+      }, RETRY_DELAY);
     }
   } finally {
     // Clear the timeout if it exists

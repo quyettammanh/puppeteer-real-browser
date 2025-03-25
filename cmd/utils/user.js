@@ -78,6 +78,7 @@ function createUsers(filePath) {
 }
 
 function checkUserPathByKey(key) {
+    console.log('key', key)
     let userPath = '';
     if (key.includes("hanoi_a1")) {
         userPath = "./cmd/data/user/hn/hn_a1.json";

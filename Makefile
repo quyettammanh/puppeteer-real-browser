@@ -1,5 +1,5 @@
 run:
 	node cmd/index.js
 pub:
-	docker exec my-redis redis-cli PUBLISH url_updates  "https://www.goethe.de/coe/options;coesessionid=E33D836FB79DB013A19052FF8240D7B3?1=&64a4bb21e29e708eed03141ffa38edba=fc4f7617bccf85a0fa6d7fb6bf659d0e&COE-Customer=eed03127-df1d-4df9-b286-a18cf3614d34&COE-Tab-ID=135ae3e9-413b-4262-b6b4-9b606aae530d&COE-Tab-ID=135ae3e9-413b-4262-b6b4-9b606aae530d@register-goethe-redis/hcm_b2-link16@Reading-Listening-Writing-Speaking@11/03/2025"
+	docker exec my-redis redis-cli PUBLISH url_updates 'https://www.goethe.de/coe/options;coesessionid=CD27B006D6CD1F1050774D0F3AAA6C4C?1=&64a4bb21e29e708eed03141ffa38edba=911966567341e36e78d75bcac9cf6326&COE-Customer=1f7a392d-2a5b-4384-a08a-2a2105a98260&COE-Tab-ID=ab087a56-1798-4ec0-8692-bd229ff63a74&COE-Tab-ID=ab087a56-1798-4ec0-8692-bd229ff63a74@register-goethe-redis/hcm_b2-link1@Reading-Listening@23.06. - 24.06.2025'
 	

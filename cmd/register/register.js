@@ -63,6 +63,7 @@ async function taskRegisterGoethe(
 // Hàm xác định bước hiện tại dựa trên URL
 async function getCurrentStep(page, identifier = "") {
   const currentUrl = page.url();
+  console.log(`Browser for ${identifier}: Checking current URL: ${currentUrl}`);
 
   // Map URL patterns to step names
   const urlStepMap = [
@@ -78,22 +79,53 @@ async function getCurrentStep(page, identifier = "") {
     { pattern: "success", step: "success" },
   ];
 
-  // Tìm bước dựa trên URL
+  // Tìm bước dựa trên URL (case-insensitive)
   for (const { pattern, step } of urlStepMap) {
-    if (currentUrl.includes(pattern)) {
+    if (currentUrl.toLowerCase().includes(pattern.toLowerCase())) {
+      console.log(`Browser for ${identifier}: Matched step "${step}" from pattern "${pattern}"`);
       return step;
     }
   }
 
-  // Nếu không tìm thấy, lấy bước từ văn bản trang
-  const activeStep = await getActiveStepText(page);
-  console.log(
-    `Browser for ${identifier}: Unknown step from URL:`,
-    currentUrl,
-    "Active step text:",
-    activeStep
-  );
-  return activeStep || "unknown";
+  // Nếu không tìm thấy, thử phương thức khác để xác định bước
+  try {
+    // Check page title which might contain step information
+    const pageTitle = await page.title();
+    console.log(`Browser for ${identifier}: Page title: "${pageTitle}"`);
+    
+    // For debugging - take screenshot when step detection fails
+    await takeScreenshot(page, { 
+      fullPage: true, 
+      createDateFolder: true,
+      fileName: `unknown_step_${Date.now()}.png` 
+    });
+    
+    // Try to get text from any step indicator elements
+    const activeStep = await getActiveStepText(page);
+    console.log(
+      `Browser for ${identifier}: Step detection failed. URL: ${currentUrl}, Active step text: "${activeStep}"`
+    );
+    
+    // Additional attempts to identify the page - check for specific elements
+    const bodyText = await page.evaluate(() => document.body.innerText);
+    console.log(`Browser for ${identifier}: First 100 chars of page body: "${bodyText.substring(0, 100)}..."`);
+    
+    // Try to identify based on DOM structure or specific elements
+    const hasLoginForm = await page.evaluate(() => !!document.querySelector('form input[type="password"]'));
+    if (hasLoginForm) {
+      console.log(`Browser for ${identifier}: Detected login form on page`);
+      return "login";
+    }
+    
+    if (activeStep) {
+      return activeStep;
+    }
+    
+    return "unknown";
+  } catch (error) {
+    console.error(`Browser for ${identifier}: Error in getCurrentStep: ${error.message}`);
+    return "unknown";
+  }
 }
 
 // Hàm kiểm tra và cập nhật trạng thái hoàn thành bước
