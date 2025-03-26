@@ -72,7 +72,8 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
     }
     
     // Process with this browser - pass modules and date as additional parameters
-    await taskRegisterGoethe(browser, page, url, user, "./cmd/data/proxy/proxy.txt", examCode, browserId, modules, date);
+    const endStep = 'summary';
+    await taskRegisterGoethe(browser, page, url, user, "./cmd/data/proxy/proxy.txt", examCode, browserId, modules, date, endStep);
     
     // Close the browser when done
     console.log(`Browser ${browserId}: ${user.email} completed, closing browser`);

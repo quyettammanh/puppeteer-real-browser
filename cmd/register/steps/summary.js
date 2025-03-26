@@ -1,7 +1,15 @@
-async function stepSummary(page, user) {
+// Import the sendTelegramMessage function
+const { sendTelegramMessage } = require('../../utils/notification_tele');
+
+
+async function stepSummary(page, user,endStep = 'success') {
     try{
         console.log("Xử lý bước summary");
-        await stepConfirmDone(page, user);
+        if (endStep === 'success') {
+            await stepConfirmDone(page, user);
+        } else {
+            await stopSummaryandSendTele(page, user);
+        }
         return true;
     }catch(error){
         console.error("Error in stepSummary:", error);
@@ -9,109 +17,8 @@ async function stepSummary(page, user) {
     }
 
 }
-async function stepConfirmDone(page, user) {
-    // gửi tạo link chứa cookies để gửi đến telegram
-    try {
-        console.log("Chuẩn bị gửi link chứa cookies đến Telegram");
-        await stopRegisterAndSendTele(page, user);
-        return true;
-    } catch (error) {
-        console.error("Error in stepConfirmDone while sending to Telegram:", error);
-    }
-}
 
-async function stopRegisterAndSendTele(page, user) {
-    console.log("🚀 Đã dừng đăng ký và gửi thông báo");
-    const urlSuccess = await createLinkSendTele(page);
-
-    // Check if URL contains error or warning
-    if (!urlSuccess.toLowerCase().includes('error') && !urlSuccess.toLowerCase().includes('warning')) {
-        await sendTelegramMessage(`🚀 ${user?.email || 'User'} cần xử lý thủ công: ${urlSuccess}`);
-        console.log("🚀 Đã gửi thông báo cho telegram");
-    } else {
-        console.log("❌ Không gửi thông báo do URL chứa error hoặc warning");
-    }
-}
-
-async function createLinkSendTele(page) {
-    try {
-        // Bước 1: Lấy URL hiện tại của trang
-        const currentUrl = page.url();
-        console.log("\n🌐 Current URL:", currentUrl);
-
-        // Bước 2: Lấy tất cả cookies từ trang
-        const cookies = await page.evaluate(() => {
-            return document.cookie.split(';').map(cookie => {
-                const [name, value] = cookie.trim().split('=');
-                return { name, value };
-            });
-        });
-        // Bước 3: Tạo URL mới chứa cookies
-        const urlWithCookies = addCookiesToUrl(currentUrl, cookies);
-        console.log("\n🔗 URL with cookies:", urlWithCookies);
-
-        // Trả về URL chứa cookies
-        return urlWithCookies;
-    } catch (error) {
-        console.error("\n❌ Error in createLinkConfirm:", error);
-        throw error;
-    }
-}
-
-// Hàm hỗ trợ: Thêm cookies vào URL dưới dạng query parameters
-function addCookiesToUrl(url, cookies) {
-    const urlObj = new URL(url);
-
-    // Thêm từng cookie vào URL dưới dạng query parameters
-    cookies.forEach(cookie => {
-        urlObj.searchParams.append(cookie.name, cookie.value);
-    });
-
-    return urlObj.toString();
-}
-
-// async function createLinkSendTele(page) {
-//     try {
-//         // Bước 1: Lấy URL hiện tại của trang
-//         const currentUrl = page.url();
-//         console.log("\n🌐 Current URL:", currentUrl);
-
-//         // Bước 2: Lấy tất cả cookies từ trang
-//         const cookies = await page.cookies();
-//         console.log("\n🍪 Got cookies, count:", cookies.length);
-        
-//         // Bước 3: Tạo URL mới chứa cookies
-//         const urlWithCookies = addCookiesToUrl(currentUrl, cookies);
-//         console.log("\n🔗 URL with cookies:", urlWithCookies);
-
-//         // Trả về URL chứa cookies
-//         return urlWithCookies;
-//     } catch (error) {
-//         console.error("\n❌ Error in createLinkConfirm:", error);
-//         return "error: " + error.message;
-//     }
-// }
-
-// function addCookiesToUrl(url, cookies) {
-//     // Create a new URL object from the original URL
-//     const urlObj = new URL(url);
-    
-//     // Add each cookie as a query parameter
-//     cookies.forEach(cookie => {
-//         if (cookie.name && cookie.value) {
-//             // Encode the cookie name and value to ensure they are URL-safe
-//             urlObj.searchParams.append(
-//                 encodeURIComponent(`cookie_${cookie.name}`),
-//                 encodeURIComponent(cookie.value)
-//             );
-//         }
-//     });
-    
-//     // Return the new URL as a string
-//     return urlObj.toString();
-// }
-
-async function stepConfirmDone1(page) {
+async function stepConfirmDone(page) {
     try {
         console.log("Đã kiểm tra thông tin");
         
@@ -174,8 +81,66 @@ async function stepConfirmDone1(page) {
     }
 }
 
-// Import the sendTelegramMessage function
-const { sendTelegramMessage } = require('../../utils/notification_tele');
+async function stopSummaryandSendTele(page, user) {
+    // gửi tạo link chứa cookies để gửi đến telegram
+    try {
+        console.log("Chuẩn bị gửi link chứa cookies đến Telegram");
+        await stopRegisterAndSendTele(page, user);
+        return true;
+    } catch (error) {
+        console.error("Error in stepConfirmDone while sending to Telegram:", error);
+    }
+}
+
+async function stopRegisterAndSendTele(page, user) {
+    console.log("🚀 Đã dừng đăng ký và gửi thông báo");
+    const urlSuccess = await createLinkSendTele(page);
+
+    // Check if URL contains error or warning
+    if (!urlSuccess.toLowerCase().includes('error') && !urlSuccess.toLowerCase().includes('warning')) {
+        await sendTelegramMessage(`🚀 ${user?.email || 'User'} cần xử lý thủ công: ${urlSuccess}`);
+        console.log("🚀 Đã gửi thông báo cho telegram");
+    } else {
+        console.log("❌ Không gửi thông báo do URL chứa error hoặc warning");
+    }
+}
+
+async function createLinkSendTele(page) {
+    try {
+        // Bước 1: Lấy URL hiện tại của trang
+        const currentUrl = page.url();
+        console.log("\n🌐 Current URL:", currentUrl);
+
+        // Bước 2: Lấy tất cả cookies từ trang
+        const cookies = await page.evaluate(() => {
+            return document.cookie.split(';').map(cookie => {
+                const [name, value] = cookie.trim().split('=');
+                return { name, value };
+            });
+        });
+        // Bước 3: Tạo URL mới chứa cookies
+        const urlWithCookies = addCookiesToUrl(currentUrl, cookies);
+        console.log("\n🔗 URL with cookies:", urlWithCookies);
+
+        // Trả về URL chứa cookies
+        return urlWithCookies;
+    } catch (error) {
+        console.error("\n❌ Error in createLinkConfirm:", error);
+        throw error;
+    }
+}
+
+// Hàm hỗ trợ: Thêm cookies vào URL dưới dạng query parameters
+function addCookiesToUrl(url, cookies) {
+    const urlObj = new URL(url);
+
+    // Thêm từng cookie vào URL dưới dạng query parameters
+    cookies.forEach(cookie => {
+        urlObj.searchParams.append(cookie.name, cookie.value);
+    });
+
+    return urlObj.toString();
+}
 
 module.exports = {
     stepSummary,
