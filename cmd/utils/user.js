@@ -97,7 +97,7 @@ function checkUserPathByKey(key) {
     } else if (key.includes("hcm_b2")) {
         userPath = "./cmd/data/user/hcm/hcm_b2.json";
     } else{
-        userPath = "./cmd/data/test/user.json";
+        userPath = "./cmd/data/user/test/user.json";
     }
     return userPath;
 }
