@@ -1,4 +1,5 @@
 const { takeScreenshot } = require("../../helper/func.js");
+const { waitForLoadingComplete } = require('../helper/wait_for_loading');
 
 // Helper function for waiting since page.waitForTimeout is not available
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -16,6 +17,12 @@ async function stepSuccess(page, user, log = console.log) {
   // Wait for the page to be fully loaded
   try {
     log("Waiting for success page to stabilize...");
+    
+    // Đợi cho trang loading biến mất nếu có
+    await waitForLoadingComplete(page, {
+      timeout: 10000,
+      logEnabled: false
+    });
     
     // Wait for network to be idle - better approach than waitForNavigation
     await page.waitForFunction(() => {
@@ -66,4 +73,6 @@ async function stepSuccess(page, user, log = console.log) {
   }
 }
 
-module.exports = { stepSuccess }; 
+module.exports = {
+  stepSuccess,
+}; 

@@ -1,26 +1,72 @@
 // Import the sendTelegramMessage function
 const { sendTelegramMessage } = require('../../utils/notification_tele');
+const { takeScreenshot } = require('../../helper/func');
+const { waitForLoadingComplete } = require('../helper/wait_for_loading');
 
-
-async function stepSummary(page, user,endStep = 'success') {
-    try{
+async function stepSummary(page, user, endStep = 'success') {
+    try {
         console.log("Xử lý bước summary");
+        
+        // Đợi cho trang loading biến mất
+        await waitForLoadingComplete(page);
+        
+        // Thêm xử lý trước khi thực hiện stepConfirmDone hoặc stopSummaryandSendTele
+        // Kiểm tra các phần tử trên trang summary
+        const summaryContent = await page.evaluate(() => {
+            return document.body.innerText;
+        });
+        
+        // Ghi log thông tin summary
+        console.log(`Summary page for ${user.email}: Page loaded`);
+        
         if (endStep === 'success') {
             await stepConfirmDone(page, user);
         } else {
             await stopSummaryandSendTele(page, user);
         }
+        
+        // Chụp hình màn hình summary sau khi xử lý
+        await takeScreenshot(page, user, {
+            fullPage: true,
+            createDateFolder: true,
+            fileName: `summary_completed_${Date.now()}.png`,
+        });
+        
         return true;
-    }catch(error){
-        console.error("Error in stepSummary:", error);
-        return false;
+    } catch (error) {
+        console.error(`Error in stepSummary for ${user.email}:`, error.message);
+        
+        // Chụp hình màn hình lỗi
+        try {
+            await takeScreenshot(page, user, {
+                fullPage: true,
+                createDateFolder: true,
+                fileName: `summary_error_${Date.now()}.png`,
+            });
+            
+            // Gửi thông báo lỗi qua Telegram nếu có
+            try {
+                await sendTelegramMessage(`❌ Lỗi ở bước Summary cho ${user.email}: ${error.message}`);
+            } catch (teleError) {
+                console.error("Không thể gửi thông báo Telegram:", teleError);
+            }
+        } catch (screenshotError) {
+            console.error("Không thể chụp màn hình lỗi:", screenshotError);
+        }
+        
+        // Re-throw lỗi để handler bên ngoài xử lý
+        throw error;
     }
-
 }
 
-async function stepConfirmDone(page) {
+async function stepConfirmDone(page, user) {
     try {
         console.log("Đã kiểm tra thông tin");
+        
+        // Đợi cho trang loading biến mất
+        await waitForLoadingComplete(page, {
+            logEnabled: false
+        });
         
         // Sử dụng CSS selector thay vì XPath
         const cssSelector = 'button.cs-button--arrow_next';
@@ -82,26 +128,25 @@ async function stepConfirmDone(page) {
 }
 
 async function stopSummaryandSendTele(page, user) {
-    // gửi tạo link chứa cookies để gửi đến telegram
     try {
-        console.log("Chuẩn bị gửi link chứa cookies đến Telegram");
-        await stopRegisterAndSendTele(page, user);
-        return true;
+        console.log(`Stopping at summary step for ${user.email} and sending Telegram notification`);
+        
+        // Chụp màn hình để gửi Telegram
+        const screenshotPath = await takeScreenshot(page, user, {
+            fullPage: true,
+            createDateFolder: true,
+            fileName: `summary_stop_${Date.now()}.png`,
+            returnPath: true
+        });
+        
+        // Gửi thông báo Telegram
+        const message = `✅ Đã hoàn thành đến bước Summary cho ${user.email}`;
+        await sendTelegramMessage(message, screenshotPath);
+        
+        console.log(`Telegram notification sent for ${user.email}`);
     } catch (error) {
-        console.error("Error in stepConfirmDone while sending to Telegram:", error);
-    }
-}
-
-async function stopRegisterAndSendTele(page, user) {
-    console.log("🚀 Đã dừng đăng ký và gửi thông báo");
-    const urlSuccess = await createLinkSendTele(page);
-
-    // Check if URL contains error or warning
-    if (!urlSuccess.toLowerCase().includes('error') && !urlSuccess.toLowerCase().includes('warning')) {
-        await sendTelegramMessage(`🚀 ${user?.email || 'User'} cần xử lý thủ công: ${urlSuccess}`);
-        console.log("🚀 Đã gửi thông báo cho telegram");
-    } else {
-        console.log("❌ Không gửi thông báo do URL chứa error hoặc warning");
+        console.error(`Error in stopSummaryandSendTele for ${user.email}:`, error);
+        throw error;
     }
 }
 

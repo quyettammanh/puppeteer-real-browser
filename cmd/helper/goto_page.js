@@ -13,7 +13,7 @@ async function gotoPage(page, url, options = {}) {
   const config = {
     waitUntil: options.waitUntil || "domcontentloaded", // networkidle0, networkidle2, load, domcontentloaded
     logLevel: options.logLevel || 'info', // debug, info, error
-    timeout: options.timeout || 5000, // Thêm timeout 5s
+    timeout: options.timeout || 30000, // Thêm timeout 5s
 
   };
 
