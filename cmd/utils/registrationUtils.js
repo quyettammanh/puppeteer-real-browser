@@ -1,4 +1,5 @@
 const { initBrowserWithRealBrowser } = require("../puppeteer/multi_browser.js");
+const { runChromeWithGenlogin } = require("../gem-login/Genlogin_run.js");
 const { taskRegisterGoethe } = require("../register/register.js");
 const { parseExamCode } = require("./examUtils.js");
 const { getNextUser, returnUserToPool } = require("./userPool.js");
@@ -42,8 +43,7 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
     }
     
     // Initialize a new browser for this user with the browser ID
-    // const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
-    const { browser, page } = await initBrowserWithRealBrowser(browserId,proxy);
+    const { browser,page} = await runChromeWithGenlogin();
     // Keep track of active browsers
     activeBrowsers.set(browserId, { browser, user });
     
