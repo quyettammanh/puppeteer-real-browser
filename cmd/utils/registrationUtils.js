@@ -2,7 +2,7 @@ const { initBrowserWithRealBrowser } = require("../puppeteer/multi_browser.js");
 const { runChromeWithGenlogin } = require("../gem-login/Genlogin_run.js");
 const { taskRegisterGoethe } = require("../register/register.js");
 const { parseExamCode } = require("./examUtils.js");
-const { getNextUser, returnUserToPool } = require("./userPool.js");
+const { getNextUser, returnUserToPool, releaseActiveUser } = require("./userPool.js");
 const { extractCookies, parseCookies } = require("./link_cookies.js");
 
 // Store active browsers to manage them
@@ -39,13 +39,18 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
         console.error(`Error force closing browser ${browserId}:`, e);
       }
       activeBrowsers.delete(browserId);
+      console.log(`Active browsers after force close: ${activeBrowsers.size}`);
       return;
     }
     
+    console.log(`Starting browser for user ${user.email}, browser ID: ${browserId}`);
+    
     // Initialize a new browser for this user with the browser ID
-    const { browser,page} = await runChromeWithGenlogin(proxy);
+    const { browser, page } = await runChromeWithGenlogin(proxy);
+    
     // Keep track of active browsers
     activeBrowsers.set(browserId, { browser, user });
+    console.log(`Added browser to active set. Total active browsers: ${activeBrowsers.size}`);
     
     // If cookies were provided, set them on the page
     if (cookies) {
@@ -75,23 +80,35 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
     const endStep = 'summary';
     await taskRegisterGoethe(browser, page, url, user, "./cmd/data/proxy/proxy.txt", examCode, browserId, modules, date, endStep);
     
-    // Close the browser when done
-    console.log(`Browser ${browserId}: ${user.email} completed, closing browser`);
-    await browser.close();
+    // Close only the page when done, not the browser
+    console.log(`Browser ${browserId}: ${user.email} completed, closing page`);
+    await page.close();
     
     // Remove from active browsers
     activeBrowsers.delete(browserId);
+    console.log(`Removed browser from active set. Remaining active browsers: ${activeBrowsers.size}`);
+    
+    // Explicitly release user from active status to ensure it's not left in active state
+    releaseActiveUser(user);
+    console.log(`Explicitly released user ${user.email} from active status`);
+    
   } catch (error) {
     console.error(`Error for ${browserId} (${user.email}):`, error);
     // Remove from active browsers in case of error
     if (activeBrowsers.has(browserId)) {
-      const { browser } = activeBrowsers.get(browserId);
+      const { browser, page } = activeBrowsers.get(browserId);
       try {
-        await browser.close();
+        // Close only the page on error, not the browser
+        await page.close();
       } catch (e) {
         // Ignore errors on cleanup
       }
       activeBrowsers.delete(browserId);
+      console.log(`Removed browser from active set after error. Remaining active browsers: ${activeBrowsers.size}`);
+      
+      // Also release user from active status on error
+      releaseActiveUser(user);
+      console.log(`Released user ${user.email} from active status after error`);
     }
   }
 }

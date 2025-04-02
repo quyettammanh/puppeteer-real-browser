@@ -56,74 +56,75 @@ function getProxies(filePath) {
 }
 
 async function setProxyOnPage(page, proxy, browserId) {
-  if (!proxy || !proxy.proxy || !proxy.port) {
-    console.log("Không có proxy, không thiết lập proxy.");
-    return page;
-  }
+  console.log("tạm thời không sử dụng proxy")
+  // if (!proxy || !proxy.proxy || !proxy.port) {
+  //   console.log("Không có proxy, không thiết lập proxy.");
+  //   return page;
+  // }
 
-  try {
-    // Use provided browserId or generate a random one
-    const browserIdentifier = browserId || Math.random().toString(36).substring(2, 10);
+  // try {
+  //   // Use provided browserId or generate a random one
+  //   const browserIdentifier = browserId || Math.random().toString(36).substring(2, 10);
     
-    // Xác định loại proxy
-    let proxyUrl;
-    if (proxy.type === "socks5") {
-      proxyUrl = `socks5://${encodeURIComponent(
-        proxy.username
-      )}:${encodeURIComponent(proxy.password)}@${proxy.proxy}:${
-        proxy.port
-      }`;
-    } else if (proxy.type === "http") {
-      proxyUrl = `http://${encodeURIComponent(
-        proxy.username
-      )}:${encodeURIComponent(proxy.password)}@${proxy.proxy}:${
-        proxy.port
-      }`;
-    } else {
-      throw new Error("Proxy type not supported");
-    }
+  //   // Xác định loại proxy
+  //   let proxyUrl;
+  //   if (proxy.type === "socks5") {
+  //     proxyUrl = `socks5://${encodeURIComponent(
+  //       proxy.username
+  //     )}:${encodeURIComponent(proxy.password)}@${proxy.proxy}:${
+  //       proxy.port
+  //     }`;
+  //   } else if (proxy.type === "http") {
+  //     proxyUrl = `http://${encodeURIComponent(
+  //       proxy.username
+  //     )}:${encodeURIComponent(proxy.password)}@${proxy.proxy}:${
+  //       proxy.port
+  //     }`;
+  //   } else {
+  //     throw new Error("Proxy type not supported");
+  //   }
   
-    // console.log(`Browser ${browserIdentifier}: Setting proxy ${proxy.proxy}:${proxy.port}`);
+  //   // console.log(`Browser ${browserIdentifier}: Setting proxy ${proxy.proxy}:${proxy.port}`);
   
-    // Reset request interception - make sure to handle errors
-    try {
-      await page.setRequestInterception(false);
-      await page.setRequestInterception(true);
-    } catch (err) {
-      // console.error(`Browser ${browserIdentifier}: Error setting request interception:`, err.message);
-      // Try to continue even if this fails
-    }
+  //   // Reset request interception - make sure to handle errors
+  //   try {
+  //     await page.setRequestInterception(false);
+  //     await page.setRequestInterception(true);
+  //   } catch (err) {
+  //     // console.error(`Browser ${browserIdentifier}: Error setting request interception:`, err.message);
+  //     // Try to continue even if this fails
+  //   }
   
-    // Remove all previous listeners to avoid memory leaks
-    const listenerCount = page.listenerCount("request");
-    if (listenerCount > 0) {
-      // console.log(`Browser ${browserIdentifier}: Removing ${listenerCount} existing request listeners`);
-      page.removeAllListeners("request");
-    }
+  //   // Remove all previous listeners to avoid memory leaks
+  //   const listenerCount = page.listenerCount("request");
+  //   if (listenerCount > 0) {
+  //     // console.log(`Browser ${browserIdentifier}: Removing ${listenerCount} existing request listeners`);
+  //     page.removeAllListeners("request");
+  //   }
   
-    // Add new proxy
-    page.on("request", async (request) => {
-      try {
-        await useProxy(request, proxyUrl.toString());
-      } catch (err) {
-        // Only log the first part of the error to avoid spam
-        const errorMsg = err.message || "Unknown error";
-        const shortError = errorMsg.split('\n')[0];
-        // console.log(`Browser ${browserIdentifier}: Proxy error:`, shortError);
+  //   // Add new proxy
+  //   page.on("request", async (request) => {
+  //     try {
+  //       await useProxy(request, proxyUrl.toString());
+  //     } catch (err) {
+  //       // Only log the first part of the error to avoid spam
+  //       const errorMsg = err.message || "Unknown error";
+  //       const shortError = errorMsg.split('\n')[0];
+  //       // console.log(`Browser ${browserIdentifier}: Proxy error:`, shortError);
         
-        try {
-          request.continue();
-        } catch (continueErr) {
-          // Request might already be handled, ignore this error
-        }
-      }
-    });
+  //       try {
+  //         request.continue();
+  //       } catch (continueErr) {
+  //         // Request might already be handled, ignore this error
+  //       }
+  //     }
+  //   });
   
-    return page;
-  } catch (error) {
-    console.error("Error in setProxyOnPage:", error.message);
-    return page; // Return the page even if proxy setup fails
-  }
+  //   return page;
+  // } catch (error) {
+  //   console.error("Error in setProxyOnPage:", error.message);
+  //   return page; // Return the page even if proxy setup fails
+  // }
 }
 
 module.exports = {

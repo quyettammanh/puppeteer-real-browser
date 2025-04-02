@@ -12,12 +12,12 @@ async function stepLogin(page, user) {
     // Đợi cho form đăng nhập xuất hiện
     const emailInput = await page.waitForSelector("#username", { 
       visible: true, 
-      timeout: 10000 
+      timeout: 3000 
     });
     
     // Xóa giá trị hiện tại và nhập email
     await page.evaluate(() => document.getElementById('username').value = '');
-    await emailInput.type(user.email, { delay: 50 });
+    await emailInput.type(user.email, { delay: 5 });
     
     // Xử lý input password
     const passwordInput = await page.waitForSelector("#password", { 
@@ -27,17 +27,17 @@ async function stepLogin(page, user) {
     
     // Xóa giá trị hiện tại và nhập password
     await page.evaluate(() => document.getElementById('password').value = '');
-    await passwordInput.type(user.password, { delay: 50 });
+    await passwordInput.type(user.password, { delay: 5 });
     
     // Bấm Enter và đợi điều hướng
     try {
       await Promise.race([
         Promise.all([
-          page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 15000 }),
+          page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 1500 }),
           page.keyboard.press("Enter")
         ]),
         new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Login timeout after pressing Enter')), 20000)
+          setTimeout(() => reject(new Error('Login timeout after pressing Enter')), 2000)
         )
       ]);
       console.log("Đăng nhập thành công (dùng input + CSS selector + id)");
@@ -48,7 +48,7 @@ async function stepLogin(page, user) {
 
     // Đợi cho trang sau đăng nhập loading biến mất (nếu có)
     await waitForLoadingComplete(page, { 
-      timeout: 10000, 
+      timeout: 1000, 
       logEnabled: false 
     });
 

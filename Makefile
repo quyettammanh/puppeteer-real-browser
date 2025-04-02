@@ -4,8 +4,9 @@ run:
 REDIS_KEY := url_updates
 SUFFIX_URL := @register-goethe-redis/hcm_b2-link2@Reading-Listening@14.07. - 25.07.2025
 
-BASE_URL := https://www.goethe.de/coe/options;coesessionid=854B4CE0F0477E0DC5EB1736C7FCADDF?1=&64a4bb21e29e708eed03141ffa38edba=02baaba06fd4fc8067907449d20034fd&COE-Customer=ec18fed6-3f9d-4c5f-886c-38ad7de8b1ed&COE-Tab-ID=49389ccd-14c9-4627-9db1-dfe54b2b2cbc&COE-Tab-ID=49389ccd-14c9-4627-9db1-dfe54b2b2cbc
-BASE_URL2 := https://www.goethe.de/coe/options;coesessionid=66A712A2D1E734E69B6C5888176421B7?1=&64a4bb21e29e708eed03141ffa38edba=02baaba06fd4fc8067907449d20034fd&COE-Customer=9a3a8edd-84c1-4864-8b2c-3d822db063c9&COE-Tab-ID=75776d42-619c-45e1-9487-5a45193aa8c0&COE-Tab-ID=75776d42-619c-45e1-9487-5a45193aa8c0
+BASE_URL1 := https://www.goethe.de/coe/options;coesessionid=29A083F7C26AA7EA8F53EAFA2449863E?1=&64a4bb21e29e708eed03141ffa38edba=aba8127d574d5bc2ae361be71239363e&COE-Customer=c2a2f02c-6fc2-4a6a-875a-60b07a9693fc&COE-Tab-ID=dfc1d837-7190-4e22-bc0b-6039ae28ff55&COE-Tab-ID=dfc1d837-7190-4e22-bc0b-6039ae28ff55
+BASE_URL2 := https://www.goethe.de/coe/options;coesessionid=6AE5B4C41F771718A3EDCFC4A84E665F?1=&64a4bb21e29e708eed03141ffa38edba=314ce822e3a9f79e0c55c7de9eb63771&COE-Customer=f2a275d8-ad2a-47c0-aae7-dfa5db6b4c43&COE-Tab-ID=1f96b344-2f9b-45ec-955a-5122202fa07d&COE-Tab-ID=1f96b344-2f9b-45ec-955a-5122202fa07d
+
 pub:
 	docker exec my-redis redis-cli PUBLISH $(REDIS_KEY) "$(BASE_URL2)$(SUFFIX_URL)"
 pm2-start:

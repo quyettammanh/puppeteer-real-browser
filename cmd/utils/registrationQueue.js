@@ -1,6 +1,6 @@
 const { processRegistration } = require('./registrationUtils.js');
 const { parseExamCode } = require('./examUtils.js');
-const { getNextUser, returnUserToPool, getAvailableUserCount, isUserActive, trackActiveUser } = require('./userPool.js');
+const { getNextUser, returnUserToPool, getAvailableUserCount, isUserActive, trackActiveUser, isUserOnCooldown, debugActiveUsers } = require('./userPool.js');
 const { extractCookies } = require('./link_cookies.js');
 const { getSortedUsersByModules, getRequiredSkills } = require('./userSorter.js');
 
@@ -8,7 +8,7 @@ const { getSortedUsersByModules, getRequiredSkills } = require('./userSorter.js'
 const linkQueue = [];
 
 // Maximum number of concurrent browsers
-const MAX_CONCURRENT_BROWSERS = 6;
+const MAX_CONCURRENT_BROWSERS = 10;
 
 // Maximum size for the queue to prevent memory issues
 const MAX_QUEUE_SIZE = 25;
@@ -81,6 +81,8 @@ function tryProcessQueue() {
   if (!isProcessingQueue) {
     isProcessingQueue = true;
     processQueue();
+  } else {
+    console.log('Queue processing already in progress, skipping this attempt');
   }
 }
 
@@ -89,6 +91,13 @@ function tryProcessQueue() {
  */
 function processQueue() {
   try {
+    // Check if we're already at max capacity
+    if (activeBrowserCount >= MAX_CONCURRENT_BROWSERS) {
+      console.log(`Already at maximum capacity (${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}). Waiting for browsers to complete.`);
+      isProcessingQueue = false;
+      return;
+    }
+
     // Get all unique exam types from the queue
     const examTypesInQueue = new Set();
     for (const message of linkQueue) {
@@ -112,7 +121,14 @@ function processQueue() {
 
     // Use the lower of MAX_CONCURRENT_BROWSERS or totalAvailableUsers as the limit
     const effectiveLimit = Math.min(MAX_CONCURRENT_BROWSERS, totalAvailableUsers || MAX_CONCURRENT_BROWSERS);
-    console.log(`Effective browser limit: ${effectiveLimit} (Available users: ${totalAvailableUsers}, Max browsers: ${MAX_CONCURRENT_BROWSERS})`);
+    console.log(`Effective browser limit: ${effectiveLimit} (Available users: ${totalAvailableUsers}, Max browsers: ${MAX_CONCURRENT_BROWSERS}, Current: ${activeBrowserCount})`);
+
+    // If we're already at the effective limit, don't process any more links
+    if (activeBrowserCount >= effectiveLimit) {
+      console.log(`At effective capacity (${activeBrowserCount}/${effectiveLimit}) with ${linkQueue.length} links waiting`);
+      isProcessingQueue = false;
+      return;
+    }
 
     // Continue processing while there are items and capacity
     while (linkQueue.length > 0 && activeBrowserCount < effectiveLimit) {
@@ -199,10 +215,17 @@ async function processLink(message, proxies) {
       return;
     }
 
-    // Find the first available user that is not currently active
-    user = sortedUsers.find(user => !isUserActive(user));
+    // Find the first available user that is not currently active AND not on cooldown
+    user = sortedUsers.find(user => !isUserActive(user) && !isUserOnCooldown(user));
     if (!user) {
-      console.log(`No available users found - all matching users are currently active`);
+      // Log how many users are on cooldown vs active for better diagnostics
+      const activeCount = sortedUsers.filter(user => isUserActive(user)).length;
+      const cooldownCount = sortedUsers.filter(user => isUserOnCooldown(user)).length;
+      console.log(`No available users found - Active: ${activeCount}, On cooldown: ${cooldownCount}, Total: ${sortedUsers.length}`);
+      
+      // Debug which users are active
+      debugActiveUsers();
+      
       return;
     }
 
@@ -265,6 +288,10 @@ async function processLink(message, proxies) {
       const { location, level } = parseExamCode(user.examCode || '');
       if (location && level) {
         returnUserToPool(user, location, level);
+        
+        // Debug active users after returning to pool
+        console.log("Active users after returning user to pool:");
+        debugActiveUsers();
       }
     }
     

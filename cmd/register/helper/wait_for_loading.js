@@ -10,7 +10,7 @@
  */
 async function waitForLoadingComplete(page, options = {}) {
   const {
-    timeout = 30000,
+    timeout = 3000,
     loadingText = "XIN CHỜ TRONG GIÂY LÁT",
     spinnerSelector = '.spinner-border',
     logEnabled = true
