@@ -1,6 +1,6 @@
 const { processRegistration } = require('./registrationUtils.js');
 const { parseExamCode } = require('./examUtils.js');
-const { getNextUser, returnUserToPool, getAvailableUserCount, isUserActive, trackActiveUser, isUserOnCooldown, debugActiveUsers } = require('./userPool.js');
+const { getNextUser, returnUserToPool, getAvailableUserCount, isUserActive, trackActiveUser, isUserOnCooldown, debugActiveUsers, releaseActiveUser, setUserOnCooldown } = require('./userPool.js');
 const { extractCookies } = require('./link_cookies.js');
 const { getSortedUsersByModules, getRequiredSkills } = require('./userSorter.js');
 
@@ -171,6 +171,8 @@ async function processLink(message, proxies) {
   
   let user = null;
   let browserTimeout = null;
+  let location = null; // Define location and level here to be accessible in finally
+  let level = null;
   
   try {
     // Parse the message
@@ -202,41 +204,50 @@ async function processLink(message, proxies) {
     }
     
     // Extract location and level from exam code
-    const { location, level } = parseExamCode(examCode);
+    const parsedExam = parseExamCode(examCode);
+    location = parsedExam.location; // Assign to outer scope variables
+    level = parsedExam.level;
     
     if (!location || !level) {
       throw new Error(`Could not parse location and level from exam code: ${examCode}`);
     }
 
-    // Get sorted users based on modules
-    const sortedUsers = getSortedUsersByModules(modules, location, level);
-    if (sortedUsers.length === 0) {
-      console.log(`No users available with matching modules for ${location} ${level}`);
-      return;
-    }
+    // Get the next available user directly from the pool manager
+    user = await getNextUser(location, level);
 
-    // Find the first available user that is not currently active AND not on cooldown
-    user = sortedUsers.find(user => !isUserActive(user) && !isUserOnCooldown(user));
     if (!user) {
-      // Log how many users are on cooldown vs active for better diagnostics
-      const activeCount = sortedUsers.filter(user => isUserActive(user)).length;
-      const cooldownCount = sortedUsers.filter(user => isUserOnCooldown(user)).length;
-      console.log(`No available users found - Active: ${activeCount}, On cooldown: ${cooldownCount}, Total: ${sortedUsers.length}`);
-      
-      // Debug which users are active
-      debugActiveUsers();
-      
-      return;
+      // Handle case where no user is available (active or on cooldown)
+      console.log(`No available users found for ${location}_${level} at the moment.`);
+      // Re-add the message to the queue with a delay
+      console.log(`Re-adding message to queue due to no available users`);
+      setTimeout(() => {
+          const retryKey = `retry_${message}`;
+          const retryCount = retryCounters.get(retryKey) || 0;
+          
+          if (retryCount < MAX_RETRIES) {
+              retryCounters.set(retryKey, retryCount + 1);
+              linkQueue.push(message);
+              console.log(`Retry ${retryCount + 1}/${MAX_RETRIES} for message due to no available users`);
+          } else {
+              console.log(`Maximum retries (${MAX_RETRIES}) reached for message, dropping: ${message}`);
+              retryCounters.delete(retryKey); // Clean up retry counter
+          }
+      }, RETRY_DELAY);
+      // Decrement browser count as we didn't actually start processing
+      activeBrowserCount--; 
+      console.log(`Browser count decremented due to no user. Active browsers: ${activeBrowserCount}/${MAX_CONCURRENT_BROWSERS}`);
+      // Trigger queue processing again in case other links can be processed
+      setTimeout(() => tryProcessQueue(), 100); 
+      return; // Exit this processing attempt
     }
-
-    // Mark user as active
-    trackActiveUser(user);
     
-    // Get required skills for this user
+    // User is already marked active by getNextUser, no need to call trackActiveUser here
+
+    // Get required skills for this user (Assuming this function is still needed and works with the user object)
     const requiredSkills = getRequiredSkills(user, modules);
     
     // Log user and required skills
-    console.log(`Selected user: ${user.email}`);
+    console.log(`Selected user: ${user.email} for ${location}_${level}`);
     console.log(`Required skills: ${requiredSkills.join(', ')}`);
     
     // Select a random proxy
@@ -285,13 +296,19 @@ async function processLink(message, proxies) {
     }
     
     if (user) {
-      const { location, level } = parseExamCode(user.examCode || '');
+      // Use the location and level derived from the message, not user.examCode
       if (location && level) {
         returnUserToPool(user, location, level);
         
         // Debug active users after returning to pool
         console.log("Active users after returning user to pool:");
         debugActiveUsers();
+      } else {
+         // This case should ideally not happen if we got a user, but good to log
+         console.warn(`Could not determine location/level to return user ${user.email} to pool.`);
+         // Fallback: attempt to release the user anyway without returning to a specific pool's available list
+         releaseActiveUser(user); 
+         setUserOnCooldown(user); // Still apply cooldown
       }
     }
     
