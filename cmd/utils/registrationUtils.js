@@ -82,7 +82,7 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
     
     // Close only the page when done, not the browser
     console.log(`Browser ${browserId}: ${user.email} completed, closing page`);
-    await page.close();
+    // await page.close();
     
     // Remove from active browsers
     activeBrowsers.delete(browserId);
@@ -99,7 +99,7 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
       const { browser, page } = activeBrowsers.get(browserId);
       try {
         // Close only the page on error, not the browser
-        await page.close();
+        // await page.close();
       } catch (e) {
         // Ignore errors on cleanup
       }

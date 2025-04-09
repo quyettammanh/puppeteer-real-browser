@@ -27,7 +27,6 @@ async function taskRegisterGoethe(
   endStep = 'success'
 ) {
   try {
-    url='https://www.goethe.de/coe/entry?lang=vi&oid=56c3595be592cdd7cf03f57b6b62119640551810493f62134a867da3502e81d0'
     const identifier = browserId || `user-${user.email.split("@")[0]}`;
     console.log(
       `Browser ${identifier}: Starting registration process for ${user.email}`

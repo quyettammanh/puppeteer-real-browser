@@ -8,7 +8,7 @@ const { getSortedUsersByModules, getRequiredSkills } = require('./userSorter.js'
 const linkQueue = [];
 
 // Maximum number of concurrent browsers
-const MAX_CONCURRENT_BROWSERS = 10;
+const MAX_CONCURRENT_BROWSERS = 5;
 
 // Maximum size for the queue to prevent memory issues
 const MAX_QUEUE_SIZE = 25;
