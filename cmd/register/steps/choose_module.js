@@ -1,12 +1,19 @@
 const {acceptCookies} = require('../helper/click_cookies');
 const {clickButtonContinue} = require('../helper/click_continue');
 const { randomTime, userInputLoop } = require('../../helper/func');
+const { waitForLoadingComplete } = require('../helper/wait_for_loading');
 
 async function stepChooseModule(page, user) {
     try {
+        console.log("Choose module");
+
+        // Đợi cho trang loading biến mất
+        await waitForLoadingComplete(page);
+
         await chooseModule(page, user);
     } catch (error) {
         console.error("Error in stepChooseModule:", error);
+        throw error;
     }
 }
 

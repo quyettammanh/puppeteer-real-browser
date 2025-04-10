@@ -56,6 +56,8 @@ function getProxies(filePath) {
 }
 
 async function setProxyOnPage(page, proxy, browserId) {
+  // console.log("tạm thời không sử dụng proxy")
+  // return page;
   if (!proxy || !proxy.proxy || !proxy.port) {
     console.log("Không có proxy, không thiết lập proxy.");
     return page;
@@ -68,6 +70,7 @@ async function setProxyOnPage(page, proxy, browserId) {
     // Xác định loại proxy
     let proxyUrl;
     if (proxy.type === "socks5") {
+      // console.log("proxy.username", proxy.username);
       proxyUrl = `socks5://${encodeURIComponent(
         proxy.username
       )}:${encodeURIComponent(proxy.password)}@${proxy.proxy}:${

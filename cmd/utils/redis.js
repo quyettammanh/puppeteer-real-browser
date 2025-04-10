@@ -154,7 +154,7 @@ async function subscribeToRegistrationLinks(channel, callback) {
         queueModule = require('./registrationQueue');
         const queueLength = queueModule.getQueueLength();
         const activeBrowsers = queueModule.getActiveBrowserCount();
-        const maxBrowsers = 6; // Match the MAX_CONCURRENT_BROWSERS value from registrationQueue.js
+        const maxBrowsers = 5; // Match the MAX_CONCURRENT_BROWSERS value from registrationQueue.js
         
         // Check if we're overloaded (queue has too many pending items)
         const MAX_QUEUE_SIZE = 25; // Adjust this threshold as needed

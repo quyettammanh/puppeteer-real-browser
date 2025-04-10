@@ -1,7 +1,14 @@
 const {randomTime} = require('../../helper/func.js');
+const {waitForLoadingComplete} = require('./wait_for_loading.js');
 
 async function clickButtonContinue(page) {
   try {
+      // Đợi cho trang loading biến mất
+      await waitForLoadingComplete(page, {
+          logEnabled: false, 
+          timeout: 10000
+      });
+
       // Tìm button dựa trên selector (giả sử button có text 'tiếp tục')
       const buttons = await page.$$('button'); // Lấy tất cả các button
       let buttonToClick;
@@ -49,6 +56,12 @@ async function clickButtonContinue(page) {
       ]);
 
       console.log("Đã click và load trang hoàn tất");
+      
+      // Đợi cho trang mới loading biến mất nếu có
+      await waitForLoadingComplete(page, {
+          logEnabled: false, 
+          timeout: 5000
+      });
 
       // Delay ngẫu nhiên từ 1 đến 2 giây
       await randomTime(1, 2);

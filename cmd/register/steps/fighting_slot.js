@@ -5,7 +5,7 @@ async function fightingForSlots(browser, page, url, pathProxy, browserId) {
   try {
     console.log("chọn module đăng ký");
     let attempt = 0;
-    let maxAttempts = 5;
+    let maxAttempts = 10;
 
     // Use provided browserId or create a random one
     const identifier = browserId || Math.random().toString(36).substring(2, 10);
@@ -30,9 +30,6 @@ async function fightingForSlots(browser, page, url, pathProxy, browserId) {
         
         const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
         console.log(`Browser ${identifier}: Applying new proxy`, randomProxy.proxy);
-        
-        // Apply the proxy to the current page
-        console.log("randomProxy", randomProxy);
         await setProxyOnPage(page, randomProxy, identifier);
         
         // Try again with the new proxy

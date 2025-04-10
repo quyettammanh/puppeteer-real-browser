@@ -1,21 +1,12 @@
+const {acceptCookies} = require('./click_cookies.js');
+const {waitForLoadingComplete} = require('./wait_for_loading.js');
+
 async function clickRegisterForMe(page) {
   try {
-    // Đợi cho spinner và message "XIN CHỜ TRONG GIÂY LÁT" biến mất
-    try {
-      await page.waitForFunction(
-        () => {
-          // Kiểm tra text "XIN CHỜ TRONG GIÂY LÁT"
-          const waitText = document.body.innerText.includes("XIN CHỜ TRONG GIÂY LÁT");
-          // Kiểm tra spinner loading
-          const spinner = document.querySelector('.spinner-border');
-          return !waitText && !spinner;
-        },
-        { timeout: 30000 } // Đợi tối đa 30 giây
-      );
-      console.log("Trang đã sẵn sàng, tiếp tục thực hiện các bước...");
-    } catch (waitError) {
-      console.log("Đã hết thời gian chờ trang loading, thử tiếp tục...");
-    }
+    // Sử dụng hàm mới đợi loading biến mất
+    await waitForLoadingComplete(page);
+
+    await acceptCookies(page);
 
     // Chuyển XPath sang CSS selector và đợi button xuất hiện
     await page.waitForSelector(
@@ -52,15 +43,29 @@ async function clickRegisterForMe(page) {
       button
     );
 
-    // Click button và đợi navigation
-    await Promise.all([
-      page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 10000 }),
-      button.click()
-    ]);
-
-    console.log("Đã bấm nút đăng ký thành công");
+    // Click button và đợi navigation với xử lý timeout tốt hơn
+    try {
+      await Promise.race([
+        Promise.all([
+          page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 10000 }),
+          button.click()
+        ]),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Navigation timeout after clicking register button')), 15000)
+        )
+      ]);
+      console.log("Đã bấm nút đăng ký thành công");
+    } catch (error) {
+      console.error(`Lỗi khi bấm nút đăng ký: ${error.message}`);
+      // Đánh dấu isCookieAccepted để tránh lặp vô hạn
+      const isCookieAccepted = true;
+      // Throw để báo lỗi ngược lên hàm gọi
+      throw new Error(`Không thể điều hướng sau khi bấm nút đăng ký: ${error.message}`);
+    }
   } catch (error) {
     console.log("Chọn đăng ký cho tôi lỗi:", error.message);
+    // Re-throw lỗi để đảm bảo hàm gọi có thể xử lý
+    throw error;
   }
 }
 

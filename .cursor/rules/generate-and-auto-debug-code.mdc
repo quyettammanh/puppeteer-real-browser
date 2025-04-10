@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+name: Generate and Auto-Debug Code
+trigger: manual
+steps:
+  1. Generate code snippet based on current context
+  2. Execute code in integrated terminal
+  3. If error detected:
+     a. Analyze stack trace
+     b. Apply syntax fixes
+     c. Suggest logic corrections
+     d. Retry execution
+  4. Repeat until success or 5 attempts
+  5. Save final working version
