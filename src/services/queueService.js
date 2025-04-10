@@ -10,7 +10,7 @@ const registrationManager = require('../register/registrationManager');
 const logger = createLogger('QueueService');
 
 // Queue configuration
-const MAX_CONCURRENT_BROWSERS = 10;
+const MAX_CONCURRENT_BROWSERS = 20;
 let maxQueueSize = 50;
 let registrationQueue = [];
 let skippedLinksCount = 0;

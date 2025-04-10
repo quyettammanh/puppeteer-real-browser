@@ -26,7 +26,6 @@ async function taskRegisterGoethe(
   endStep = 'success'
 ) {
   try {
-    // url='https://www.google.com/search?q=nhac+tre'
     const identifier = browserId || `user-${user.email.split("@")[0]}`;
     console.log(
       `Browser ${identifier}: Starting registration process for ${user.email}`
@@ -263,18 +262,20 @@ async function handleRemainingSteps(
     summary: async () => {
       log("📋 Starting: Summary");
       try {
-        const success = await stepSummary(page, user, endStep);
-        if (success) {
-          stepCompletionStatus.summary = true;
-          log("✅ Summary step completed successfully!");
+        console.log("🔍 Summary step");
+        return true;
+        // const success = await stepSummary(page, user, endStep);
+        // if (success) {
+        //   stepCompletionStatus.summary = true;
+        //   log("✅ Summary step completed successfully!");
           
-          // If endStep is 'summary', we're done here
-          if (endStep === 'summary') {
-            log("🎉 Ending at summary step as requested");
-            return true;
-          }
-        }
-        return success;
+        //   // If endStep is 'summary', we're done here
+        //   if (endStep === 'summary') {
+        //     log("🎉 Ending at summary step as requested");
+        //     return true;
+        //   }
+        // }
+        // return success;
       } catch (error) {
         log(`❌ Error in summary step: ${error.message}`);
         return false;

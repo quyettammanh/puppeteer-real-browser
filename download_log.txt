@@ -1,0 +1,935 @@
+[2025-04-10 21:38:24] === DOWNLOAD PROCESS STARTED ===
+[2025-04-10 21:38:24] Starting data download process
+[2025-04-10 21:38:24] Using Google Spreadsheet ID: 1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk
+[2025-04-10 21:38:24] Processing sheet: hn_b1 (gid=0)
+[2025-04-10 21:38:24] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=0
+[2025-04-10 21:38:25] Download successful, Content-Length: 3462 bytes
+[2025-04-10 21:38:25] Content decoded, processing CSV data
+[2025-04-10 21:38:25] Loaded 20 rows from sheet hn_b1
+[2025-04-10 21:38:25] Converting DataFrame to records
+[2025-04-10 21:38:25] Converted to 20 dictionary records
+[2025-04-10 21:38:25] Starting data transformation for hn_b1
+[2025-04-10 21:38:25] Transforming 20 rows
+[2025-04-10 21:38:25] ERROR: Row 0: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:25] ERROR: Row 2: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 3: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 4: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 5: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 6: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 7: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 8: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 9: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 11: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 13: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:25] ERROR: Row 13: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 14: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:25] ERROR: Row 14: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 15: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:25] ERROR: Row 15: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 16: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:25] ERROR: Row 16: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 17: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:25] ERROR: Row 17: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 18: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:25] ERROR: Row 18: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:25] ERROR: Row 19: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:25] Transformation complete. 20 rows processed successfully, 0 errors
+[2025-04-10 21:38:25] Applying data normalization to 20 rows
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:25] Row 1: Modified phone number from '0379008986' to '379008986'
+[2025-04-10 21:38:25] Row 2: Modified phone number from '0375576506' to '375576506'
+[2025-04-10 21:38:25] Row 3: Modified phone number from '0858591618' to '858591618'
+[2025-04-10 21:38:25] Row 4: Modified phone number from '0379689169' to '379689169'
+[2025-04-10 21:38:25] Row 5: Modified phone number from '0583276250' to '583276250'
+[2025-04-10 21:38:25] Row 6: Modified phone number from '0989396405' to '989396405'
+[2025-04-10 21:38:25] Row 7: Modified phone number from '0368410574' to '368410574'
+[2025-04-10 21:38:25] Row 8: Modified phone number from '0363073184' to '363073184'
+[2025-04-10 21:38:25] Row 9: Modified phone number from '0826650278' to '826650278'
+[2025-04-10 21:38:25] Row 10: Modified phone number from '0981046240' to '981046240'
+[2025-04-10 21:38:25] Row 11: Modified phone number from '0857234333' to '857234333'
+[2025-04-10 21:38:25] Row 12: Modified phone number from '0972680558' to '972680558'
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Row 13: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Row 14: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Row 15: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Row 16: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Row 17: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Row 18: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:25] ERROR: Row 19: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:25] Data normalization complete. 12 rows valid, 8 rows skipped.
+[2025-04-10 21:38:25] Transformation complete, 12 valid records remain
+[2025-04-10 21:38:25] Target directory for hn_b1: ./data/user/hn
+[2025-04-10 21:38:25] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:38:25] Saving 12 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:38:25] Successfully saved to ./data/user/hn\hn_b1.json
+[2025-04-10 21:38:25] Successfully saved 12 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:38:25] Processing sheet: hn_b2 (gid=1807418615)
+[2025-04-10 21:38:25] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1807418615
+[2025-04-10 21:38:26] Download successful, Content-Length: 463 bytes
+[2025-04-10 21:38:26] Content decoded, processing CSV data
+[2025-04-10 21:38:26] Loaded 5 rows from sheet hn_b2
+[2025-04-10 21:38:26] Converting DataFrame to records
+[2025-04-10 21:38:26] Converted to 5 dictionary records
+[2025-04-10 21:38:26] Starting data transformation for hn_b2
+[2025-04-10 21:38:26] Transforming 5 rows
+[2025-04-10 21:38:26] ERROR: Row 0: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:26] ERROR: Row 1: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:26] ERROR: Row 1: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:26] ERROR: Row 2: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:26] ERROR: Row 2: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:26] ERROR: Row 3: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:26] ERROR: Row 3: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:26] ERROR: Row 4: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:26] ERROR: Row 4: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:26] Transformation complete. 5 rows processed successfully, 0 errors
+[2025-04-10 21:38:26] Applying data normalization to 5 rows
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Row 1: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Row 2: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Row 3: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:26] ERROR: Row 4: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:26] Data normalization complete. 0 rows valid, 5 rows skipped.
+[2025-04-10 21:38:26] ERROR: No valid data after transformation for hn_b2
+[2025-04-10 21:38:26] Processing sheet: hn_a1 (gid=1827133648)
+[2025-04-10 21:38:26] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1827133648
+[2025-04-10 21:38:27] Download successful, Content-Length: 373 bytes
+[2025-04-10 21:38:27] Content decoded, processing CSV data
+[2025-04-10 21:38:27] Loaded 2 rows from sheet hn_a1
+[2025-04-10 21:38:27] Converting DataFrame to records
+[2025-04-10 21:38:27] Converted to 2 dictionary records
+[2025-04-10 21:38:27] Starting data transformation for hn_a1
+[2025-04-10 21:38:27] Transforming 2 rows
+[2025-04-10 21:38:27] ERROR: Row 0: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:27] ERROR: Row 0: Invalid numeric value for Reading: 'nan', setting to 0
+[2025-04-10 21:38:27] ERROR: Row 0: Invalid numeric value for Listening: 'nan', setting to 0
+[2025-04-10 21:38:27] ERROR: Row 0: Invalid numeric value for Writing: 'nan', setting to 0
+[2025-04-10 21:38:27] ERROR: Row 0: Invalid numeric value for Speaking: 'nan', setting to 0
+[2025-04-10 21:38:27] ERROR: Row 0: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:27] ERROR: Row 1: Invalid date format for DOB: 'nan' (expected DD/MM/YYYY)
+[2025-04-10 21:38:27] ERROR: Row 1: Invalid numeric value for Reading: 'nan', setting to 0
+[2025-04-10 21:38:27] ERROR: Row 1: Invalid numeric value for Listening: 'nan', setting to 0
+[2025-04-10 21:38:27] ERROR: Row 1: Invalid numeric value for Writing: 'nan', setting to 0
+[2025-04-10 21:38:27] ERROR: Row 1: Invalid numeric value for Speaking: 'nan', setting to 0
+[2025-04-10 21:38:27] ERROR: Row 1: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:38:27] Transformation complete. 2 rows processed successfully, 0 errors
+[2025-04-10 21:38:27] Applying data normalization to 2 rows
+[2025-04-10 21:38:27] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:27] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:27] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:27] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:27] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:27] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:27] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:27] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:27] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:38:27] ERROR: Row 1: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:38:27] Data normalization complete. 0 rows valid, 2 rows skipped.
+[2025-04-10 21:38:27] ERROR: No valid data after transformation for hn_a1
+[2025-04-10 21:38:27] Download process complete. Success: 1, Failed: 2
+[2025-04-10 21:38:27] Process finished. Successfully processed 1 sheets, 2 sheets failed.
+[2025-04-10 21:38:27] === DOWNLOAD PROCESS COMPLETED ===
+[2025-04-10 21:40:14] === DOWNLOAD PROCESS STARTED ===
+[2025-04-10 21:40:14] Starting data download process
+[2025-04-10 21:40:14] Using Google Spreadsheet ID: 1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk
+[2025-04-10 21:40:14] Processing sheet: hn_b1 (gid=0)
+[2025-04-10 21:40:14] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=0
+[2025-04-10 21:40:16] Download successful, Content-Length: 3462 bytes
+[2025-04-10 21:40:16] Content decoded, processing CSV data
+[2025-04-10 21:40:16] Loaded 20 rows from sheet hn_b1
+[2025-04-10 21:40:16] Converting DataFrame to records
+[2025-04-10 21:40:16] Converted to 20 dictionary records
+[2025-04-10 21:40:16] Starting data transformation for hn_b1
+[2025-04-10 21:40:16] Transforming 20 rows
+[2025-04-10 21:40:16] ERROR: Row 0: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:16] ERROR: Row 2: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 3: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 4: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 5: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 6: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 7: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 8: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 9: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 11: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 13: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:16] ERROR: Row 13: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 14: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:16] ERROR: Row 14: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 15: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:16] ERROR: Row 15: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 16: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:16] ERROR: Row 16: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 17: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:16] ERROR: Row 17: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 18: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:16] ERROR: Row 18: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:16] ERROR: Row 19: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:16] Transformation complete. 20 rows processed successfully, 0 errors
+[2025-04-10 21:40:16] Applying data normalization to 20 rows
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:16] Row 1: Modified phone number from '0379008986' to '379008986'
+[2025-04-10 21:40:16] Row 2: Modified phone number from '0375576506' to '375576506'
+[2025-04-10 21:40:16] Row 3: Modified phone number from '0858591618' to '858591618'
+[2025-04-10 21:40:16] Row 4: Modified phone number from '0379689169' to '379689169'
+[2025-04-10 21:40:16] Row 5: Modified phone number from '0583276250' to '583276250'
+[2025-04-10 21:40:16] Row 6: Modified phone number from '0989396405' to '989396405'
+[2025-04-10 21:40:16] Row 7: Modified phone number from '0368410574' to '368410574'
+[2025-04-10 21:40:16] Row 8: Modified phone number from '0363073184' to '363073184'
+[2025-04-10 21:40:16] Row 9: Modified phone number from '0826650278' to '826650278'
+[2025-04-10 21:40:16] Row 10: Modified phone number from '0981046240' to '981046240'
+[2025-04-10 21:40:16] Row 11: Modified phone number from '0857234333' to '857234333'
+[2025-04-10 21:40:16] Row 12: Modified phone number from '0972680558' to '972680558'
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Row 13: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Row 14: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Row 15: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Row 16: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Row 17: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Row 18: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:16] ERROR: Row 19: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:16] Data normalization complete. 12 rows valid, 8 rows skipped.
+[2025-04-10 21:40:16] Transformation complete, 12 valid records remain
+[2025-04-10 21:40:16] Target directory for hn_b1: ./data/user/hn
+[2025-04-10 21:40:16] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:40:16] Saving 12 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:40:16] Successfully saved to ./data/user/hn\hn_b1.json
+[2025-04-10 21:40:16] Successfully saved 12 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:40:16] Processing sheet: hn_b2 (gid=1807418615)
+[2025-04-10 21:40:16] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1807418615
+[2025-04-10 21:40:17] Download successful, Content-Length: 463 bytes
+[2025-04-10 21:40:17] Content decoded, processing CSV data
+[2025-04-10 21:40:17] Loaded 5 rows from sheet hn_b2
+[2025-04-10 21:40:17] Converting DataFrame to records
+[2025-04-10 21:40:17] Converted to 5 dictionary records
+[2025-04-10 21:40:17] Starting data transformation for hn_b2
+[2025-04-10 21:40:17] Transforming 5 rows
+[2025-04-10 21:40:17] ERROR: Row 0: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:17] ERROR: Row 1: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:17] ERROR: Row 1: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 2: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:17] ERROR: Row 2: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 3: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:17] ERROR: Row 3: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 4: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:17] ERROR: Row 4: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:17] Transformation complete. 5 rows processed successfully, 0 errors
+[2025-04-10 21:40:17] Applying data normalization to 5 rows
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Row 1: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Row 2: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Row 3: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Row 4: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:17] Data normalization complete. 0 rows valid, 5 rows skipped.
+[2025-04-10 21:40:17] ERROR: No valid data after transformation for hn_b2
+[2025-04-10 21:40:17] Processing sheet: hn_a1 (gid=1827133648)
+[2025-04-10 21:40:17] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1827133648
+[2025-04-10 21:40:17] Download successful, Content-Length: 373 bytes
+[2025-04-10 21:40:17] Content decoded, processing CSV data
+[2025-04-10 21:40:17] Loaded 2 rows from sheet hn_a1
+[2025-04-10 21:40:17] Converting DataFrame to records
+[2025-04-10 21:40:17] Converted to 2 dictionary records
+[2025-04-10 21:40:17] Starting data transformation for hn_a1
+[2025-04-10 21:40:17] Transforming 2 rows
+[2025-04-10 21:40:17] ERROR: Row 0: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:17] ERROR: Row 0: Invalid numeric value for Reading: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 0: Invalid numeric value for Listening: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 0: Invalid numeric value for Writing: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 0: Invalid numeric value for Speaking: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 0: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 1: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:17] ERROR: Row 1: Invalid numeric value for Reading: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 1: Invalid numeric value for Listening: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 1: Invalid numeric value for Writing: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 1: Invalid numeric value for Speaking: 'nan', setting to 0
+[2025-04-10 21:40:17] ERROR: Row 1: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:17] Transformation complete. 2 rows processed successfully, 0 errors
+[2025-04-10 21:40:17] Applying data normalization to 2 rows
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:17] ERROR: Row 1: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:17] Data normalization complete. 0 rows valid, 2 rows skipped.
+[2025-04-10 21:40:17] ERROR: No valid data after transformation for hn_a1
+[2025-04-10 21:40:17] Download process complete. Success: 1, Failed: 2
+[2025-04-10 21:40:17] Process finished. Successfully processed 1 sheets, 2 sheets failed.
+[2025-04-10 21:40:17] === DOWNLOAD PROCESS COMPLETED ===
+[2025-04-10 21:40:55] === DOWNLOAD PROCESS STARTED ===
+[2025-04-10 21:40:55] Starting data download process
+[2025-04-10 21:40:55] Using Google Spreadsheet ID: 1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk
+[2025-04-10 21:40:55] Processing sheet: hn_b1 (gid=0)
+[2025-04-10 21:40:55] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=0
+[2025-04-10 21:40:55] Download successful, Content-Length: 3462 bytes
+[2025-04-10 21:40:55] Content decoded, processing CSV data
+[2025-04-10 21:40:56] Loaded 20 rows from sheet hn_b1
+[2025-04-10 21:40:56] Converting DataFrame to records
+[2025-04-10 21:40:56] Converted to 20 dictionary records
+[2025-04-10 21:40:56] Starting data transformation for hn_b1
+[2025-04-10 21:40:56] Transforming 20 rows
+[2025-04-10 21:40:56] ERROR: Row 0: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:56] ERROR: Row 2: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 3: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 4: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 5: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 6: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 7: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 8: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 9: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 11: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 13: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:56] ERROR: Row 13: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 14: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:56] ERROR: Row 14: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 15: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:56] ERROR: Row 15: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 16: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:56] ERROR: Row 16: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 17: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:56] ERROR: Row 17: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 18: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:56] ERROR: Row 18: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:56] ERROR: Row 19: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:56] Transformation complete. 20 rows processed successfully, 0 errors
+[2025-04-10 21:40:56] Applying data normalization to 20 rows
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:56] Row 1: Modified phone number from '0379008986' to '379008986'
+[2025-04-10 21:40:56] Row 2: Modified phone number from '0375576506' to '375576506'
+[2025-04-10 21:40:56] Row 3: Modified phone number from '0858591618' to '858591618'
+[2025-04-10 21:40:56] Row 4: Modified phone number from '0379689169' to '379689169'
+[2025-04-10 21:40:56] Row 5: Modified phone number from '0583276250' to '583276250'
+[2025-04-10 21:40:56] Row 6: Modified phone number from '0989396405' to '989396405'
+[2025-04-10 21:40:56] Row 7: Modified phone number from '0368410574' to '368410574'
+[2025-04-10 21:40:56] Row 8: Modified phone number from '0363073184' to '363073184'
+[2025-04-10 21:40:56] Row 9: Modified phone number from '0826650278' to '826650278'
+[2025-04-10 21:40:56] Row 10: Modified phone number from '0981046240' to '981046240'
+[2025-04-10 21:40:56] Row 11: Modified phone number from '0857234333' to '857234333'
+[2025-04-10 21:40:56] Row 12: Modified phone number from '0972680558' to '972680558'
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Row 13: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Row 14: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Row 15: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Row 16: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Row 17: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Row 18: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:56] ERROR: Row 19: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:56] Data normalization complete. 12 rows valid, 8 rows skipped.
+[2025-04-10 21:40:56] Transformation complete, 12 valid records remain
+[2025-04-10 21:40:56] Target directory for hn_b1: ./data/user/hn
+[2025-04-10 21:40:56] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:40:56] Saving 12 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:40:56] Successfully saved to ./data/user/hn\hn_b1.json
+[2025-04-10 21:40:56] Successfully saved 12 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:40:56] Processing sheet: hn_b2 (gid=1807418615)
+[2025-04-10 21:40:56] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1807418615
+[2025-04-10 21:40:57] Download successful, Content-Length: 463 bytes
+[2025-04-10 21:40:57] Content decoded, processing CSV data
+[2025-04-10 21:40:57] Loaded 5 rows from sheet hn_b2
+[2025-04-10 21:40:57] Converting DataFrame to records
+[2025-04-10 21:40:57] Converted to 5 dictionary records
+[2025-04-10 21:40:57] Starting data transformation for hn_b2
+[2025-04-10 21:40:57] Transforming 5 rows
+[2025-04-10 21:40:57] ERROR: Row 0: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:57] ERROR: Row 1: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:57] ERROR: Row 1: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 2: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:57] ERROR: Row 2: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 3: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:57] ERROR: Row 3: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 4: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:57] ERROR: Row 4: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:57] Transformation complete. 5 rows processed successfully, 0 errors
+[2025-04-10 21:40:57] Applying data normalization to 5 rows
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Row 1: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Row 2: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Row 3: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Row 4: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:57] Data normalization complete. 0 rows valid, 5 rows skipped.
+[2025-04-10 21:40:57] ERROR: No valid data after transformation for hn_b2
+[2025-04-10 21:40:57] Processing sheet: hn_a1 (gid=1827133648)
+[2025-04-10 21:40:57] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1827133648
+[2025-04-10 21:40:57] Download successful, Content-Length: 373 bytes
+[2025-04-10 21:40:57] Content decoded, processing CSV data
+[2025-04-10 21:40:57] Loaded 2 rows from sheet hn_a1
+[2025-04-10 21:40:57] Converting DataFrame to records
+[2025-04-10 21:40:57] Converted to 2 dictionary records
+[2025-04-10 21:40:57] Starting data transformation for hn_a1
+[2025-04-10 21:40:57] Transforming 2 rows
+[2025-04-10 21:40:57] ERROR: Row 0: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:57] ERROR: Row 0: Invalid numeric value for Reading: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 0: Invalid numeric value for Listening: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 0: Invalid numeric value for Writing: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 0: Invalid numeric value for Speaking: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 0: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 1: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:40:57] ERROR: Row 1: Invalid numeric value for Reading: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 1: Invalid numeric value for Listening: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 1: Invalid numeric value for Writing: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 1: Invalid numeric value for Speaking: 'nan', setting to 0
+[2025-04-10 21:40:57] ERROR: Row 1: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:40:57] Transformation complete. 2 rows processed successfully, 0 errors
+[2025-04-10 21:40:57] Applying data normalization to 2 rows
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:40:57] ERROR: Row 1: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:40:57] Data normalization complete. 0 rows valid, 2 rows skipped.
+[2025-04-10 21:40:57] ERROR: No valid data after transformation for hn_a1
+[2025-04-10 21:40:57] Download process complete. Success: 1, Failed: 2
+[2025-04-10 21:40:57] Process finished. Successfully processed 1 sheets, 2 sheets failed.
+[2025-04-10 21:40:57] === DOWNLOAD PROCESS COMPLETED ===
+[2025-04-10 21:41:35] === DOWNLOAD PROCESS STARTED ===
+[2025-04-10 21:41:35] Starting data download process
+[2025-04-10 21:41:35] Using Google Spreadsheet ID: 1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk
+[2025-04-10 21:41:35] Processing sheet: hn_b1 (gid=0)
+[2025-04-10 21:41:35] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=0
+[2025-04-10 21:41:36] Download successful, Content-Length: 3462 bytes
+[2025-04-10 21:41:36] Content decoded, processing CSV data
+[2025-04-10 21:41:36] Loaded 20 rows from sheet hn_b1
+[2025-04-10 21:41:36] Converting DataFrame to records
+[2025-04-10 21:41:36] Converted to 20 dictionary records
+[2025-04-10 21:41:36] Starting data transformation for hn_b1
+[2025-04-10 21:41:36] Transforming 20 rows
+[2025-04-10 21:41:36] ERROR: Row 0: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:36] ERROR: Row 2: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 3: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 4: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 5: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 6: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 7: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 8: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 9: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 11: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 13: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:36] ERROR: Row 13: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 14: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:36] ERROR: Row 14: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 15: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:36] ERROR: Row 15: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 16: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:36] ERROR: Row 16: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 17: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:36] ERROR: Row 17: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 18: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:36] ERROR: Row 18: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:36] ERROR: Row 19: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:36] Transformation complete. 20 rows processed successfully, 0 errors
+[2025-04-10 21:41:36] Applying data normalization to 20 rows
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:36] Row 1: Modified phone number from '0379008986' to '379008986'
+[2025-04-10 21:41:36] Row 2: Modified phone number from '0375576506' to '375576506'
+[2025-04-10 21:41:36] Row 3: Modified phone number from '0858591618' to '858591618'
+[2025-04-10 21:41:36] Row 4: Modified phone number from '0379689169' to '379689169'
+[2025-04-10 21:41:36] Row 5: Modified phone number from '0583276250' to '583276250'
+[2025-04-10 21:41:36] Row 6: Modified phone number from '0989396405' to '989396405'
+[2025-04-10 21:41:36] Row 7: Modified phone number from '0368410574' to '368410574'
+[2025-04-10 21:41:36] Row 8: Modified phone number from '0363073184' to '363073184'
+[2025-04-10 21:41:36] Row 9: Modified phone number from '0826650278' to '826650278'
+[2025-04-10 21:41:36] Row 10: Modified phone number from '0981046240' to '981046240'
+[2025-04-10 21:41:36] Row 11: Modified phone number from '0857234333' to '857234333'
+[2025-04-10 21:41:36] Row 12: Modified phone number from '0972680558' to '972680558'
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Row 13: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Row 14: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Row 15: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Row 16: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Row 17: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Row 18: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:36] ERROR: Row 19: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:36] Data normalization complete. 12 rows valid, 8 rows skipped.
+[2025-04-10 21:41:36] Transformation complete, 12 valid records remain
+[2025-04-10 21:41:36] Target directory for hn_b1: ./data/user/hn
+[2025-04-10 21:41:36] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:41:36] Saving 12 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:41:36] Successfully saved to ./data/user/hn\hn_b1.json
+[2025-04-10 21:41:36] Successfully saved 12 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:41:36] Processing sheet: hn_b2 (gid=1807418615)
+[2025-04-10 21:41:36] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1807418615
+[2025-04-10 21:41:37] Download successful, Content-Length: 463 bytes
+[2025-04-10 21:41:37] Content decoded, processing CSV data
+[2025-04-10 21:41:37] Loaded 5 rows from sheet hn_b2
+[2025-04-10 21:41:37] Converting DataFrame to records
+[2025-04-10 21:41:37] Converted to 5 dictionary records
+[2025-04-10 21:41:37] Starting data transformation for hn_b2
+[2025-04-10 21:41:37] Transforming 5 rows
+[2025-04-10 21:41:37] ERROR: Row 0: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:37] ERROR: Row 1: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:37] ERROR: Row 1: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:37] ERROR: Row 2: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:37] ERROR: Row 2: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:37] ERROR: Row 3: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:37] ERROR: Row 3: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:37] ERROR: Row 4: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:37] ERROR: Row 4: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:37] Transformation complete. 5 rows processed successfully, 0 errors
+[2025-04-10 21:41:37] Applying data normalization to 5 rows
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Row 1: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Row 2: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Row 3: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:37] ERROR: Row 4: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:37] Data normalization complete. 0 rows valid, 5 rows skipped.
+[2025-04-10 21:41:37] ERROR: No valid data after transformation for hn_b2
+[2025-04-10 21:41:37] Processing sheet: hn_a1 (gid=1827133648)
+[2025-04-10 21:41:37] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1827133648
+[2025-04-10 21:41:38] Download successful, Content-Length: 373 bytes
+[2025-04-10 21:41:38] Content decoded, processing CSV data
+[2025-04-10 21:41:38] Loaded 2 rows from sheet hn_a1
+[2025-04-10 21:41:38] Converting DataFrame to records
+[2025-04-10 21:41:38] Converted to 2 dictionary records
+[2025-04-10 21:41:38] Starting data transformation for hn_a1
+[2025-04-10 21:41:38] Transforming 2 rows
+[2025-04-10 21:41:38] ERROR: Row 0: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:38] ERROR: Row 0: Invalid numeric value for Reading: 'nan', setting to 0
+[2025-04-10 21:41:38] ERROR: Row 0: Invalid numeric value for Listening: 'nan', setting to 0
+[2025-04-10 21:41:38] ERROR: Row 0: Invalid numeric value for Writing: 'nan', setting to 0
+[2025-04-10 21:41:38] ERROR: Row 0: Invalid numeric value for Speaking: 'nan', setting to 0
+[2025-04-10 21:41:38] ERROR: Row 0: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:38] ERROR: Row 1: Non-standard date format for DOB: 'nan' (expected DD/MM/YYYY), treating as empty
+[2025-04-10 21:41:38] ERROR: Row 1: Invalid numeric value for Reading: 'nan', setting to 0
+[2025-04-10 21:41:38] ERROR: Row 1: Invalid numeric value for Listening: 'nan', setting to 0
+[2025-04-10 21:41:38] ERROR: Row 1: Invalid numeric value for Writing: 'nan', setting to 0
+[2025-04-10 21:41:38] ERROR: Row 1: Invalid numeric value for Speaking: 'nan', setting to 0
+[2025-04-10 21:41:38] ERROR: Row 1: Invalid numeric value for Priority: 'nan', setting to 0
+[2025-04-10 21:41:38] Transformation complete. 2 rows processed successfully, 0 errors
+[2025-04-10 21:41:38] Applying data normalization to 2 rows
+[2025-04-10 21:41:38] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:38] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:38] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:38] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:38] ERROR: Row 0: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:38] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:38] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:38] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:38] ERROR: Error removing diacritics from 'nan': normalize() argument 2 must be str, not float
+[2025-04-10 21:41:38] ERROR: Row 1: Error in data transformation: 'float' object has no attribute 'lstrip'
+[2025-04-10 21:41:38] Data normalization complete. 0 rows valid, 2 rows skipped.
+[2025-04-10 21:41:38] ERROR: No valid data after transformation for hn_a1
+[2025-04-10 21:41:38] Download process complete. Success: 1, Failed: 2
+[2025-04-10 21:41:38] Process finished. Successfully processed 1 sheets, 2 sheets failed.
+[2025-04-10 21:41:38] === DOWNLOAD PROCESS COMPLETED ===
+[2025-04-10 21:46:22] === DOWNLOAD PROCESS STARTED ===
+[2025-04-10 21:46:22] Starting data download process
+[2025-04-10 21:46:22] Using Google Spreadsheet ID: 1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk
+[2025-04-10 21:46:22] Processing sheet: hn_b1 (gid=0)
+[2025-04-10 21:46:22] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=0
+[2025-04-10 21:46:23] Download successful, Content-Length: 3462 bytes
+[2025-04-10 21:46:23] Content decoded, processing CSV data
+[2025-04-10 21:46:23] Loaded 20 rows from sheet hn_b1
+[2025-04-10 21:46:23] Converting DataFrame to records
+[2025-04-10 21:46:23] Converted to 20 dictionary records
+[2025-04-10 21:46:23] Starting data transformation for hn_b1
+[2025-04-10 21:46:23] Transforming 20 rows
+[2025-04-10 21:46:23] Transformation complete. 20 rows processed successfully, 0 errors
+[2025-04-10 21:46:23] Applying data normalization to 20 rows
+[2025-04-10 21:46:23] Row 1: Modified phone number from '0379008986' to '379008986'
+[2025-04-10 21:46:23] Row 2: Modified phone number from '0375576506' to '375576506'
+[2025-04-10 21:46:23] Row 3: Modified phone number from '0858591618' to '858591618'
+[2025-04-10 21:46:23] Row 4: Modified phone number from '0379689169' to '379689169'
+[2025-04-10 21:46:23] Row 5: Modified phone number from '0583276250' to '583276250'
+[2025-04-10 21:46:23] Row 6: Modified phone number from '0989396405' to '989396405'
+[2025-04-10 21:46:23] Row 7: Modified phone number from '0368410574' to '368410574'
+[2025-04-10 21:46:23] Row 8: Modified phone number from '0363073184' to '363073184'
+[2025-04-10 21:46:23] Row 9: Modified phone number from '0826650278' to '826650278'
+[2025-04-10 21:46:23] Row 10: Modified phone number from '0981046240' to '981046240'
+[2025-04-10 21:46:23] Row 11: Modified phone number from '0857234333' to '857234333'
+[2025-04-10 21:46:23] Row 12: Modified phone number from '0972680558' to '972680558'
+[2025-04-10 21:46:23] Data normalization complete. 20 rows valid, 0 rows skipped.
+[2025-04-10 21:46:23] Transformation complete, 20 valid records remain
+[2025-04-10 21:46:23] Target directory for hn_b1: ./data/user/hn
+[2025-04-10 21:46:23] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:46:23] Saving 20 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:46:23] Successfully saved to ./data/user/hn\hn_b1.json
+[2025-04-10 21:46:23] Successfully saved 20 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:46:23] Processing sheet: hn_b2 (gid=1807418615)
+[2025-04-10 21:46:23] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1807418615
+[2025-04-10 21:46:24] Download successful, Content-Length: 463 bytes
+[2025-04-10 21:46:24] Content decoded, processing CSV data
+[2025-04-10 21:46:24] Loaded 5 rows from sheet hn_b2
+[2025-04-10 21:46:24] Converting DataFrame to records
+[2025-04-10 21:46:24] Converted to 5 dictionary records
+[2025-04-10 21:46:24] Starting data transformation for hn_b2
+[2025-04-10 21:46:24] Transforming 5 rows
+[2025-04-10 21:46:24] Transformation complete. 5 rows processed successfully, 0 errors
+[2025-04-10 21:46:24] Applying data normalization to 5 rows
+[2025-04-10 21:46:24] Data normalization complete. 5 rows valid, 0 rows skipped.
+[2025-04-10 21:46:24] Transformation complete, 5 valid records remain
+[2025-04-10 21:46:24] Target directory for hn_b2: ./data/user/hn
+[2025-04-10 21:46:24] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:46:24] Saving 5 records to ./data/user/hn\hn_b2.json
+[2025-04-10 21:46:24] Successfully saved to ./data/user/hn\hn_b2.json
+[2025-04-10 21:46:24] Successfully saved 5 records to ./data/user/hn\hn_b2.json
+[2025-04-10 21:46:24] Processing sheet: hn_a1 (gid=1827133648)
+[2025-04-10 21:46:24] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1827133648
+[2025-04-10 21:46:25] Download successful, Content-Length: 373 bytes
+[2025-04-10 21:46:25] Content decoded, processing CSV data
+[2025-04-10 21:46:25] Loaded 2 rows from sheet hn_a1
+[2025-04-10 21:46:25] Converting DataFrame to records
+[2025-04-10 21:46:25] Converted to 2 dictionary records
+[2025-04-10 21:46:25] Starting data transformation for hn_a1
+[2025-04-10 21:46:25] Transforming 2 rows
+[2025-04-10 21:46:25] Transformation complete. 2 rows processed successfully, 0 errors
+[2025-04-10 21:46:25] Applying data normalization to 2 rows
+[2025-04-10 21:46:25] Data normalization complete. 2 rows valid, 0 rows skipped.
+[2025-04-10 21:46:25] Transformation complete, 2 valid records remain
+[2025-04-10 21:46:25] Target directory for hn_a1: ./data/user/hn
+[2025-04-10 21:46:25] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:46:25] Saving 2 records to ./data/user/hn\hn_a1.json
+[2025-04-10 21:46:25] Successfully saved to ./data/user/hn\hn_a1.json
+[2025-04-10 21:46:25] Successfully saved 2 records to ./data/user/hn\hn_a1.json
+[2025-04-10 21:46:25] Download process complete. Success: 3, Failed: 0
+[2025-04-10 21:46:25] Process finished. Successfully processed 3 sheets, 0 sheets failed.
+[2025-04-10 21:46:25] === DOWNLOAD PROCESS COMPLETED ===
+[2025-04-10 21:53:25] === DOWNLOAD PROCESS STARTED ===
+[2025-04-10 21:53:25] Starting data download process
+[2025-04-10 21:53:25] Using Google Spreadsheet ID: 1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk
+[2025-04-10 21:53:25] Processing sheet: hn_b1 (gid=0)
+[2025-04-10 21:53:25] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=0
+[2025-04-10 21:53:26] Download successful, Content-Length: 3462 bytes
+[2025-04-10 21:53:26] Content decoded, processing CSV data
+[2025-04-10 21:53:26] Loaded 20 rows from sheet hn_b1
+[2025-04-10 21:53:26] Converting DataFrame to records
+[2025-04-10 21:53:26] Converted to 20 dictionary records
+[2025-04-10 21:53:26] Starting data transformation for hn_b1
+[2025-04-10 21:53:26] Transforming 20 rows
+[2025-04-10 21:53:26] Transformation complete. 20 rows processed successfully, 0 errors
+[2025-04-10 21:53:26] Applying data normalization to 20 rows
+[2025-04-10 21:53:26] Row 1: Modified phone number from '0379008986' to '379008986'
+[2025-04-10 21:53:26] Row 2: Modified phone number from '0375576506' to '375576506'
+[2025-04-10 21:53:26] Row 3: Modified phone number from '0858591618' to '858591618'
+[2025-04-10 21:53:26] Row 4: Modified phone number from '0379689169' to '379689169'
+[2025-04-10 21:53:26] Row 5: Modified phone number from '0583276250' to '583276250'
+[2025-04-10 21:53:26] Row 6: Modified phone number from '0989396405' to '989396405'
+[2025-04-10 21:53:26] Row 7: Modified phone number from '0368410574' to '368410574'
+[2025-04-10 21:53:26] Row 8: Modified phone number from '0363073184' to '363073184'
+[2025-04-10 21:53:26] Row 9: Modified phone number from '0826650278' to '826650278'
+[2025-04-10 21:53:26] Row 10: Modified phone number from '0981046240' to '981046240'
+[2025-04-10 21:53:26] Row 11: Modified phone number from '0857234333' to '857234333'
+[2025-04-10 21:53:26] Row 12: Modified phone number from '0972680558' to '972680558'
+[2025-04-10 21:53:26] Data normalization complete. 20 rows valid, 0 rows skipped.
+[2025-04-10 21:53:26] Transformation complete, 20 valid records remain
+[2025-04-10 21:53:26] Target directory for hn_b1: ./data/user/hn
+[2025-04-10 21:53:26] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:53:26] Saving 20 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:53:26] Successfully saved to ./data/user/hn\hn_b1.json
+[2025-04-10 21:53:26] Successfully saved 20 records to ./data/user/hn\hn_b1.json
+[2025-04-10 21:53:26] Processing sheet: hn_b2 (gid=1807418615)
+[2025-04-10 21:53:26] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1807418615
+[2025-04-10 21:53:27] Download successful, Content-Length: 463 bytes
+[2025-04-10 21:53:27] Content decoded, processing CSV data
+[2025-04-10 21:53:27] Loaded 5 rows from sheet hn_b2
+[2025-04-10 21:53:27] Converting DataFrame to records
+[2025-04-10 21:53:27] Converted to 5 dictionary records
+[2025-04-10 21:53:27] Starting data transformation for hn_b2
+[2025-04-10 21:53:27] Transforming 5 rows
+[2025-04-10 21:53:27] Transformation complete. 5 rows processed successfully, 0 errors
+[2025-04-10 21:53:27] Applying data normalization to 5 rows
+[2025-04-10 21:53:27] Data normalization complete. 5 rows valid, 0 rows skipped.
+[2025-04-10 21:53:27] Transformation complete, 5 valid records remain
+[2025-04-10 21:53:27] Target directory for hn_b2: ./data/user/hn
+[2025-04-10 21:53:27] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:53:27] Saving 5 records to ./data/user/hn\hn_b2.json
+[2025-04-10 21:53:27] Successfully saved to ./data/user/hn\hn_b2.json
+[2025-04-10 21:53:27] Successfully saved 5 records to ./data/user/hn\hn_b2.json
+[2025-04-10 21:53:27] Processing sheet: hn_a1 (gid=1827133648)
+[2025-04-10 21:53:27] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1827133648
+[2025-04-10 21:53:28] Download successful, Content-Length: 373 bytes
+[2025-04-10 21:53:28] Content decoded, processing CSV data
+[2025-04-10 21:53:28] Loaded 2 rows from sheet hn_a1
+[2025-04-10 21:53:28] Converting DataFrame to records
+[2025-04-10 21:53:28] Converted to 2 dictionary records
+[2025-04-10 21:53:28] Starting data transformation for hn_a1
+[2025-04-10 21:53:28] Transforming 2 rows
+[2025-04-10 21:53:28] Transformation complete. 2 rows processed successfully, 0 errors
+[2025-04-10 21:53:28] Applying data normalization to 2 rows
+[2025-04-10 21:53:28] Data normalization complete. 2 rows valid, 0 rows skipped.
+[2025-04-10 21:53:28] Transformation complete, 2 valid records remain
+[2025-04-10 21:53:28] Target directory for hn_a1: ./data/user/hn
+[2025-04-10 21:53:28] Ensured directory exists: ./data/user/hn
+[2025-04-10 21:53:28] Saving 2 records to ./data/user/hn\hn_a1.json
+[2025-04-10 21:53:28] Successfully saved to ./data/user/hn\hn_a1.json
+[2025-04-10 21:53:28] Successfully saved 2 records to ./data/user/hn\hn_a1.json
+[2025-04-10 21:53:28] Download process complete. Success: 3, Failed: 0
+[2025-04-10 21:53:28] Process finished. Successfully processed 3 sheets, 0 sheets failed.
+[2025-04-10 21:53:28] === DOWNLOAD PROCESS COMPLETED ===
+[2025-04-10 22:31:19] === DOWNLOAD PROCESS STARTED ===
+[2025-04-10 22:31:19] Starting data download process
+[2025-04-10 22:31:19] Using Google Spreadsheet ID: 1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk
+[2025-04-10 22:31:19] Processing sheet: hn_b1 (gid=0)
+[2025-04-10 22:31:19] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=0
+[2025-04-10 22:31:20] Download successful, Content-Length: 3461 bytes
+[2025-04-10 22:31:20] Content decoded, processing CSV data
+[2025-04-10 22:31:20] Loaded 20 rows from sheet hn_b1
+[2025-04-10 22:31:20] Converting DataFrame to records
+[2025-04-10 22:31:20] Converted to 20 dictionary records
+[2025-04-10 22:31:20] Starting data transformation for hn_b1
+[2025-04-10 22:31:20] Transforming 20 rows
+[2025-04-10 22:31:20] Transformation complete. 20 rows processed successfully, 0 errors
+[2025-04-10 22:31:20] Applying data normalization to 20 rows
+[2025-04-10 22:31:20] Row 1: Modified phone number from '0379008986' to '379008986'
+[2025-04-10 22:31:20] Row 2: Modified phone number from '0375576506' to '375576506'
+[2025-04-10 22:31:20] Row 3: Modified phone number from '0858591618' to '858591618'
+[2025-04-10 22:31:20] Row 4: Modified phone number from '0379689169' to '379689169'
+[2025-04-10 22:31:20] Row 5: Modified phone number from '0583276250' to '583276250'
+[2025-04-10 22:31:20] Row 6: Modified phone number from '0989396405' to '989396405'
+[2025-04-10 22:31:20] Row 7: Modified phone number from '0368410574' to '368410574'
+[2025-04-10 22:31:20] Row 8: Modified phone number from '0363073184' to '363073184'
+[2025-04-10 22:31:20] Row 9: Modified phone number from '0826650278' to '826650278'
+[2025-04-10 22:31:20] Row 10: Modified phone number from '0981046240' to '981046240'
+[2025-04-10 22:31:20] Row 11: Modified phone number from '0857234333' to '857234333'
+[2025-04-10 22:31:20] Row 12: Modified phone number from '0972680558' to '972680558'
+[2025-04-10 22:31:20] Data normalization complete. 20 rows valid, 0 rows skipped.
+[2025-04-10 22:31:20] Transformation complete, 20 valid records remain
+[2025-04-10 22:31:20] Target directory for hn_b1: ./data/user/hn
+[2025-04-10 22:31:20] Ensured directory exists: ./data/user/hn
+[2025-04-10 22:31:20] Saving 20 records to ./data/user/hn\hn_b1.json
+[2025-04-10 22:31:20] Successfully saved to ./data/user/hn\hn_b1.json
+[2025-04-10 22:31:20] Successfully saved 20 records to ./data/user/hn\hn_b1.json
+[2025-04-10 22:31:20] Processing sheet: hn_b2 (gid=1807418615)
+[2025-04-10 22:31:20] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1807418615
+[2025-04-10 22:31:21] Download successful, Content-Length: 413 bytes
+[2025-04-10 22:31:21] Content decoded, processing CSV data
+[2025-04-10 22:31:21] Loaded 4 rows from sheet hn_b2
+[2025-04-10 22:31:21] Converting DataFrame to records
+[2025-04-10 22:31:21] Converted to 4 dictionary records
+[2025-04-10 22:31:21] Starting data transformation for hn_b2
+[2025-04-10 22:31:21] Transforming 4 rows
+[2025-04-10 22:31:21] Transformation complete. 4 rows processed successfully, 0 errors
+[2025-04-10 22:31:21] Applying data normalization to 4 rows
+[2025-04-10 22:31:21] Data normalization complete. 4 rows valid, 0 rows skipped.
+[2025-04-10 22:31:21] Transformation complete, 4 valid records remain
+[2025-04-10 22:31:21] Target directory for hn_b2: ./data/user/hn
+[2025-04-10 22:31:21] Ensured directory exists: ./data/user/hn
+[2025-04-10 22:31:21] Saving 4 records to ./data/user/hn\hn_b2.json
+[2025-04-10 22:31:21] Successfully saved to ./data/user/hn\hn_b2.json
+[2025-04-10 22:31:21] Successfully saved 4 records to ./data/user/hn\hn_b2.json
+[2025-04-10 22:31:21] Processing sheet: hn_a1 (gid=1827133648)
+[2025-04-10 22:31:21] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1827133648
+[2025-04-10 22:31:22] Download successful, Content-Length: 373 bytes
+[2025-04-10 22:31:22] Content decoded, processing CSV data
+[2025-04-10 22:31:22] Loaded 2 rows from sheet hn_a1
+[2025-04-10 22:31:22] Converting DataFrame to records
+[2025-04-10 22:31:22] Converted to 2 dictionary records
+[2025-04-10 22:31:22] Starting data transformation for hn_a1
+[2025-04-10 22:31:22] Transforming 2 rows
+[2025-04-10 22:31:22] Transformation complete. 2 rows processed successfully, 0 errors
+[2025-04-10 22:31:22] Applying data normalization to 2 rows
+[2025-04-10 22:31:22] Data normalization complete. 2 rows valid, 0 rows skipped.
+[2025-04-10 22:31:22] Transformation complete, 2 valid records remain
+[2025-04-10 22:31:22] Target directory for hn_a1: ./data/user/hn
+[2025-04-10 22:31:22] Ensured directory exists: ./data/user/hn
+[2025-04-10 22:31:22] Saving 2 records to ./data/user/hn\hn_a1.json
+[2025-04-10 22:31:22] Successfully saved to ./data/user/hn\hn_a1.json
+[2025-04-10 22:31:22] Successfully saved 2 records to ./data/user/hn\hn_a1.json
+[2025-04-10 22:31:22] Processing sheet: hn_test (gid=1733470159)
+[2025-04-10 22:31:22] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1733470159
+[2025-04-10 22:31:23] Download successful, Content-Length: 4653 bytes
+[2025-04-10 22:31:23] Content decoded, processing CSV data
+[2025-04-10 22:31:23] Loaded 25 rows from sheet hn_test
+[2025-04-10 22:31:23] Converting DataFrame to records
+[2025-04-10 22:31:23] Converted to 25 dictionary records
+[2025-04-10 22:31:23] Starting data transformation for hn_test
+[2025-04-10 22:31:23] Transforming 25 rows
+[2025-04-10 22:31:23] Transformation complete. 25 rows processed successfully, 0 errors
+[2025-04-10 22:31:23] Applying data normalization to 25 rows
+[2025-04-10 22:31:23] Row 0: Modified phone number from '0394220913' to '394220913'
+[2025-04-10 22:31:23] Row 1: Modified phone number from '0902008201' to '902008201'
+[2025-04-10 22:31:23] Row 2: Modified phone number from '0912018202' to '912018202'
+[2025-04-10 22:31:23] Row 3: Modified phone number from '0902018202' to '902018202'
+[2025-04-10 22:31:23] Row 4: Modified phone number from '0902028202' to '902028202'
+[2025-04-10 22:31:23] Row 5: Modified phone number from '0902038202' to '902038202'
+[2025-04-10 22:31:23] Row 6: Modified phone number from '0902308202' to '902308202'
+[2025-04-10 22:31:23] Row 7: Modified phone number from '0902006202' to '902006202'
+[2025-04-10 22:31:23] Row 8: Modified phone number from '0912008202' to '912008202'
+[2025-04-10 22:31:23] Row 9: Modified phone number from '0902008202' to '902008202'
+[2025-04-10 22:31:23] Row 10: Modified phone number from '0359525333' to '359525333'
+[2025-04-10 22:31:23] Row 11: Modified phone number from '0862124223' to '862124223'
+[2025-04-10 22:31:23] Row 12: Modified phone number from '0394226913' to '394226913'
+[2025-04-10 22:31:23] Row 13: Modified phone number from '0904018209' to '904018209'
+[2025-04-10 22:31:23] Row 14: Modified phone number from '0585773888' to '585773888'
+[2025-04-10 22:31:23] Row 15: Modified phone number from '0398425460' to '398425460'
+[2025-04-10 22:31:23] Row 16: Modified phone number from '0356337552' to '356337552'
+[2025-04-10 22:31:23] Row 17: Modified phone number from '0583276250' to '583276250'
+[2025-04-10 22:31:23] Row 18: Modified phone number from '0374331628' to '374331628'
+[2025-04-10 22:31:23] Row 19: Modified phone number from '0328122692' to '328122692'
+[2025-04-10 22:31:23] Row 20: Modified phone number from '0392244393' to '392244393'
+[2025-04-10 22:31:23] Row 21: Modified phone number from '0983028857' to '983028857'
+[2025-04-10 22:31:23] Row 22: Modified phone number from '0349892665' to '349892665'
+[2025-04-10 22:31:23] Row 23: Modified phone number from '0971917400' to '971917400'
+[2025-04-10 22:31:23] Row 24: Modified phone number from '0359520333' to '359520333'
+[2025-04-10 22:31:23] Data normalization complete. 25 rows valid, 0 rows skipped.
+[2025-04-10 22:31:23] Transformation complete, 25 valid records remain
+[2025-04-10 22:31:23] Target directory for hn_test: ./data/user/hn
+[2025-04-10 22:31:23] Ensured directory exists: ./data/user/hn
+[2025-04-10 22:31:23] Saving 25 records to ./data/user/hn\hn_test.json
+[2025-04-10 22:31:23] Successfully saved to ./data/user/hn\hn_test.json
+[2025-04-10 22:31:23] Successfully saved 25 records to ./data/user/hn\hn_test.json
+[2025-04-10 22:31:23] Download process complete. Success: 4, Failed: 0
+[2025-04-10 22:31:23] Process finished. Successfully processed 4 sheets, 0 sheets failed.
+[2025-04-10 22:31:23] === DOWNLOAD PROCESS COMPLETED ===

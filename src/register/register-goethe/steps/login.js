@@ -33,7 +33,7 @@ async function stepLogin(page, user) {
     try {
       await Promise.race([
         Promise.all([
-          page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 1500 }),
+          page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 5000 }),
           page.keyboard.press("Enter")
         ]),
         new Promise((_, reject) => 
