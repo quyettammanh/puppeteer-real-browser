@@ -1,5 +1,6 @@
 const axios = require("axios");
-const LOCAL_URL = "http://localhost:1010/api/profiles";
+const { randomTime } = require("../helper/func");
+const LOCAL_URL = "http://127.0.0.1:19995";
 
 class Genlogin {
   constructor(api_key) {
@@ -7,7 +8,7 @@ class Genlogin {
   }
 
   async getProfile(id) {
-    const url = LOCAL_URL + `/${id}`;
+    const url = LOCAL_URL +'/api/v3/profiles/'+ `/${id}`;
     const res = await axios
       .get(url)
       .then((res) => res.data.data)
@@ -16,7 +17,7 @@ class Genlogin {
   }
 
   async getProfiles(offset = 0, limit = 1000) {
-    const url = LOCAL_URL;
+    const url = LOCAL_URL + '/api/v3/profiles?page=1&per_page=' + limit;
     const res = await axios
       .get(`${url}`)
       .then((res) => ({
@@ -27,7 +28,7 @@ class Genlogin {
   }
 
   async runProfile(id) {
-    const url ='http://localhost:1010/api/profiles/start/' + id + '?addination_args=--lang%3Dvi&win_pos=100%2C200&win_size=1280%2C720&win_scale=1'
+    const url=LOCAL_URL + '/api/v3/profiles/start/'+`${id}`
     const res = await axios
       .get(url)
       .then((res) => {
@@ -38,19 +39,40 @@ class Genlogin {
         return err.response.data;
       });
       if (res.data) {
-        // console.log("Success response data:", res);
-        const remote_debugging_address = res.data.remote_debugging_address;
-        console.log("remote_debugging_address:", remote_debugging_address);
-        const url_2='http://'+remote_debugging_address+'/json/version'
-        console.log("url_2:", url_2);
-        const wsEndpointValue = await axios
-          .get(url_2)
-          .then((res) => {
-            return res.data.webSocketDebuggerUrl;
-          })
-          .catch((err) => {
-            console.log("Error response data:", err);
-          });
+        let wsEndpointValue = null;
+        let retries = 0;
+        const maxRetries = 3;
+
+        while (!wsEndpointValue && retries < maxRetries) {
+          try {
+            await randomTime(1, 2);
+            const remote_debugging_address = res.data.remote_debugging_address;
+            const url_2 = 'http://' + remote_debugging_address + '/json/version';
+            
+            wsEndpointValue = await axios
+              .get(url_2)
+              .then((res) => {
+                return res.data.webSocketDebuggerUrl;
+              })
+              .catch((err) => {
+                console.log("Error response data:", err.message);
+                return null;
+              });
+
+            retries++;
+            if (!wsEndpointValue) {
+              console.log(`Retry ${retries}/${maxRetries}: Endpoint not ready yet`);
+            }
+          } catch (err) {
+            console.log("Error getting endpoint:", err.message);
+            retries++;
+          }
+        }
+
+        if (!wsEndpointValue) {
+          return { success: false, message: "Could not get websocket endpoint after retries" };
+        }
+
         return { success: true, wsEndpoint: wsEndpointValue };
       } else {
         console.log("Failure response data:", res);

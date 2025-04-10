@@ -4,7 +4,7 @@ run:
 REDIS_KEY := url_updates
 SUFFIX_URL := @register-goethe-redis/hcm_b2-link2@Reading-Listening@14.07. - 25.07.2025
 
-BASE_URL2 := https://www.goethe.de/coe/options;coesessionid=E71B3EED8348E60A5216B036F3107AF9?1=&64a4bb21e29e708eed03141ffa38edba=00a0d54e6df526f3dc30643e200ef0b1&COE-Customer=1b8256d0-a2e9-4d3a-ad24-2c10b64f9ba4&COE-Tab-ID=b7f165b0-3e99-4ad7-b26a-01d4fff02569&COE-Tab-ID=b7f165b0-3e99-4ad7-b26a-01d4fff02569
+BASE_URL2 :=https://www.goethe.de/coe/options;coesessionid=7BA9B103100D23732E09058000F49A28?1=&64a4bb21e29e708eed03141ffa38edba=12a5c2ebe3395c7aa0797ffeca33ac2b&COE-Customer=747057ba-4d0d-4835-a696-86c08026542f&COE-Tab-ID=56f8dcc0-4524-4c0e-bdca-8474904515cb&COE-Tab-ID=56f8dcc0-4524-4c0e-bdca-8474904515cb
 
 pub:
 	docker exec my-redis redis-cli PUBLISH $(REDIS_KEY) "$(BASE_URL2)$(SUFFIX_URL)"

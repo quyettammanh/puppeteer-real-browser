@@ -1,5 +1,6 @@
 const { initBrowserWithRealBrowser } = require("../puppeteer/multi_browser.js");
 const { runChromeWithGenlogin } = require("../gem-login/Genlogin_run.js");
+const { runChromeWithGpmlogin } = require("../gpm-login/Gpmlogin_run.js");
 const { taskRegisterGoethe } = require("../register/register.js");
 const { parseExamCode } = require("./examUtils.js");
 const { getNextUser, returnUserToPool, releaseActiveUser } = require("./userPool.js");
@@ -46,7 +47,8 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
     console.log(`Starting browser for user ${user.email}, browser ID: ${browserId}`);
     
     // Initialize a new browser for this user with the browser ID
-    const { browser, page } = await runChromeWithGenlogin(proxy);
+    // const { browser, page } = await runChromeWithGenlogin(proxy);
+    const { browser, page } = await runChromeWithGpmlogin(proxy); 
     
     // Keep track of active browsers
     activeBrowsers.set(browserId, { browser, user });
@@ -82,7 +84,7 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
     
     // Close only the page when done, not the browser
     console.log(`Browser ${browserId}: ${user.email} completed, closing page`);
-    // await page.close();
+    await browser.close();
     
     // Remove from active browsers
     activeBrowsers.delete(browserId);
@@ -98,8 +100,7 @@ async function processRegistration(url, examCode, modules, date, user, proxy, br
     if (activeBrowsers.has(browserId)) {
       const { browser, page } = activeBrowsers.get(browserId);
       try {
-        // Close only the page on error, not the browser
-        // await page.close();
+        await browser.close();
       } catch (e) {
         // Ignore errors on cleanup
       }
