@@ -81,13 +81,13 @@ async function closeBrowser(browserId) {
   if (instance) {
     logger.info(`Closing browser ${browserId}`);
     try {
-      await instance.browser.close();
-      activeBrowsers.delete(browserId);
+      // await instance.browser.close();
+      // activeBrowsers.delete(browserId);
       logger.info(`Browser ${browserId} closed successfully`);
     } catch (error) {
       logger.error(`Error closing browser ${browserId}: ${error.message}`);
       // Remove from active browsers anyway
-      activeBrowsers.delete(browserId);
+      // activeBrowsers.delete(browserId);
     }
   }
 }
@@ -101,7 +101,7 @@ async function closeAllBrowsers() {
   const closingPromises = [];
   for (const [browserId, instance] of activeBrowsers.entries()) {
     try {
-      closingPromises.push(instance.browser.close());
+      // closingPromises.push(instance.browser.close());
       logger.info(`Initiated close for browser ${browserId}`);
     } catch (error) {
       logger.error(`Error closing browser ${browserId}: ${error.message}`);

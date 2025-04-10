@@ -40,7 +40,7 @@ class Gpmlogin {
       if (res.data) {
         let wsEndpointValue = null;
         let retries = 0;
-        const maxRetries = 3;
+        const maxRetries = 5;
 
         while (!wsEndpointValue && retries < maxRetries) {
           try {

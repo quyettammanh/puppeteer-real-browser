@@ -305,7 +305,7 @@ async function handleRemainingSteps(
   while (attempts < maxAttempts && Date.now() - startTime < timeout) {
     try {
       cuongCheck++
-      if(cuongCheck>20){
+      if(cuongCheck>100){
         log("🔍 Quá giới hạn ");
         return;
       }
