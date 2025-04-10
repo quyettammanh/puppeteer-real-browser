@@ -262,20 +262,18 @@ async function handleRemainingSteps(
     summary: async () => {
       log("📋 Starting: Summary");
       try {
-        console.log("🔍 Summary step");
-        return true;
-        // const success = await stepSummary(page, user, endStep);
-        // if (success) {
-        //   stepCompletionStatus.summary = true;
-        //   log("✅ Summary step completed successfully!");
+        const success = await stepSummary(page, user, endStep);
+        if (success) {
+          stepCompletionStatus.summary = true;
+          log("✅ Summary step completed successfully!");
           
-        //   // If endStep is 'summary', we're done here
-        //   if (endStep === 'summary') {
-        //     log("🎉 Ending at summary step as requested");
-        //     return true;
-        //   }
-        // }
-        // return success;
+          // If endStep is 'summary', we're done here
+          if (endStep === 'summary') {
+            log("🎉 Ending at summary step as requested");
+            return true;
+          }
+        }
+        return success;
       } catch (error) {
         log(`❌ Error in summary step: ${error.message}`);
         return false;
