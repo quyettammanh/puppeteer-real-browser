@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: 
+globs: 
+alwaysApply: true
+---
+cả project này phục vụ việc đăng ký goethe theo các steps ở phần cmd/register => không được thay đổi phần đó
+Tái cấu trúc lại toàn bộ dự án cho tôi, đang có quá nhiều sự rối rắm ở đây.
+cả project đang vận hành như sau:
+1. nhận link đăng ký (url chứa cookies) từ redis pub sub -> từ link đăng ký đó lấy ra exam để lấy list user trong phần data/user.
+2. mở chrome bằng gpm-login ở phần cmd/gpm-login => không thay đổi code
+2. chèn cookies đã tách từ url ra để thêm vào trang và vào link (link đó cần cookies mới chạy được)
+3. khi này sử dụng code ở phần cmd/register

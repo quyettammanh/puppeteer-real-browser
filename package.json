@@ -1,4 +1,13 @@
 {
+  "name": "goethe-registration-system",
+  "version": "2.0.0",
+  "description": "Automated system for Goethe exam registration",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "lint": "eslint ."
+  },
   "dependencies": {
     "@lem0-packages/puppeteer-page-proxy": "^1.4.1",
     "axios": "^1.8.4",
@@ -7,5 +16,9 @@
     "puppeteer-core": "^24.4.0",
     "puppeteer-real-browser": "^1.4.2",
     "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "nodemon": "^3.0.3"
   }
 }

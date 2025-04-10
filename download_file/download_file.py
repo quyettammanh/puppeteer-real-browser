@@ -134,9 +134,9 @@ def download_file():
 
             # Xác định thư mục lưu dựa vào tên sheet
             if "hcm" in sheet_name.lower():
-                target_dir = "./cmd/data/user/hcm"
+                target_dir = "./data/user/hcm"
             elif "hn" in sheet_name.lower():
-                target_dir = "./cmd/data/user/hn"
+                target_dir = "./data/user/hn"
             os.makedirs(target_dir, exist_ok=True)  # Tạo thư mục nếu chưa tồn tại
 
             file_path = os.path.join(target_dir, f"{sheet_name}.json")
