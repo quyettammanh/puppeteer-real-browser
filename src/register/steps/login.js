@@ -9,7 +9,7 @@
  * 5. Sử dụng networkidle0 để đảm bảo trang đã tải hoàn toàn
  */
 
-const { randomTime } = require("../../../utils/func");
+const { randomTime } = require("../../utils/func");
 const { cancellBooking } = require("../helper/click_cancel_booking");
 const { waitForLoadingComplete } = require("../helper/wait_for_loading");
 
@@ -110,7 +110,7 @@ module.exports = {
   stepLoginAlternative
 };
 
-// const { randomTime } = require("../../../utils/func");
+// const { randomTime } = require("../../utils/func");
 // const { cancellBooking } = require("../helper/click_cancel_booking");
 // const { waitForLoadingComplete } = require("../helper/wait_for_loading");
 

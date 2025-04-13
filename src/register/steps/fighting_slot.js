@@ -1,5 +1,5 @@
-const { gotoPage } = require("../../../utils/gotoPage");
-const { getProxies, setProxyOnPage } = require("../../../utils/proxyService");
+const { gotoPage } = require("../../utils/gotoPage");
+const { getProxies, setProxyOnPage } = require("../../utils/proxyService");
 
 async function fightingForSlots(browser, page, url, pathProxy, browserId) {
   try {

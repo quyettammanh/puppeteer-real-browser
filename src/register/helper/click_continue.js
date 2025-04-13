@@ -1,4 +1,4 @@
-const {randomTime} = require('../../../utils/func');
+const {randomTime} = require('../../utils/func');
 const {waitForLoadingComplete} = require('./wait_for_loading.js');
 
 async function clickButtonContinue(page) {

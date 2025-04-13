@@ -1,4 +1,4 @@
-const { takeScreenshot } = require("../../../utils/func");
+const { takeScreenshot } = require("../../utils/func");
 const { waitForLoadingComplete } = require('../helper/wait_for_loading.js');
 
 // Helper function for waiting since page.waitForTimeout is not available

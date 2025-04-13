@@ -1,6 +1,6 @@
 const {acceptCookies} = require('../helper/click_cookies');
 const {clickButtonContinue} = require('../helper/click_continue');
-const { randomTime, userInputLoop } = require('../../../utils/func');
+const { randomTime, userInputLoop } = require('../../utils/func');
 const { waitForLoadingComplete } = require('../helper/wait_for_loading');
 
 async function stepChooseModule(page, user) {

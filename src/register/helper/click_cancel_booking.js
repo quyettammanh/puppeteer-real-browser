@@ -1,4 +1,4 @@
-const { randomTime } = require("../../../utils/func");
+const { randomTime } = require("../../utils/func");
 
 async function cancellBooking(page) {
     try {

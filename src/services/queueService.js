@@ -5,12 +5,12 @@
 const { createLogger } = require('../utils/logger');
 const browserManager = require('../browser/browserManager');
 const userManager = require('./userManager');
-const registrationManager = require('../register/registrationManager');
+const registrationManager = require('../browser/registrationManager');
 
 const logger = createLogger('QueueService');
 
 // Queue configuration
-const MAX_CONCURRENT_BROWSERS = 20;
+const MAX_CONCURRENT_BROWSERS = 2;
 let maxQueueSize = 50;
 let registrationQueue = [];
 let skippedLinksCount = 0;
@@ -142,7 +142,7 @@ async function processRegistrationTask(task, user, proxy) {
     const { browser, page, browserId } = await browserManager.launchBrowser(proxy);
     
     // Process URL to extract cookies if present
-    const { processLinkWithCookies } = require('../register/registrationManager');
+    const { processLinkWithCookies } = require('../browser/registrationManager');
     const { url, cookies } = processLinkWithCookies(task.link);
     
     // Log the extracted information

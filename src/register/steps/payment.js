@@ -1,4 +1,4 @@
-const { userInputLoop } = require('../../../utils/func');
+const { userInputLoop } = require('../../utils/func');
 const { clickButtonContinue } = require('../helper/click_continue');
 const { waitForLoadingComplete } = require('../helper/wait_for_loading');
 

@@ -6,7 +6,7 @@ const path = require('path');
 const { createLogger } = require('../utils/logger');
 const { releaseUser } = require('../services/userManager');
 const { parseRegistrationUrl } = require('../utils/urlParser');
-const browserManager = require('../browser/browserManager');
+const browserManager = require('./browserManager.js');
 
 const logger = createLogger('RegistrationManager');
 
@@ -28,7 +28,7 @@ async function startRegistration(browser, page, registrationUrl, user, examCode,
     // Note: cookies should be applied before calling this function
     
     // Import the original registration task function
-    const { taskRegisterGoethe } = require('./register-goethe/register.js');
+    const { taskRegisterGoethe } = require('../register/register.js');
     
     // Get proxy path
     const pathProxy = path.join(process.cwd(), 'data/proxy/proxy.txt');

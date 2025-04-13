@@ -1,6 +1,6 @@
 // Import the sendTelegramMessage function
-const { sendTelegramMessage } = require('../../../utils/notification_tele')
-const { takeScreenshot } = require('../../../utils/func');
+const { sendTelegramMessage } = require('../../utils/notification_tele')
+const { takeScreenshot } = require('../../utils/func');
 const { waitForLoadingComplete } = require('../helper/wait_for_loading');
 
 async function stepSummary(page, user, endStep = 'success') {

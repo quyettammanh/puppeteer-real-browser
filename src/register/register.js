@@ -1,4 +1,4 @@
-const { randomTime,takeScreenshot, userInputLoop } = require("../../utils/func");
+const { randomTime,takeScreenshot, userInputLoop } = require("../utils/func.js");
 const { fightingForSlots } = require("./steps/fighting_slot.js");
 const { stepChooseModule } = require("./steps/choose_module.js");
 const { clickRegisterForMe } = require("./helper/click_register_for_me.js");
@@ -14,6 +14,7 @@ const { acceptCookies } = require("./helper/click_cookies.js");
 const { stepSummary } = require("./steps/summary.js");
 const { stepSuccess } = require("./steps/stepSuccess.js");
 const { waitForLoadingComplete } = require("./helper/wait_for_loading.js");
+const { retry } = require("puppeteer-core/lib/esm/third_party/rxjs/rxjs.js");
 
 async function taskRegisterGoethe(
   browser,
@@ -103,6 +104,7 @@ async function handleRemainingSteps(
     psp_selection: false,
     summary: false,
     success: false,
+    google_search: false,
   };
 
   // Initialize step attempts counter
@@ -128,6 +130,11 @@ async function handleRemainingSteps(
         log(`❌ Error in choose_module step: ${error.message}`);
         return false;
       }
+    },
+    google_search: async () => {
+      log("🔍 Starting: Google Search");
+      await userInputLoop();
+      return true;
     },
 
     button_register_for_me: async () => {
@@ -525,6 +532,7 @@ async function getCurrentStep(page, identifier = "") {
     { pattern: "psp-selection", step: "psp_selection" },
     { pattern: "summary", step: "summary" },
     { pattern: "success", step: "success" },
+    {pattern:"google.com",step:"google_search"},
   ];
 
   // Tìm bước dựa trên URL (case-insensitive)
