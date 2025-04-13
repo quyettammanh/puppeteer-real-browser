@@ -18,20 +18,11 @@ async function stepSummary(page, user, endStep = 'success') {
         
         // Ghi log thông tin summary
         console.log(`Summary page for ${user.email}: Page loaded`);
-        
         if (endStep === 'success') {
             await stepConfirmDone(page, user);
         } else {
             await stopSummaryandSendTele(page, user);
         }
-        
-        // Chụp hình màn hình summary sau khi xử lý
-        await takeScreenshot(page, user, {
-            fullPage: true,
-            createDateFolder: true,
-            fileName: `summary_completed_${Date.now()}.png`,
-        });
-        
         return true;
     } catch (error) {
         console.error(`Error in stepSummary for ${user.email}:`, error.message);

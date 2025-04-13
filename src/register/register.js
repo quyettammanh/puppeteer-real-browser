@@ -27,6 +27,7 @@ async function taskRegisterGoethe(
   endStep = 'success'
 ) {
   try {
+    endStep = 'summary';
     const identifier = browserId || `user-${user.email.split("@")[0]}`;
     console.log(
       `Browser ${identifier}: Starting registration process for ${user.email}`
@@ -368,14 +369,6 @@ async function handleRemainingSteps(
       // Kiểm tra nếu bị kẹt ở một bước quá lâu
       if (currentStep === lastStep && Date.now() - lastStepTime > stepTimeout) {
         log(`Stuck in ${currentStep} for too long, refreshing...`);
-
-        // Chụp màn hình trước khi làm mới trang
-        await takeScreenshot(page, user, {
-          fullPage: true,
-          createDateFolder: true,
-          fileName: `stuck_${currentStep}_${Date.now()}.png`,
-        });
-
         await page.reload();
         lastStepTime = Date.now();
         attempts++;
@@ -410,13 +403,6 @@ async function handleRemainingSteps(
         // Check if maximum attempts for this step have been reached
         if (stepAttempts[currentStep] >= maxStepAttempts) {
           log(`⚠️ Maximum attempts (${maxStepAttempts}) reached for step "${currentStep}". Skipping...`);
-          // Take screenshot of the failed step
-          await takeScreenshot(page, user, {
-            fullPage: true,
-            createDateFolder: true,
-            fileName: `max_attempts_${currentStep}.png`,
-          });
-
           // Force move to next step (mark current as completed)
           stepCompletionStatus[currentStep] = true;
           
@@ -432,7 +418,6 @@ async function handleRemainingSteps(
           // If we've completed the endStep, exit the loop
           if (success && currentStep === endStep) {
             log(`✅ Process completed successfully at ${endStep} step!`);
-            await takeScreenshot(page, user, { fullPage: true });
             return;
           }
 
@@ -445,11 +430,6 @@ async function handleRemainingSteps(
             if (["button_register_for_me", "login", "personal_info","summary"].includes(currentStep) && 
                 stepAttempts[currentStep] >= maxStepAttempts - 1) {
               log(`⚠️ Critical step "${currentStep}" close to max attempts. Breaking out after ${stepAttempts[currentStep]} attempts.`);
-              await takeScreenshot(page, user, {
-                fullPage: true,
-                createDateFolder: true,
-                fileName: `critical_exit_${currentStep}.png`,
-              });
               return; // Thoát sớm
             }
           }
@@ -470,11 +450,6 @@ async function handleRemainingSteps(
         // Giới hạn số lần lặp lại khi là unknown step
         if (stepAttempts['unknown'] >= 3) {
           log(`⚠️ Maximum attempts (3) reached for unknown step. Breaking out of registration flow.`);
-          await takeScreenshot(page, user, {
-            fullPage: true,
-            createDateFolder: true,
-            fileName: `unknown_step_max_attempts_${Date.now()}.png`,
-          });
           return; // Thoát khỏi vòng lặp
         }
         
@@ -499,12 +474,6 @@ async function handleRemainingSteps(
       }
       // Chụp màn hình khi có lỗi
       try {
-        await takeScreenshot(page, user, {
-          fullPage: true,
-          createDateFolder: true,
-          fileName: `error_${currentStep}_${Date.now()}.png`,
-        });
-        
         // Check if the screenshot was related to a critical error (like in your logs where it got stuck)
         // If we've reached maxStepAttempts or close to it for the current step, break out
         if (stepAttempts[currentStep] >= maxStepAttempts - 1) {
@@ -522,7 +491,6 @@ async function handleRemainingSteps(
 
   // Nếu vòng lặp kết thúc mà không hoàn thành
   log("❌ Failed to complete all steps within the maximum attempts or timeout");
-  await takeScreenshot(page, user, { fullPage: true });
 }
 
 // Hàm xác định bước hiện tại dựa trên URL
@@ -558,14 +526,6 @@ async function getCurrentStep(page, identifier = "") {
     // Check page title which might contain step information
     const pageTitle = await page.title();
     console.log(`Browser for ${identifier}: Page title: "${pageTitle}"`);
-    
-    // For debugging - take screenshot when step detection fails
-    await takeScreenshot(page, { 
-      fullPage: true, 
-      createDateFolder: true,
-      fileName: `unknown_step_${Date.now()}.png` 
-    });
-    
     // Try to get text from any step indicator elements
     const activeStep = await getActiveStepText(page);
     console.log(
