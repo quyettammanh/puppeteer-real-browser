@@ -133,7 +133,6 @@ async function handleRemainingSteps(
     },
     google_search: async () => {
       log("🔍 Starting: Google Search");
-      await userInputLoop();
       return true;
     },
 
@@ -349,6 +348,17 @@ async function handleRemainingSteps(
       }
 
       log(`Current step: ${currentStep}`);
+      if (currentStep == "google_search") {
+        log("🔍 Starting: Google Search");
+        stepCompletionStatus["google_search"] = true;  // Đánh dấu bước này đã hoàn thành
+        await randomTime(1, 2);
+        await takeScreenshot(page, user, {
+          fullPage: true,
+          createDateFolder: true,
+          fileName: `google_search_${Date.now()}.png`,
+        });
+        return;
+      }
 
       // Special handling for success page detection
       if (currentStep === "success" && !stepCompletionStatus.success) {

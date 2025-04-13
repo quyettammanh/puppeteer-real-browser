@@ -18,9 +18,10 @@ const logger = createLogger('RegistrationManager');
  * @param {Object} user - User data
  * @param {string} examCode - Exam code
  * @param {string} browserId - Browser identifier
+ * @param {Function} onCompleteCallback - Callback to execute when registration completes
  * @returns {Promise<boolean>} Success status
  */
-async function startRegistration(browser, page, registrationUrl, user, examCode, browserId) {
+async function startRegistration(browser, page, registrationUrl, user, examCode, browserId, onCompleteCallback) {
   logger.info(`Starting registration for ${user.email} with exam ${examCode}`);
   
   try {
@@ -50,8 +51,8 @@ async function startRegistration(browser, page, registrationUrl, user, examCode,
     // Release the user
     releaseUser(examCode, user.email);
     
-    // Close the browser
-    await browserManager.closeBrowser(browserId);
+    // Close the browser with callback
+    await browserManager.closeBrowser(browserId, onCompleteCallback);
     
     return true;
   } catch (error) {
@@ -60,8 +61,8 @@ async function startRegistration(browser, page, registrationUrl, user, examCode,
     // Release the user
     releaseUser(examCode, user.email);
     
-    // Close the browser in case of error
-    await browserManager.closeBrowser(browserId);
+    // Close the browser in case of error, with callback
+    await browserManager.closeBrowser(browserId, onCompleteCallback);
     
     return false;
   }

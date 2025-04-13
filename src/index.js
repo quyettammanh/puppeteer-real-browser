@@ -38,6 +38,18 @@ const logger = createLogger('Main');
   logger.info('Initializing queue system...');
   queueService.initQueue(listProxies);
   
+  // Enable sequential processing mode by default (one link at a time)
+  logger.info('Enabling sequential processing mode (one link at a time)');
+  queueService.setSequentialMode(true);
+  
+  // Set browser cooldown period to avoid ECONNREFUSED errors
+  logger.info('Setting browser cooldown period to 8 seconds');
+  queueService.setBrowserCooldown(8000);
+  
+  // Set user cooldown period to prevent rapid loops when no users are available
+  logger.info('Setting user unavailability cooldown period to 2 minutes');
+  queueService.setUserCooldown(120000); // 2 minutes
+  
   // Subscribe to Redis channel for registration links
   logger.info(`Subscribing to Redis channel: ${config.redis.registerChannel}`);
   await redisService.subscribeToRegistrationLinks((link, examCode, modules, date) => {
@@ -61,8 +73,16 @@ const logger = createLogger('Main');
     const activeBrowsers = browserManager.getActiveBrowserCount();
     const maxQueueSize = queueService.getMaxQueueSize();
     const skippedLinks = queueService.getSkippedLinksCount();
+    const activeTasks = queueService.getActiveTaskCount();
     
-    logger.info(`Status: Queue ${queueLength}/${maxQueueSize}, Browsers ${activeBrowsers}, Skipped ${skippedLinks}`);
+    logger.info(`Status: Queue ${queueLength}/${maxQueueSize}, Active Tasks ${activeTasks}, Browsers ${activeBrowsers}, Skipped ${skippedLinks}`);
+    
+    // Check and restart queue processing if there are items in queue but no active processing
+    if (queueLength > 0 && activeBrowsers < browserManager.getMaxBrowserLimit()) {
+      logger.info('Detected items in queue with available browser slots. Restarting queue processing.');
+      // Force queue restart
+      queueService.processQueue();
+    }
   }, 60000); // Report status every minute
   
   // Handle graceful shutdown

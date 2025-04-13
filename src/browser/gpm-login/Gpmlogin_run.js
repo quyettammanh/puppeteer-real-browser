@@ -14,6 +14,9 @@ async function runChromeWithGpmlogin(proxy) {
   currentProfileIndex++;
   
   let { wsEndpoint } = await gpmlogin.runProfile(profiles[profileIndex].id);
+  if (wsEndpoint == ""||wsEndpoint==null) {
+    return { browser: null, page: null };
+  }
   console.log(`Đã lấy được wsEndpoint từ profile #${profileIndex}:`, wsEndpoint);
   const browser = await connect({
     browserWSEndpoint: wsEndpoint,

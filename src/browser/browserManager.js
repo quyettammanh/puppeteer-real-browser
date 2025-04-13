@@ -47,8 +47,28 @@ async function launchBrowser(linkId, proxy = null) {
     // Import the GPM login module dynamically to avoid circular dependencies
     const GpmLogin = require('./gpm-login/Gpmlogin_run');
     
-    // Launch the browser
-    const { browser, page } = await GpmLogin.runChromeWithGpmlogin(proxy);
+    // Launch the browser with error handling
+    let browser, page;
+    try {
+      // Launch with timeout to prevent hanging
+      const launchPromise = GpmLogin.runChromeWithGpmlogin(proxy);
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Browser launch timeout after 30 seconds')), 30000)
+      );
+      
+      // Race between launch and timeout
+      const result = await Promise.race([launchPromise, timeoutPromise]);
+      browser = result.browser;
+      page = result.page;
+      
+      // Verify browser is working
+      if (!browser || !page) {
+        throw new Error('Browser or page object is null');
+      }
+    } catch (launchError) {
+      logger.error(`Error launching Chrome for ${browserId}: ${launchError.message}`);
+      throw launchError;
+    }
     
     // Setup disconnection handler
     browser.on('disconnected', () => {
@@ -67,7 +87,18 @@ async function launchBrowser(linkId, proxy = null) {
     logger.info(`Successfully launched browser ${browserId} (${activeBrowsers.size}/${getMaxBrowserLimit()})`);
     return { browser, page, browserId };
   } catch (error) {
-    logger.error(`Failed to launch browser ${browserId}: ${error}`);
+    logger.error(`Failed to launch browser ${browserId}: ${error.message}`);
+    
+    // Clean up any lingering Chrome processes if needed
+    try {
+      if (error.message.includes('ECONNREFUSED')) {
+        logger.info('Connection refused error detected. Cleaning up Chrome processes...');
+        execSync('taskkill /F /IM chrome.exe', { stdio: 'ignore' });
+      }
+    } catch (cleanupError) {
+      // Ignore cleanup errors
+    }
+    
     throw error;
   }
 }
@@ -75,19 +106,30 @@ async function launchBrowser(linkId, proxy = null) {
 /**
  * Close a specific browser instance
  * @param {string} browserId - ID of the browser to close
+ * @param {Function} callback - Optional callback function to run after closing
  */
-async function closeBrowser(browserId) {
+async function closeBrowser(browserId, callback) {
   const instance = activeBrowsers.get(browserId);
   if (instance) {
     logger.info(`Closing browser ${browserId}`);
     try {
-      // await instance.browser.close();
-      // activeBrowsers.delete(browserId);
+      await instance.browser.close();
+      activeBrowsers.delete(browserId);
       logger.info(`Browser ${browserId} closed successfully`);
+      
+      // Execute callback if provided
+      if (typeof callback === 'function') {
+        callback();
+      }
     } catch (error) {
       logger.error(`Error closing browser ${browserId}: ${error.message}`);
       // Remove from active browsers anyway
-      // activeBrowsers.delete(browserId);
+      activeBrowsers.delete(browserId);
+      
+      // Execute callback even on error
+      if (typeof callback === 'function') {
+        callback();
+      }
     }
   }
 }
