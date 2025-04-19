@@ -1,9 +1,10 @@
 // Import the sendTelegramMessage function
 const { sendTelegramMessage } = require('../../utils/notification_tele')
-const { takeScreenshot } = require('../../utils/func');
+const { takeScreenshot, randomTime, userInputLoop } = require('../../utils/func');
 const { waitForLoadingComplete } = require('../helper/wait_for_loading');
 
 async function stepSummary(page, user, endStep = 'success') {
+    await userInputLoop();
     try {
         console.log("Xử lý bước summary");
         
@@ -84,7 +85,7 @@ async function stepConfirmDone(page, user) {
                 if (isDev !== 'development' && button) {
                     button.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-                return new Promise(resolve => setTimeout(resolve, 300));
+                return new Promise(resolve => setTimeout(resolve, 3000));
             }, isDev);
 
             // Bấm nút và đợi điều hướng trang
@@ -94,10 +95,11 @@ async function stepConfirmDone(page, user) {
                 // Cách an toàn hơn khi xử lý điều hướng trong Puppeteer
                 const navigationPromise = page.waitForNavigation({ 
                     timeout: 30000,
-                    waitUntil: 'networkidle0'
+                    // waitUntil: 'networkidle0'
                 });
                 
                 await page.click(cssSelector);
+                await randomTime(10,20);
                 await navigationPromise;
                 
                 console.log("Đã bấm nút thanh toán và hoàn tất tải trang");

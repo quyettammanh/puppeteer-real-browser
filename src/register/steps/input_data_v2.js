@@ -53,6 +53,7 @@ async function stepInputData(page, user, exam) {
 async function inputData(page, user, exam) {
     if (page.url().includes('oska-acc')) {
         try {
+            await clickButtonContinue(page);
             // First check if name fields exist on the page
             const firstNameField = await page.$('input[name="accountPanel:basicData:body:firstName:inputContainer:input"]');
             const lastNameField = await page.$('input[name="accountPanel:basicData:body:lastName:inputContainer:input"]');
@@ -71,6 +72,7 @@ async function inputData(page, user, exam) {
 
     if (page.url().includes('oska-acc')) {
         try {
+            await clickButtonContinue(page);
             // Check if any address fields exist on the page
             const postalCodeField = await page.$('input[autocomplete="postal-code"]');
             const cityField = await page.$('input[autocomplete="locality"]');
@@ -100,6 +102,7 @@ async function inputData(page, user, exam) {
 // Hàm tiện ích để nhập dữ liệu vào trường và xử lý lỗi chung
 async function fillInputFieldAdress(page, selector, value, fieldName, email) {
     try {
+        await clickButtonContinue(page);
         if (page.url().includes('oska-acc')) {
             // Find the input element
             const inputElement = await page.$(selector);

@@ -143,7 +143,7 @@ async function closeAllBrowsers() {
   const closingPromises = [];
   for (const [browserId, instance] of activeBrowsers.entries()) {
     try {
-      // closingPromises.push(instance.browser.close());
+      closingPromises.push(instance.browser.close());
       logger.info(`Initiated close for browser ${browserId}`);
     } catch (error) {
       logger.error(`Error closing browser ${browserId}: ${error.message}`);
@@ -152,13 +152,6 @@ async function closeAllBrowsers() {
   
   await Promise.all(closingPromises);
   activeBrowsers.clear();
-  
-  // Force kill Chrome processes if needed
-  try {
-    execSync('taskkill /F /IM chrome.exe', { stdio: 'ignore' });
-  } catch (error) {
-    // Ignore errors as Chrome might not be running
-  }
   
   logger.info('All browsers closed');
 }

@@ -27,7 +27,7 @@ async function taskRegisterGoethe(
   endStep = 'success'
 ) {
   try {
-    endStep = 'summary';
+    // endStep = 'summary';
     const identifier = browserId || `user-${user.email.split("@")[0]}`;
     console.log(
       `Browser ${identifier}: Starting registration process for ${user.email}`
