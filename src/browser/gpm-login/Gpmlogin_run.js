@@ -24,6 +24,19 @@ async function runChromeWithGpmlogin(proxy) {
   });
   const identifier = `browser-${Math.random().toString(36).substring(2, 8)}`;
   const page = await browser.newPage();
+  // Bật chế độ chặn request
+  await page.setRequestInterception(true);
+
+  page.on('request', request => {
+    const url = request.url();
+
+    if (url.includes('connect.facebook.net/en_US/fbevents.js')) {
+      console.log('🛑 Blocked:', url);
+      request.abort();
+    } else {
+      request.continue();
+    }
+  });
   await setProxyOnPage(page, proxy, identifier);
   return { browser, page };
 }

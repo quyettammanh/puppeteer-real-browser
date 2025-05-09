@@ -27,6 +27,9 @@ async function taskRegisterGoethe(
   endStep = 'success'
 ) {
   try {
+    user.email="b4zqkv38lk@ozkadem.edu.pl"
+    user.password="Dunghoipass@00"
+    url="https://www.goethe.de/coe?lang=vi&oid=3948ec9b81bb10089e72dce47bb1ceda507f83b3bbf61c3dbfc8d67f4881d885"
     // endStep = 'summary';
     const identifier = browserId || `user-${user.email.split("@")[0]}`;
     console.log(
@@ -198,7 +201,7 @@ async function handleRemainingSteps(
     child_acc: async () => {
       log("👶 Starting: Child Account");
       try {
-        // await stepInputData(page, user, exam);
+        await stepInputData(page, user, exam);
         return checkStepCompletion(
           page,
           user,
@@ -267,18 +270,12 @@ async function handleRemainingSteps(
       }
     },
     summary: async () => {
-      log("📋 Starting: Summary");
+      log("📋 Starting: Summary",endStep);
       try {
         const success = await stepSummary(page, user, endStep);
         if (success) {
           stepCompletionStatus.summary = true;
           log("✅ Summary step completed successfully!");
-          
-          // If endStep is 'summary', we're done here
-          if (endStep === 'summary') {
-            log("🎉 Ending at summary step as requested");
-            return true;
-          }
         }
         return success;
       } catch (error) {
@@ -338,15 +335,8 @@ async function handleRemainingSteps(
         return; // Thoát khỏi quá trình đăng ký
       }
 
-      // Direct URL check for success page
-      const currentUrl = page.url();
-      if (currentUrl.includes('success') && !stepCompletionStatus.success) {
-        log("🔍 Success pattern detected in URL: " + currentUrl);
-        currentStep = "success";
-      } else {
-        // Regular step detection
-        currentStep = await getCurrentStep(page, identifier);
-      }
+      currentStep = await getCurrentStep(page, identifier);
+      
 
       log(`Current step: ${currentStep}`);
       if (currentStep == "google_search") {

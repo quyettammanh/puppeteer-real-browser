@@ -18,3 +18,5 @@ def run_python_script():
     except subprocess.CalledProcessError as e:
         return jsonify({"error": e.stderr.strip().split("\n")}), 500
 
+
+// api -> set cookies

@@ -4,9 +4,10 @@ const { takeScreenshot, randomTime, userInputLoop } = require('../../utils/func'
 const { waitForLoadingComplete } = require('../helper/wait_for_loading');
 
 async function stepSummary(page, user, endStep = 'success') {
-    await userInputLoop();
     try {
+        console.log("endStep",endStep);
         console.log("Xử lý bước summary");
+        await userInputLoop();
         
         // Đợi cho trang loading biến mất
         await waitForLoadingComplete(page);

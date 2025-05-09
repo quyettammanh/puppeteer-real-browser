@@ -933,3 +933,78 @@
 [2025-04-10 22:31:23] Download process complete. Success: 4, Failed: 0
 [2025-04-10 22:31:23] Process finished. Successfully processed 4 sheets, 0 sheets failed.
 [2025-04-10 22:31:23] === DOWNLOAD PROCESS COMPLETED ===
+[2025-04-27 16:00:40] === DOWNLOAD PROCESS STARTED ===
+[2025-04-27 16:00:40] Starting data download process
+[2025-04-27 16:00:40] Using Google Spreadsheet ID: 1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk
+[2025-04-27 16:00:40] Processing sheet: hn_b1 (gid=0)
+[2025-04-27 16:00:40] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=0
+[2025-04-27 16:00:42] Download successful, Content-Length: 2138 bytes
+[2025-04-27 16:00:42] Content decoded, processing CSV data
+[2025-04-27 16:00:42] Loaded 18 rows from sheet hn_b1
+[2025-04-27 16:00:42] Converting DataFrame to records
+[2025-04-27 16:00:42] Converted to 18 dictionary records
+[2025-04-27 16:00:42] Starting data transformation for hn_b1
+[2025-04-27 16:00:42] Transforming 18 rows
+[2025-04-27 16:00:42] Transformation complete. 18 rows processed successfully, 0 errors
+[2025-04-27 16:00:42] Applying data normalization to 18 rows
+[2025-04-27 16:00:42] Row 9: Modified phone number from '0826650278' to '826650278'
+[2025-04-27 16:00:42] Row 10: Modified phone number from '0363073184' to '363073184'
+[2025-04-27 16:00:42] Data normalization complete. 18 rows valid, 0 rows skipped.
+[2025-04-27 16:00:42] Transformation complete, 18 valid records remain
+[2025-04-27 16:00:42] Target directory for hn_b1: ./data/user/hn
+[2025-04-27 16:00:42] Ensured directory exists: ./data/user/hn
+[2025-04-27 16:00:42] Saving 18 records to ./data/user/hn\hn_b1.json
+[2025-04-27 16:00:42] Successfully saved to ./data/user/hn\hn_b1.json
+[2025-04-27 16:00:42] Successfully saved 18 records to ./data/user/hn\hn_b1.json
+[2025-04-27 16:00:42] Processing sheet: hn_b2 (gid=1807418615)
+[2025-04-27 16:00:42] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1807418615
+[2025-04-27 16:00:43] Download successful, Content-Length: 269 bytes
+[2025-04-27 16:00:43] Content decoded, processing CSV data
+[2025-04-27 16:00:43] Loaded 1 rows from sheet hn_b2
+[2025-04-27 16:00:43] ERROR: Sheet hn_b2 has only header row, skipping
+[2025-04-27 16:00:43] Processing sheet: hn_a1 (gid=1827133648)
+[2025-04-27 16:00:43] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1827133648
+[2025-04-27 16:00:44] Download successful, Content-Length: 337 bytes
+[2025-04-27 16:00:44] Content decoded, processing CSV data
+[2025-04-27 16:00:44] Loaded 2 rows from sheet hn_a1
+[2025-04-27 16:00:44] Converting DataFrame to records
+[2025-04-27 16:00:44] Converted to 2 dictionary records
+[2025-04-27 16:00:44] Starting data transformation for hn_a1
+[2025-04-27 16:00:44] Transforming 2 rows
+[2025-04-27 16:00:44] ERROR: Row 1: Missing required email field, skipping row
+[2025-04-27 16:00:44] Transformation complete. 1 rows processed successfully, 1 errors
+[2025-04-27 16:00:44] Applying data normalization to 1 rows
+[2025-04-27 16:00:44] Data normalization complete. 1 rows valid, 0 rows skipped.
+[2025-04-27 16:00:44] Transformation complete, 1 valid records remain
+[2025-04-27 16:00:44] Target directory for hn_a1: ./data/user/hn
+[2025-04-27 16:00:44] Ensured directory exists: ./data/user/hn
+[2025-04-27 16:00:44] Saving 1 records to ./data/user/hn\hn_a1.json
+[2025-04-27 16:00:44] Successfully saved to ./data/user/hn\hn_a1.json
+[2025-04-27 16:00:44] Successfully saved 1 records to ./data/user/hn\hn_a1.json
+[2025-04-27 16:00:44] Processing sheet: hn_test (gid=1733470159)
+[2025-04-27 16:00:44] Downloading from URL: https://docs.google.com/spreadsheets/d/1KuoVm1NIUR0q8GF_xcMmbeg88HdsJsmnVEwoaQIVUZk/export?format=csv&gid=1733470159
+[2025-04-27 16:00:46] Download successful, Content-Length: 1152 bytes
+[2025-04-27 16:00:46] Content decoded, processing CSV data
+[2025-04-27 16:00:46] Loaded 7 rows from sheet hn_test
+[2025-04-27 16:00:46] Converting DataFrame to records
+[2025-04-27 16:00:46] Converted to 7 dictionary records
+[2025-04-27 16:00:46] Starting data transformation for hn_test
+[2025-04-27 16:00:46] Transforming 7 rows
+[2025-04-27 16:00:46] Transformation complete. 7 rows processed successfully, 0 errors
+[2025-04-27 16:00:46] Applying data normalization to 7 rows
+[2025-04-27 16:00:46] Row 0: Modified phone number from '0394220913' to '394220913'
+[2025-04-27 16:00:46] Row 1: Modified phone number from '0902008201' to '902008201'
+[2025-04-27 16:00:46] Row 2: Modified phone number from '0912018202' to '912018202'
+[2025-04-27 16:00:46] Row 3: Modified phone number from '0902018202' to '902018202'
+[2025-04-27 16:00:46] Row 4: Modified phone number from '0902028202' to '902028202'
+[2025-04-27 16:00:46] Row 5: Modified phone number from '0902038202' to '902038202'
+[2025-04-27 16:00:46] Data normalization complete. 7 rows valid, 0 rows skipped.
+[2025-04-27 16:00:46] Transformation complete, 7 valid records remain
+[2025-04-27 16:00:46] Target directory for hn_test: ./data/user/hn
+[2025-04-27 16:00:46] Ensured directory exists: ./data/user/hn
+[2025-04-27 16:00:46] Saving 7 records to ./data/user/hn\hn_test.json
+[2025-04-27 16:00:46] Successfully saved to ./data/user/hn\hn_test.json
+[2025-04-27 16:00:46] Successfully saved 7 records to ./data/user/hn\hn_test.json
+[2025-04-27 16:00:46] Download process complete. Success: 3, Failed: 1
+[2025-04-27 16:00:46] Process finished. Successfully processed 3 sheets, 1 sheets failed.
+[2025-04-27 16:00:46] === DOWNLOAD PROCESS COMPLETED ===

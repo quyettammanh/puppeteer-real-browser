@@ -1,5 +1,6 @@
 const {clickButtonContinue}=require('../helper/click_continue')
 const {waitForLoadingComplete} = require('../helper/wait_for_loading')
+const { randomTime } = require("../../utils/func");
 
 // Helper function for waiting since page.waitForTimeout is not available
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -35,16 +36,28 @@ async function waitForNetworkIdle(page, timeout = 1000) {
 }
 
 async function stepInputData(page, user, exam) {
-    try {
-        // Đợi cho trang loading biến mất
-        await waitForLoadingComplete(page);
-        console.log("Đang xử lý input data cho", user.email);
-        if (page.url().includes('oska-acc')) {
-            console.log("acc thiếu thông tin")
-            await inputData(page, user, exam);
+    // try {
+    //     // Đợi cho trang loading biến mất
+    //     await waitForLoadingComplete(page);
+    //     console.log("Đang xử lý input data cho", user.email);
+    //     if (page.url().includes('oska-acc')) {
+    //         console.log("acc thiếu thông tin")
+    //         await inputData(page, user, exam);
+    //     }
+    //     return page;
+    // } catch (error) {
+    //     console.error(`Error in stepInputData for ${user.email}:`, error);
+    //     throw error;
+    // }
+    // tạm thời dừng chờ để xử lý
+    try{
+        if (page.url().includes('oska-acc')|| page.url().includes('child-acc')) {
+            console.log("Đang xử lý input data cho", user.email);
+            await randomTime(30,40);
+            await clickButtonContinue(page);
         }
         return page;
-    } catch (error) {
+    }catch(error){
         console.error(`Error in stepInputData for ${user.email}:`, error);
         throw error;
     }
